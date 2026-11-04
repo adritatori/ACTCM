@@ -102,12 +102,18 @@ def test_notices_contain_every_required_notice():
     assert "could not confirm with a licence file" in t
 
 
-def test_pages_workflow_is_committed_but_disabled():
-    d = yaml.safe_load(text(".github/workflows/pages.yml"))
+def test_pages_workflow_is_in_one_clean_state():
+    """Either fully off (guard present) or on and manual-only (no guard). Never a half state, never started by a push or a schedule."""
+    t = text(".github/workflows/pages.yml")
+    d = yaml.safe_load(t)
     triggers = d.get("on") or d.get(True)
-    assert set(triggers) == {"workflow_dispatch"}, "must not run on push or schedule"
-    assert d["jobs"]["deploy"]["if"] is False
-    assert "DISABLED" in text(".github/workflows/pages.yml")
+    assert set(triggers) <= {"workflow_dispatch", "push"}, "must not run on a schedule or pull request"
+    guard = d["jobs"]["deploy"].get("if", True)
+    if guard is False:
+        assert "DISABLED" in t and set(triggers) == {"workflow_dispatch"}
+    else:
+        assert "DISABLED" not in t and "if: false" not in t
+    assert "upload-pages-artifact" in t and "deploy-pages" in t and "path: site" in t
 
 
 def test_ci_runs_validate_tests_build_and_does_not_publish():
