@@ -34,8 +34,10 @@ def status(url: str) -> str:
 
 def live() -> int:
     """After publishing: the repository links and the five Navigator layer files must answer, and each layer must be valid JSON."""
+    import datetime
     import json
     import urllib.request
+    report = []
     links = json.loads((c.DATA / "generated" / "navigator" / "links.json").read_text())
     bad = 0
     for l in links:
@@ -49,10 +51,18 @@ def live() -> int:
             print("  error:", raw, e)
         bad += not ok
         print(f"{'OK  ' if ok else 'FAIL'} {l['layer']:18} {raw}")
+        report.append(f"| Navigator layer `{l['layer']}` | {raw} | {'200 OK, valid layer' if ok else 'FAILED'} |")
     repo = "https://github.com/" + c.config()["repository"]
     s = status(repo)
     print(f"{'OK  ' if s == '200' else 'FAIL'} repository {repo} -> {s}")
     bad += s != "200"
+    report.append(f"| Repository | {repo} | {s} |")
+    doc = c.ROOT / "docs" / "LINK_CHECK.md"
+    text = doc.read_text(encoding="utf-8") if doc.exists() else "# Link check\n"
+    text = re.sub(r"\n## Live check.*\Z", "", text, flags=re.S).rstrip("\n")
+    text += ("\n\n## Live check (`make links-live`), " + datetime.date.today().isoformat() + "\n\n| What | URL | Result |\n|---|---|---|\n" + "\n".join(report) +
+             "\n\nThe hosted ATT&CK Navigator app itself is not tested by this script: open each \"Open in Navigator\" link in a browser and check that the layer loads.\n")
+    doc.write_text(text + "", encoding="utf-8")
     print("The Navigator app itself must still be opened by hand with each 'Open in Navigator' link and checked in a browser.")
     return 1 if bad else 0
 
@@ -67,10 +77,10 @@ def main() -> dict:
     for u in sorted(where):
         s = status(u)
         repo = ("github.com/" + c.config()["repository"]) in u
-        verdict = "PENDING (marked 'works after publishing' on the page)" if repo else ("200 OK" if s == "200" else
+        verdict = "PENDING (marked 'works after publishing' on the page)" if repo and not c.config().get("published") else ("200 OK" if s == "200" else
                   "UNVERIFIED (host did not answer from this session)" if s in ("000", "") else f"HTTP {s}: CHECK")
         rows.append((u, s, verdict, ", ".join(sorted(where[u]))))
-    L = ["# Link check", "", "Run by `scripts/link_check.py` from the build session. Repo links are not tested because the repo is not published.", "",
+    L = ["# Link check", "", "Run by `scripts/link_check.py` (`make links`). Repository links are tested for real. Links to other sites that did not answer from the build session are marked UNVERIFIED, not passed; run `make links` from a machine with open internet to check them.", "",
          "| URL | HTTP status | Verdict | Pages |", "|---|---|---|---|"]
     L += [f"| {u} | {s} | {v} | {w} |" for u, s, v, w in rows]
     ok = sum(1 for r in rows if r[2] == "200 OK"); pend = sum(1 for r in rows if r[2].startswith("PENDING"))

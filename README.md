@@ -9,6 +9,8 @@ For each public AI control setting, ACTCM lists every hidden attack task (a "sid
 
 ![The Explorer: summary, label status and the tactic matrix, with gap tactics hatched](docs/screenshots/index-1280-light.png)
 
+**Live site:** https://adritatori.github.io/ACTCM/ (built from this repository by GitHub Pages).
+
 ## Why it matters
 
 An AI control evaluation reports how often safety measures stop an AI agent that is secretly trying to cause harm. That number only covers the
@@ -24,7 +26,7 @@ with MITRE ATT&CK; this project applies the same check to AI control settings.
 ## Quick start
 
 ```bash
-git clone https://github.com/adritatori/actcm.git && cd actcm     # works after publishing
+git clone https://github.com/adritatori/actcm.git && cd actcm
 uv sync                                    # or: pip install -r requirements.txt
 make test                                  # all tests (browser tests need node + playwright, and skip without them)
 python3 -m http.server -d site 8000        # then open http://localhost:8000

@@ -103,7 +103,7 @@ def test_links_use_layerurl_parameter_and_are_marked_pending():
     assert len(links) == 1 + len(c.visible_settings())
     for l in links:
         assert "#layerURL=" in l["open_in_navigator"] and "raw.githubusercontent.com" in l["open_in_navigator"].replace("%2F", "/").replace("%3A", ":")
-        assert "after the repository is published" in l["status"]
+        assert ("loaded from this repository" if c.config().get("published") else "after the repository is published") in l["status"]
 
 
 def test_description_carries_branding_and_warning():

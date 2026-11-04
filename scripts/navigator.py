@@ -190,7 +190,7 @@ def main() -> dict:
         (OUT / fname).write_text(json.dumps(layer, indent=1) + "\n", encoding="utf-8")
         report[key] = dict(file=fname, tasks=len(ts), entries=len(layer["techniques"]), score_sum=scored, errors=errs)
         links.append(dict(layer=key, file=fname, open_in_navigator=nav_link(fname),
-                          status="works only after the repository is published"))
+                          status=("layer file is loaded from this repository" if c.config().get("published") else "works only after the repository is published")))
     (OUT / "links.json").write_text(json.dumps(links, indent=1) + "\n", encoding="utf-8")
     return report
 

@@ -6,7 +6,7 @@ Human reviews and well-argued disputes are the most useful contributions.
 ## Set up
 
 ```bash
-git clone https://github.com/adritatori/actcm.git && cd actcm     # works after publishing
+git clone https://github.com/adritatori/actcm.git && cd actcm
 uv sync                          # or: pip install -r requirements.txt
 make test                        # tests (browser tests need node + playwright; they skip without them)
 make validate                    # checks every task file

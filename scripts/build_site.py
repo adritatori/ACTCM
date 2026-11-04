@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 import shutil
 
 import common as c
@@ -42,7 +43,8 @@ def page(title: str, active: str, body: str, cn: dict, lock: dict, desc: str) ->
     nav = "".join(f'<li><a href="{h}"{" aria-current=\"page\"" if k == active else ""}>{n}</a></li>'
                   for k, h, n in [("explorer", "index.html", "Explorer"), ("guide", "guide.html", "Guide"), ("verify", "verify.html", "Verify")])
     srcs = len(c.public_lock(lock)["sources"])
-    return f"""<!doctype html>
+    published = bool(c.config().get("published"))
+    out = f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -74,6 +76,9 @@ def page(title: str, active: str, body: str, cn: dict, lock: dict, desc: str) ->
 </body>
 </html>
 """
+    if published:     # the repository is live: drop the "works after publishing" notes (and a comma left in front of one)
+        out = re.sub(r'(?:,\s*)?\s*<span class="pending">[^<]*works? after publishing[^<]*</span>', "", out)
+    return out
 
 
 # ------------------------------------------------------------------------------------------- Explorer
@@ -132,7 +137,7 @@ A <a href="guide.html#g-gap">gap</a> is a tactic with zero tasks.</p>
 <a class="btn" href="data/tasks.csv" download>Download CSV</a>
 <a class="btn" href="data/tasks.json" download>Download JSON</a>
 </div>
-<p class="small"><span id="nav-note" class="pending"></span> The Navigator link loads a layer file from the repository, so it only works once the repository is published.
+<p class="small"><span id="nav-note" class="pending"></span> The Navigator link loads a layer file from the repository, so it needs the repository to be public (it is, once published).
 Layers show tasks per technique for the selected setting; tasks with no ATT&amp;CK technique ({cn['summary']['null_technique_tasks']} in total) cannot be shown there.</p>
 """
 
@@ -289,14 +294,14 @@ def guide_body(cn: dict, st: dict, lock: dict) -> str:
 </tbody></table></div>
 
 <h2 id="cite">How to cite</h2>
-<p>A <code>CITATION.cff</code> file is added with the repository docs. Until then: Rahman Tory, A. <em>Agent Control Threat Coverage Matrix (ACTCM)</em>, version 0.1.0-draft, 2026. Provisional; not yet published.</p>
+<p>See <a href="{REPO_URL}/blob/main/CITATION.cff">CITATION.cff</a> in the repository. In short: Rahman Tory, A. <em>Agent Control Threat Coverage Matrix (ACTCM)</em>, version 0.1.0-draft, 2026. A draft: no human has reviewed any label yet.</p>
 </div>
 """
 
 
 # ------------------------------------------------------------------------------------------- Verify (stub until Phase 7)
 def protocol_ctx(cn: dict) -> dict:
-    return dict(show_extras=c.publish_extras(), n_repos=len(c.public_lock(c.load_yaml(c.LOCK_FILE))["sources"]), tiers=cn["tiers"]["total"], open_n=len(OPEN_DECISIONS), open_text=" and ".join(OPEN_DECISIONS))
+    return dict(published=bool(c.config().get("published")), show_extras=c.publish_extras(), n_repos=len(c.public_lock(c.load_yaml(c.LOCK_FILE))["sources"]), tiers=cn["tiers"]["total"], open_n=len(OPEN_DECISIONS), open_text=" and ".join(OPEN_DECISIONS))
 
 
 def verify_body(cn: dict) -> str:

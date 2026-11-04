@@ -23,7 +23,7 @@ def sections(ctx: dict) -> list[dict]:
         ]),
         dict(id="a", title="A. Reproduce the data", blocks=[
             ("ol", [
-                f"Clone this repository: `git clone {REPO}.git` and `cd actcm`. (This step works after publishing.)",
+                f"Clone this repository: `git clone {REPO}.git` and `cd actcm`. " + ("" if ctx["published"] else "(This step works after publishing.)"),
                 "Install with one command: `uv sync`. If you use pip instead: `pip install -r requirements.txt`.",
                 "Run `make reproduce`. With pip, run `make reproduce PY=python3`. It does four things: (1) fetches every source repository at its pinned commit and refuses to continue if a commit differs; "
                 "(2) fetches the MITRE ATT&CK® v20.0 and ATLAS 2026.10 files and checks their SHA-256 against `data/sources.lock.yml`; "
@@ -50,7 +50,7 @@ def sections(ctx: dict) -> list[dict]:
                 "Open the Explorer, click a task, and follow its link under \"Source at the pinned commit\". That link points at the exact commit, not a branch.",
                 "Read `goal.md` first. Then read the scorer: `scorer.py`, `scorer.md` or `scoring_details.md` in the same folder. Write down in one sentence what the scorer checks."
                 + (" For a source repository with no licence the goal text is not copied into this project: read it at the link." if ctx["show_extras"] else ""),
-                f"Apply codebook rules R1 to R9 in order ([codebook]({REPO}/blob/main/codebook/CODEBOOK.md), works after publishing). Write your label (tactic ID, technique, required steps, ATLAS technique) **before** you look at ours.",
+                f"Apply codebook rules R1 to R9 in order ([codebook]({REPO}/blob/main/codebook/CODEBOOK.md))" + ("" if ctx["published"] else " (works after publishing)") + ". Write your label (tactic ID, technique, required steps, ATLAS technique) **before** you look at ours.",
                 "Compare with the label in the Explorer. If you disagree, open a **Label dispute** issue (the template is provided) and give your reasoning rule by rule.",
             ]),
         ]),

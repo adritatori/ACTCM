@@ -25,7 +25,11 @@ def main() -> int:
     if blockers and not dry:
         print("Refusing: the publish gate is blocked:\n  - " + "\n  - ".join(blockers[:10]))
         return 1
-    new = text.replace(GUARD, "").replace("# DISABLED until Tory says \"publish\" (Phase 9).", "# ENABLED at publish time.")
+    lines = text.replace(GUARD, "").split("\n")
+    top = next(i for i, l in enumerate(lines) if l.startswith("name:"))
+    new = "\n".join(["# Deploys the site to GitHub Pages. It is started by hand (workflow_dispatch) from the Actions tab.",
+                     "# One-time setup in the repository: Settings > Pages > Source: GitHub Actions.",
+                     "# It builds the site with scripts/build_site.py and publishes the site/ folder."] + lines[top:])
     print(("would remove" if dry else "removed") + " the `if: false` guard from .github/workflows/pages.yml")
     if not dry:
         WF.write_text(new, encoding="utf-8")

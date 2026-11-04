@@ -1,8 +1,10 @@
-# Deploys the site to GitHub Pages. It is started by hand (workflow_dispatch) from the Actions tab.
+# Deploys the site to GitHub Pages on every push to main, and can also be started by hand from the Actions tab.
 # One-time setup in the repository: Settings > Pages > Source: GitHub Actions.
 # It builds the site with scripts/build_site.py and publishes the site/ folder.
 name: Deploy site to GitHub Pages
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read

@@ -10,7 +10,7 @@ This protocol is written so that anyone can repeat it exactly, without asking an
 
 ## A. Reproduce the data
 
-1. Clone this repository: `git clone https://github.com/adritatori/actcm.git` and `cd actcm`. (This step works after publishing.)
+1. Clone this repository: `git clone https://github.com/adritatori/actcm.git` and `cd actcm`. 
 2. Install with one command: `uv sync`. If you use pip instead: `pip install -r requirements.txt`.
 3. Run `make reproduce`. With pip, run `make reproduce PY=python3`. It does four things: (1) fetches every source repository at its pinned commit and refuses to continue if a commit differs; (2) fetches the MITRE ATT&CK® v20.0 and ATLAS 2026.10 files and checks their SHA-256 against `data/sources.lock.yml`; (3) rebuilds the task files, tables, Navigator layers, stress test, review sheet and site; (4) compares the SHA-256 of every output file with `data/generated/CHECKSUMS`. It does not change any label.
 4. A pass looks exactly like this (N is the number of lines in `data/generated/CHECKSUMS`):
@@ -35,7 +35,7 @@ PASS: all N files match
 
 1. Open the Explorer, click a task, and follow its link under "Source at the pinned commit". That link points at the exact commit, not a branch.
 2. Read `goal.md` first. Then read the scorer: `scorer.py`, `scorer.md` or `scoring_details.md` in the same folder. Write down in one sentence what the scorer checks.
-3. Apply codebook rules R1 to R9 in order ([codebook](https://github.com/adritatori/actcm/blob/main/codebook/CODEBOOK.md), works after publishing). Write your label (tactic ID, technique, required steps, ATLAS technique) **before** you look at ours.
+3. Apply codebook rules R1 to R9 in order ([codebook](https://github.com/adritatori/actcm/blob/main/codebook/CODEBOOK.md)). Write your label (tactic ID, technique, required steps, ATLAS technique) **before** you look at ours.
 4. Compare with the label in the Explorer. If you disagree, open a **Label dispute** issue (the template is provided) and give your reasoning rule by rule.
 
 ## C. Full independent relabelling (how Tory and any contributor do it)

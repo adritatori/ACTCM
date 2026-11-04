@@ -9,3 +9,6 @@ publish_extras: false
 # The repository name. Links on the site and in the Navigator layers are built from it.
 repository: adritatori/actcm
 branch: main
+
+# true once the repository and the site are live. Removes the "works after publishing" notes from the site and docs.
+published: true

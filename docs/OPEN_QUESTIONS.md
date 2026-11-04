@@ -21,11 +21,13 @@ Everything below needs a decision or an action from you. Nothing has been pushed
 
 ## Known gaps, not blocking
 
-9. **External links.** 5 external links did not answer from the build session and are unverified (`docs/LINK_CHECK.md`). Run `make links` from your own machine.
-10. **Hosted Navigator.** Not tested: the host was unreachable. Evidence that it offers v20 is in `docs/NAVIGATOR_CHECK.md`. Test the "Open in Navigator" links after publishing (`make links-live`).
-11. **CI.** The workflows were written but never run (no GitHub Actions in the build session). Check the first run after publishing.
+9. **External links.** All 8 repository links return 200. 5 links to other sites did not answer from the build session and are unverified (`docs/LINK_CHECK.md`). Run `make links` from your own computer.
+10. **Hosted Navigator.** The four layer files are live and valid (`make links-live`). The Navigator app itself was not tested (host unreachable). Open each "Open in Navigator" link in a browser. Evidence that it offers v20: `docs/NAVIGATOR_CHECK.md`.
+11. **CI.** Ran on GitHub and passed (both jobs).
 12. **Refactor Arena and ct-vllm** declare MIT in `pyproject.toml` but have no `LICENSE` file, so there is no copyright line to reproduce. We treat them as MIT on that declaration.
 13. **`ct-linuxarena` pin.** Pinned at `v0.4.0` because no `v3.2.0` tag exists. Checked: its file lists 10 environments at `v3.2.0`, and the count is 92 (`docs/SOURCES.md`).
 14. **File names containing lowercase "attack"** (11 tracked files: the Navigator layers and the licence copy) are left as they are, by your decision. The branding rule covers the project name, repository name, logo and domain, and none of them contains "ATT&CK", "MITRE" or "attack".
 16. **LinuxArena paper** was not read (arXiv unreachable). The glossary uses the Control Tower docs. Anthropic's LLM ATT&CK Navigator is "not verified" in the Guide.
-17. **Publishing.** Rule 8: nothing is pushed or published until you say "publish". `docs/PUBLISH.md` describes the single step.
+17. **Published (4 Nov 2026).** The repository is public and the site is deployed. See `docs/HANDOFF.md` for what is live, what is unreviewed and what is left.
+18. **Delete the GitHub token** you pasted into the chat.
+19. **Repository name spelling.** GitHub names it `adritatori/ACTCM`. Links use `adritatori/actcm`, which GitHub redirects; the site address uses `ACTCM`.

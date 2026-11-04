@@ -266,7 +266,10 @@ def test_repo_links_are_marked_as_working_after_publishing(fn):
     hits = [b for b in blocks if "github.com/adritatori/actcm" in b]
     assert hits, fn
     for b in hits:
-        assert re.search(r"works? after publishing", b), re.sub(r"\s+", " ", b)[-200:]
+        if c.config().get("published"):
+            assert not re.search(r"works? after publishing", b), "the repository is live, so the pending note must be gone"
+        else:
+            assert re.search(r"works? after publishing", b), re.sub(r"\s+", " ", b)[-200:]
 
 
 def test_images_exist_with_alt_text_and_size():
