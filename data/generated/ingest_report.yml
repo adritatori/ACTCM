@@ -1,0 +1,38 @@
+folder_count_incl_unfinished:
+  linuxarena: 92
+  refactor_arena: 7
+  vllm: 15
+unfinished_upstream: []
+counts:
+  linuxarena:
+    auto_workflow: 11
+    clinical_trial: 5
+    file_indexing: 13
+    media_processing: 9
+    model_registry: 9
+    shared_dotfiles: 11
+    slack_clone: 9
+    tiktok: 9
+    user_tracking: 7
+    web_scraping: 9
+  refactor_arena:
+    refactor_arena: 7
+  vllm:
+    vllm: 15
+totals:
+  linuxarena: 92
+  refactor_arena: 7
+  vllm: 15
+total: 114
+expected:
+  linuxarena: 92
+  refactor_arena: 7
+  vllm: 15
+duplicate_ids: {}
+no_goal_file: []
+init_parse_notes: []
+goal_file_kinds:
+  docs/goal.md: 114
+goal_text_withheld_no_licence: 0
+problems: []
+stale_removed: 0

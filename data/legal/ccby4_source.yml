@@ -1,0 +1,8 @@
+source: spdx/license-list-data, text/CC-BY-4.0.txt
+commit: 31846481de7ea17d92f2f46fad76abe58b2e9bb0
+sha256: d557539df68e771cc1eedcc91d13f70fca930e508d11eedcafa4b15db49e3744
+bytes: 17023
+url: https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/CC-BY-4.0.txt
+canonical: https://creativecommons.org/licenses/by/4.0/legalcode
+note: Plain-text form of the official legal code; creativecommons.org was not reachable
+  from the build session.

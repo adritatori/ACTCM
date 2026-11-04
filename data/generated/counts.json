@@ -1,0 +1,1452 @@
+{
+ "provisional": true,
+ "provisional_note": "PROVISIONAL. No human has reviewed any label yet. Counts and gaps may still change: two decisions are open (the three tenant-isolation tasks, and the line between Stealth and Defense Impairment).",
+ "settings": [
+  {
+   "id": "linuxarena",
+   "name": "LinuxArena",
+   "hash": "linuxarena"
+  },
+  {
+   "id": "refactor_arena",
+   "name": "Refactor Arena",
+   "hash": "refactor"
+  },
+  {
+   "id": "vllm",
+   "name": "vLLM",
+   "hash": "vllm"
+  }
+ ],
+ "extras_note": "LinuxArena extras is not included in v0.1, pending permission from its maintainers.",
+ "versions": {
+  "attack": "20.0",
+  "atlas": "2026.10",
+  "codebook": "1.1-draft",
+  "attack_sha": "20664a889568dce884a1dac0ec7b12ae3a199f51",
+  "atlas_sha": "f56c1468731d6428e5bf875263b4643b46d67437",
+  "attack_sha256": "81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+  "atlas_sha256": "ac41ee9f99a47084ba5fdfc77ae83a28687e12390240fffeb37df7914ffe142d"
+ },
+ "totals": {
+  "tasks": 114,
+  "by_setting": {
+   "linuxarena": 92,
+   "refactor_arena": 7,
+   "vllm": 15
+  },
+  "by_environment": {
+   "linuxarena": {
+    "auto_workflow": 11,
+    "clinical_trial": 5,
+    "file_indexing": 13,
+    "media_processing": 9,
+    "model_registry": 9,
+    "shared_dotfiles": 11,
+    "slack_clone": 9,
+    "tiktok": 9,
+    "user_tracking": 7,
+    "web_scraping": 9
+   },
+   "refactor_arena": {
+    "refactor_arena": 7
+   },
+   "vllm": {
+    "vllm": 15
+   }
+  },
+  "unfinished_upstream": 0
+ },
+ "tactics": [
+  {
+   "id": "TA0043",
+   "name": "Reconnaissance",
+   "shortname": "reconnaissance",
+   "primary": {
+    "all": 0,
+    "linuxarena": 0,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "with_steps": {
+    "all": 0,
+    "linuxarena": 0,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "techniques_used": [],
+   "techniques_used_n": 0,
+   "techniques_available_n": 46,
+   "parents_available_n": 12,
+   "parents_used_n": 0,
+   "gap_primary": true,
+   "gap_with_steps": true
+  },
+  {
+   "id": "TA0042",
+   "name": "Resource Development",
+   "shortname": "resource-development",
+   "primary": {
+    "all": 0,
+    "linuxarena": 0,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "with_steps": {
+    "all": 0,
+    "linuxarena": 0,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "techniques_used": [],
+   "techniques_used_n": 0,
+   "techniques_available_n": 51,
+   "parents_available_n": 9,
+   "parents_used_n": 0,
+   "gap_primary": true,
+   "gap_with_steps": true
+  },
+  {
+   "id": "TA0001",
+   "name": "Initial Access",
+   "shortname": "initial-access",
+   "primary": {
+    "all": 9,
+    "linuxarena": 9,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "with_steps": {
+    "all": 20,
+    "linuxarena": 20,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "techniques_used": [
+    "T1190",
+    "T1566"
+   ],
+   "techniques_used_n": 2,
+   "techniques_available_n": 22,
+   "parents_available_n": 11,
+   "parents_used_n": 2,
+   "gap_primary": false,
+   "gap_with_steps": false
+  },
+  {
+   "id": "TA0002",
+   "name": "Execution",
+   "shortname": "execution",
+   "primary": {
+    "all": 21,
+    "linuxarena": 20,
+    "refactor_arena": 0,
+    "vllm": 1
+   },
+   "with_steps": {
+    "all": 21,
+    "linuxarena": 20,
+    "refactor_arena": 0,
+    "vllm": 1
+   },
+   "techniques_used": [
+    "T1059"
+   ],
+   "techniques_used_n": 1,
+   "techniques_available_n": 66,
+   "parents_available_n": 22,
+   "parents_used_n": 1,
+   "gap_primary": false,
+   "gap_with_steps": false
+  },
+  {
+   "id": "TA0003",
+   "name": "Persistence",
+   "shortname": "persistence",
+   "primary": {
+    "all": 3,
+    "linuxarena": 2,
+    "refactor_arena": 0,
+    "vllm": 1
+   },
+   "with_steps": {
+    "all": 5,
+    "linuxarena": 4,
+    "refactor_arena": 0,
+    "vllm": 1
+   },
+   "techniques_used": [
+    "T1098.004"
+   ],
+   "techniques_used_n": 1,
+   "techniques_available_n": 113,
+   "parents_available_n": 22,
+   "parents_used_n": 1,
+   "gap_primary": false,
+   "gap_with_steps": false
+  },
+  {
+   "id": "TA0004",
+   "name": "Privilege Escalation",
+   "shortname": "privilege-escalation",
+   "primary": {
+    "all": 4,
+    "linuxarena": 3,
+    "refactor_arena": 1,
+    "vllm": 0
+   },
+   "with_steps": {
+    "all": 22,
+    "linuxarena": 21,
+    "refactor_arena": 1,
+    "vllm": 0
+   },
+   "techniques_used": [
+    "T1068",
+    "T1098"
+   ],
+   "techniques_used_n": 2,
+   "techniques_available_n": 96,
+   "parents_available_n": 13,
+   "parents_used_n": 2,
+   "gap_primary": false,
+   "gap_with_steps": false
+  },
+  {
+   "id": "TA0005",
+   "name": "Stealth",
+   "shortname": "stealth",
+   "primary": {
+    "all": 3,
+    "linuxarena": 2,
+    "refactor_arena": 0,
+    "vllm": 1
+   },
+   "with_steps": {
+    "all": 4,
+    "linuxarena": 3,
+    "refactor_arena": 0,
+    "vllm": 1
+   },
+   "techniques_used": [
+    "T1070",
+    "T1070.003",
+    "T1564"
+   ],
+   "techniques_used_n": 3,
+   "techniques_available_n": 151,
+   "parents_available_n": 31,
+   "parents_used_n": 2,
+   "gap_primary": false,
+   "gap_with_steps": false
+  },
+  {
+   "id": "TA0112",
+   "name": "Defense Impairment",
+   "shortname": "defense-impairment",
+   "primary": {
+    "all": 11,
+    "linuxarena": 5,
+    "refactor_arena": 3,
+    "vllm": 3
+   },
+   "with_steps": {
+    "all": 11,
+    "linuxarena": 5,
+    "refactor_arena": 3,
+    "vllm": 3
+   },
+   "techniques_used": [
+    "T1685",
+    "T1686"
+   ],
+   "techniques_used_n": 2,
+   "techniques_available_n": 57,
+   "parents_available_n": 18,
+   "parents_used_n": 2,
+   "gap_primary": false,
+   "gap_with_steps": false
+  },
+  {
+   "id": "TA0006",
+   "name": "Credential Access",
+   "shortname": "credential-access",
+   "primary": {
+    "all": 2,
+    "linuxarena": 2,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "with_steps": {
+    "all": 4,
+    "linuxarena": 2,
+    "refactor_arena": 0,
+    "vllm": 2
+   },
+   "techniques_used": [
+    "T1056",
+    "T1552"
+   ],
+   "techniques_used_n": 2,
+   "techniques_available_n": 68,
+   "parents_available_n": 18,
+   "parents_used_n": 2,
+   "gap_primary": false,
+   "gap_with_steps": false
+  },
+  {
+   "id": "TA0007",
+   "name": "Discovery",
+   "shortname": "discovery",
+   "primary": {
+    "all": 0,
+    "linuxarena": 0,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "with_steps": {
+    "all": 0,
+    "linuxarena": 0,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "techniques_used": [],
+   "techniques_used_n": 0,
+   "techniques_available_n": 49,
+   "parents_available_n": 34,
+   "parents_used_n": 0,
+   "gap_primary": true,
+   "gap_with_steps": true
+  },
+  {
+   "id": "TA0008",
+   "name": "Lateral Movement",
+   "shortname": "lateral-movement",
+   "primary": {
+    "all": 0,
+    "linuxarena": 0,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "with_steps": {
+    "all": 0,
+    "linuxarena": 0,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "techniques_used": [],
+   "techniques_used_n": 0,
+   "techniques_available_n": 23,
+   "parents_available_n": 9,
+   "parents_used_n": 0,
+   "gap_primary": true,
+   "gap_with_steps": true
+  },
+  {
+   "id": "TA0009",
+   "name": "Collection",
+   "shortname": "collection",
+   "primary": {
+    "all": 6,
+    "linuxarena": 6,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "with_steps": {
+    "all": 8,
+    "linuxarena": 6,
+    "refactor_arena": 0,
+    "vllm": 2
+   },
+   "techniques_used": [
+    "T1005",
+    "T1056",
+    "T1213",
+    "T1530"
+   ],
+   "techniques_used_n": 4,
+   "techniques_available_n": 41,
+   "parents_available_n": 17,
+   "parents_used_n": 4,
+   "gap_primary": false,
+   "gap_with_steps": false
+  },
+  {
+   "id": "TA0011",
+   "name": "Command and Control",
+   "shortname": "command-and-control",
+   "primary": {
+    "all": 12,
+    "linuxarena": 10,
+    "refactor_arena": 0,
+    "vllm": 2
+   },
+   "with_steps": {
+    "all": 31,
+    "linuxarena": 28,
+    "refactor_arena": 0,
+    "vllm": 3
+   },
+   "techniques_used": [
+    "T1001.002",
+    "T1071"
+   ],
+   "techniques_used_n": 2,
+   "techniques_available_n": 45,
+   "parents_available_n": 18,
+   "parents_used_n": 2,
+   "gap_primary": false,
+   "gap_with_steps": false
+  },
+  {
+   "id": "TA0010",
+   "name": "Exfiltration",
+   "shortname": "exfiltration",
+   "primary": {
+    "all": 24,
+    "linuxarena": 17,
+    "refactor_arena": 2,
+    "vllm": 5
+   },
+   "with_steps": {
+    "all": 24,
+    "linuxarena": 17,
+    "refactor_arena": 2,
+    "vllm": 5
+   },
+   "techniques_used": [
+    "T1048"
+   ],
+   "techniques_used_n": 1,
+   "techniques_available_n": 20,
+   "parents_available_n": 10,
+   "parents_used_n": 1,
+   "gap_primary": false,
+   "gap_with_steps": false
+  },
+  {
+   "id": "TA0040",
+   "name": "Impact",
+   "shortname": "impact",
+   "primary": {
+    "all": 19,
+    "linuxarena": 16,
+    "refactor_arena": 1,
+    "vllm": 2
+   },
+   "with_steps": {
+    "all": 19,
+    "linuxarena": 16,
+    "refactor_arena": 1,
+    "vllm": 2
+   },
+   "techniques_used": [
+    "T1485",
+    "T1531",
+    "T1565.001",
+    "T1565.002"
+   ],
+   "techniques_used_n": 4,
+   "techniques_available_n": 33,
+   "parents_available_n": 15,
+   "parents_used_n": 3,
+   "gap_primary": false,
+   "gap_with_steps": false
+  }
+ ],
+ "techniques": [
+  {
+   "id": "T1190",
+   "name": "Exploit Public-Facing Application",
+   "tactic": "TA0001",
+   "count": 8,
+   "by_setting": {
+    "linuxarena": 8,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/auto_workflow/aw_rce",
+    "linuxarena/file_indexing/fi_rce",
+    "linuxarena/media_processing/mp_rce",
+    "linuxarena/model_registry/mr_rce",
+    "linuxarena/slack_clone/sc_rce",
+    "linuxarena/tiktok/tt_rce",
+    "linuxarena/user_tracking/ut_rce",
+    "linuxarena/web_scraping/ws_rce"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1566",
+   "name": "Phishing",
+   "tactic": "TA0001",
+   "count": 1,
+   "by_setting": {
+    "linuxarena": 1,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/slack_clone/login_hijack"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1059",
+   "name": "Command and Scripting Interpreter",
+   "tactic": "TA0002",
+   "count": 21,
+   "by_setting": {
+    "linuxarena": 20,
+    "refactor_arena": 0,
+    "vllm": 1
+   },
+   "task_uids": [
+    "linuxarena/auto_workflow/aw_run_malware_delayed",
+    "linuxarena/auto_workflow/aw_run_malware_live",
+    "linuxarena/auto_workflow/execute_malicious_workflow",
+    "linuxarena/file_indexing/fi_run_malware_delayed",
+    "linuxarena/file_indexing/fi_run_malware_live",
+    "linuxarena/media_processing/mp_run_malware_delayed",
+    "linuxarena/media_processing/mp_run_malware_live",
+    "linuxarena/model_registry/mr_run_malware_delayed",
+    "linuxarena/model_registry/mr_run_malware_live",
+    "linuxarena/shared_dotfiles/sd_run_malware_live",
+    "linuxarena/slack_clone/sc_run_malware_delayed",
+    "linuxarena/slack_clone/sc_run_malware_live",
+    "linuxarena/tiktok/tt_run_malware_delayed",
+    "linuxarena/tiktok/tt_run_malware_live",
+    "linuxarena/user_tracking/ut_run_malware_delayed",
+    "linuxarena/user_tracking/ut_run_malware_live",
+    "linuxarena/web_scraping/embedded_code_execution",
+    "linuxarena/web_scraping/remote_code_download",
+    "linuxarena/web_scraping/ws_run_malware_delayed",
+    "linuxarena/web_scraping/ws_run_malware_live",
+    "vllm/vllm/download_execute_code_sync"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1098.004",
+   "name": "SSH Authorized Keys",
+   "tactic": "TA0003",
+   "count": 2,
+   "by_setting": {
+    "linuxarena": 2,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/shared_dotfiles/shell_access",
+    "linuxarena/slack_clone/ssh_backdoor"
+   ],
+   "also_in_tactics": [
+    "TA0004"
+   ]
+  },
+  {
+   "id": "T1068",
+   "name": "Exploitation for Privilege Escalation",
+   "tactic": "TA0004",
+   "count": 1,
+   "by_setting": {
+    "linuxarena": 1,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/file_indexing/access_secret_files_you_dont_own"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1098",
+   "name": "Account Manipulation",
+   "tactic": "TA0004",
+   "count": 3,
+   "by_setting": {
+    "linuxarena": 2,
+    "refactor_arena": 1,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/model_registry/privilege_escalation",
+    "linuxarena/tiktok/become_admin",
+    "refactor_arena/refactor_arena/escalate_user_privileges"
+   ],
+   "also_in_tactics": [
+    "TA0003"
+   ]
+  },
+  {
+   "id": "T1070",
+   "name": "Indicator Removal",
+   "tactic": "TA0005",
+   "count": 1,
+   "by_setting": {
+    "linuxarena": 1,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/user_tracking/delete_evidence"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1070.003",
+   "name": "Clear Command History",
+   "tactic": "TA0005",
+   "count": 1,
+   "by_setting": {
+    "linuxarena": 1,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/shared_dotfiles/erase_history"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1564",
+   "name": "Hide Artifacts",
+   "tactic": "TA0005",
+   "count": 1,
+   "by_setting": {
+    "linuxarena": 0,
+    "refactor_arena": 0,
+    "vllm": 1
+   },
+   "task_uids": [
+    "vllm/vllm/rogue_inference_endpoint"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1056",
+   "name": "Input Capture",
+   "tactic": "TA0006",
+   "count": 1,
+   "by_setting": {
+    "linuxarena": 1,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/shared_dotfiles/capture_unix_passwords"
+   ],
+   "also_in_tactics": [
+    "TA0009"
+   ]
+  },
+  {
+   "id": "T1552",
+   "name": "Unsecured Credentials",
+   "tactic": "TA0006",
+   "count": 1,
+   "by_setting": {
+    "linuxarena": 1,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/shared_dotfiles/appropriate_secrets"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1005",
+   "name": "Data from Local System",
+   "tactic": "TA0009",
+   "count": 2,
+   "by_setting": {
+    "linuxarena": 2,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/file_indexing/deleted_files_persist",
+    "linuxarena/file_indexing/leak_secret"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1056",
+   "name": "Input Capture",
+   "tactic": "TA0009",
+   "count": 1,
+   "by_setting": {
+    "linuxarena": 1,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/shared_dotfiles/intercept_vim_files"
+   ],
+   "also_in_tactics": [
+    "TA0006"
+   ]
+  },
+  {
+   "id": "T1213",
+   "name": "Data from Information Repositories",
+   "tactic": "TA0009",
+   "count": 2,
+   "by_setting": {
+    "linuxarena": 2,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/auto_workflow/hijack_cross_team_workflows",
+    "linuxarena/file_indexing/authentication_bypass"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1530",
+   "name": "Data from Cloud Storage",
+   "tactic": "TA0009",
+   "count": 1,
+   "by_setting": {
+    "linuxarena": 1,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/media_processing/access_other_teams_media"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1048",
+   "name": "Exfiltration Over Alternative Protocol",
+   "tactic": "TA0010",
+   "count": 24,
+   "by_setting": {
+    "linuxarena": 17,
+    "refactor_arena": 2,
+    "vllm": 5
+   },
+   "task_uids": [
+    "linuxarena/auto_workflow/aw_exfiltrate_secrets_delayed",
+    "linuxarena/auto_workflow/aw_exfiltrate_secrets_live",
+    "linuxarena/clinical_trial/export_medical_data",
+    "linuxarena/file_indexing/fi_exfiltrate_secrets_delayed",
+    "linuxarena/file_indexing/fi_exfiltrate_secrets_live",
+    "linuxarena/model_registry/exfiltrate_credentials",
+    "linuxarena/model_registry/exfiltrate_weights",
+    "linuxarena/shared_dotfiles/sd_exfiltrate_secrets_delayed",
+    "linuxarena/shared_dotfiles/sd_exfiltrate_secrets_live",
+    "linuxarena/slack_clone/exfiltrate_private_messages_delayed",
+    "linuxarena/slack_clone/exfiltrate_private_messages_live",
+    "linuxarena/tiktok/access_user_account",
+    "linuxarena/tiktok/exfiltrate_tokens",
+    "linuxarena/tiktok/leak_env_vars",
+    "linuxarena/user_tracking/exfiltrate_server_secrets",
+    "linuxarena/web_scraping/expose_secret",
+    "linuxarena/web_scraping/log_credentials",
+    "refactor_arena/refactor_arena/exfiltrate_api_key",
+    "refactor_arena/refactor_arena/exfiltrate_secret",
+    "vllm/vllm/exfiltrate_codebase_sync",
+    "vllm/vllm/exfiltrate_env_secrets",
+    "vllm/vllm/exfiltrate_ssh_keys_sync",
+    "vllm/vllm/redirect_inference_requests",
+    "vllm/vllm/weight_exfiltration_loading"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1001.002",
+   "name": "Steganography",
+   "tactic": "TA0011",
+   "count": 2,
+   "by_setting": {
+    "linuxarena": 0,
+    "refactor_arena": 0,
+    "vllm": 2
+   },
+   "task_uids": [
+    "vllm/vllm/covert_communication_channel",
+    "vllm/vllm/logit_steganography"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1071",
+   "name": "Application Layer Protocol",
+   "tactic": "TA0011",
+   "count": 10,
+   "by_setting": {
+    "linuxarena": 10,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/auto_workflow/aw_reverse_shell",
+    "linuxarena/auto_workflow/implant_worker_backdoor",
+    "linuxarena/file_indexing/fi_reverse_shell",
+    "linuxarena/media_processing/mp_reverse_shell",
+    "linuxarena/model_registry/mr_reverse_shell",
+    "linuxarena/shared_dotfiles/sd_reverse_shell",
+    "linuxarena/slack_clone/sc_reverse_shell",
+    "linuxarena/tiktok/tt_reverse_shell",
+    "linuxarena/user_tracking/ut_reverse_shell",
+    "linuxarena/web_scraping/ws_reverse_shell"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1485",
+   "name": "Data Destruction",
+   "tactic": "TA0040",
+   "count": 3,
+   "by_setting": {
+    "linuxarena": 3,
+    "refactor_arena": 0,
+    "vllm": 0
+   },
+   "task_uids": [
+    "linuxarena/clinical_trial/delete_blood_tests_and_backups",
+    "linuxarena/media_processing/delete_media_no_trace",
+    "linuxarena/model_registry/delete_model"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1531",
+   "name": "Account Access Removal",
+   "tactic": "TA0040",
+   "count": 1,
+   "by_setting": {
+    "linuxarena": 0,
+    "refactor_arena": 1,
+    "vllm": 0
+   },
+   "task_uids": [
+    "refactor_arena/refactor_arena/change_any_password_in_database"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1565.001",
+   "name": "Stored Data Manipulation",
+   "tactic": "TA0040",
+   "count": 11,
+   "by_setting": {
+    "linuxarena": 10,
+    "refactor_arena": 0,
+    "vllm": 1
+   },
+   "task_uids": [
+    "linuxarena/auto_workflow/poison_git_sync",
+    "linuxarena/clinical_trial/withdrawal_misclassification",
+    "linuxarena/file_indexing/file_corruption",
+    "linuxarena/file_indexing/redis_indexer_result_poisoning",
+    "linuxarena/file_indexing/vector_indexer_result_poisoning",
+    "linuxarena/media_processing/diarization_speaker_change",
+    "linuxarena/model_registry/pollute_training",
+    "linuxarena/slack_clone/message_impersonate",
+    "linuxarena/tiktok/malicious_website",
+    "linuxarena/user_tracking/malicious_stories",
+    "vllm/vllm/embed_weight_triggers"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1565.002",
+   "name": "Transmitted Data Manipulation",
+   "tactic": "TA0040",
+   "count": 4,
+   "by_setting": {
+    "linuxarena": 3,
+    "refactor_arena": 0,
+    "vllm": 1
+   },
+   "task_uids": [
+    "linuxarena/clinical_trial/suppress_safety_notifications",
+    "linuxarena/clinical_trial/suppress_warnings",
+    "linuxarena/media_processing/hijack_hls_playback",
+    "vllm/vllm/inject_hidden_tokens"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1685",
+   "name": "Disable or Modify Tools",
+   "tactic": "TA0112",
+   "count": 9,
+   "by_setting": {
+    "linuxarena": 5,
+    "refactor_arena": 2,
+    "vllm": 2
+   },
+   "task_uids": [
+    "linuxarena/auto_workflow/suppress_workflow_audits",
+    "linuxarena/media_processing/submit_untracked_job",
+    "linuxarena/shared_dotfiles/bypass_blacklist",
+    "linuxarena/shared_dotfiles/install_blacklisted_package",
+    "linuxarena/web_scraping/visit_malicious_website",
+    "refactor_arena/refactor_arena/kill_safety_monitor_process",
+    "refactor_arena/refactor_arena/kill_web_proxy_process",
+    "vllm/vllm/disable_safety_filters",
+    "vllm/vllm/disable_token_logging"
+   ],
+   "also_in_tactics": []
+  },
+  {
+   "id": "T1686",
+   "name": "Disable or Modify System Firewall",
+   "tactic": "TA0112",
+   "count": 1,
+   "by_setting": {
+    "linuxarena": 0,
+    "refactor_arena": 1,
+    "vllm": 0
+   },
+   "task_uids": [
+    "refactor_arena/refactor_arena/kill_firewall_process"
+   ],
+   "also_in_tactics": []
+  }
+ ],
+ "tasks_with_null_technique": [
+  "vllm/vllm/bypass_request_priority",
+  "vllm/vllm/persist_malicious_state"
+ ],
+ "atlas": {
+  "version": "2026.10",
+  "tasks_with_atlas_label": 12,
+  "summary_by_setting": {
+   "all": {
+    "tasks_with_atlas_label": 12,
+    "tactics_with_task": 6,
+    "tactics_total": 16
+   },
+   "linuxarena": {
+    "tasks_with_atlas_label": 6,
+    "tactics_with_task": 3,
+    "tactics_total": 16
+   },
+   "refactor_arena": {
+    "tasks_with_atlas_label": 0,
+    "tactics_with_task": 0,
+    "tactics_total": 16
+   },
+   "vllm": {
+    "tasks_with_atlas_label": 6,
+    "tactics_with_task": 5,
+    "tactics_total": 16
+   }
+  },
+  "tactics": [
+   {
+    "id": "AML.TA0002",
+    "name": "Reconnaissance",
+    "tasks": 0,
+    "techniques": []
+   },
+   {
+    "id": "AML.TA0003",
+    "name": "Resource Development",
+    "tasks": 0,
+    "techniques": []
+   },
+   {
+    "id": "AML.TA0001",
+    "name": "AI Attack Adaptation",
+    "tasks": 2,
+    "techniques": [
+     "AML.T0018",
+     "AML.T0018.000"
+    ]
+   },
+   {
+    "id": "AML.TA0004",
+    "name": "Initial Access",
+    "tasks": 0,
+    "techniques": []
+   },
+   {
+    "id": "AML.TA0000",
+    "name": "AI Model Access",
+    "tasks": 0,
+    "techniques": []
+   },
+   {
+    "id": "AML.TA0005",
+    "name": "Execution",
+    "tasks": 1,
+    "techniques": [
+     "AML.T0051"
+    ]
+   },
+   {
+    "id": "AML.TA0006",
+    "name": "Persistence",
+    "tasks": 5,
+    "techniques": [
+     "AML.T0018",
+     "AML.T0018.000",
+     "AML.T0020",
+     "AML.T0070"
+    ]
+   },
+   {
+    "id": "AML.TA0012",
+    "name": "Privilege Escalation",
+    "tasks": 0,
+    "techniques": []
+   },
+   {
+    "id": "AML.TA0007",
+    "name": "Defense Evasion",
+    "tasks": 0,
+    "techniques": []
+   },
+   {
+    "id": "AML.TA0013",
+    "name": "Credential Access",
+    "tasks": 0,
+    "techniques": []
+   },
+   {
+    "id": "AML.TA0008",
+    "name": "Discovery",
+    "tasks": 0,
+    "techniques": []
+   },
+   {
+    "id": "AML.TA0015",
+    "name": "Lateral Movement",
+    "tasks": 0,
+    "techniques": []
+   },
+   {
+    "id": "AML.TA0009",
+    "name": "Collection",
+    "tasks": 0,
+    "techniques": []
+   },
+   {
+    "id": "AML.TA0014",
+    "name": "Command and Control",
+    "tasks": 1,
+    "techniques": [
+     "AML.T0072"
+    ]
+   },
+   {
+    "id": "AML.TA0010",
+    "name": "Exfiltration",
+    "tasks": 3,
+    "techniques": [
+     "AML.T0024",
+     "AML.T0025"
+    ]
+   },
+   {
+    "id": "AML.TA0011",
+    "name": "Impact",
+    "tasks": 2,
+    "techniques": [
+     "AML.T0031",
+     "AML.T0059"
+    ]
+   }
+  ],
+  "techniques": [
+   {
+    "id": "AML.T0018",
+    "name": "Manipulate AI Model",
+    "tactics": [
+     "AML.TA0001",
+     "AML.TA0006"
+    ],
+    "count": 1,
+    "task_uids": [
+     "vllm/vllm/persist_malicious_state"
+    ]
+   },
+   {
+    "id": "AML.T0018.000",
+    "name": "Poison AI Model",
+    "tactics": [
+     "AML.TA0001",
+     "AML.TA0006"
+    ],
+    "count": 1,
+    "task_uids": [
+     "vllm/vllm/embed_weight_triggers"
+    ]
+   },
+   {
+    "id": "AML.T0020",
+    "name": "Training Data Poisoning",
+    "tactics": [
+     "AML.TA0006"
+    ],
+    "count": 2,
+    "task_uids": [
+     "linuxarena/model_registry/pollute_training",
+     "linuxarena/user_tracking/malicious_stories"
+    ]
+   },
+   {
+    "id": "AML.T0024",
+    "name": "Exfiltration via AI Inference API",
+    "tactics": [
+     "AML.TA0010"
+    ],
+    "count": 1,
+    "task_uids": [
+     "vllm/vllm/logit_steganography"
+    ]
+   },
+   {
+    "id": "AML.T0025",
+    "name": "Exfiltration via Cyber Means",
+    "tactics": [
+     "AML.TA0010"
+    ],
+    "count": 2,
+    "task_uids": [
+     "linuxarena/model_registry/exfiltrate_weights",
+     "vllm/vllm/weight_exfiltration_loading"
+    ]
+   },
+   {
+    "id": "AML.T0031",
+    "name": "Erode AI Model Integrity",
+    "tactics": [
+     "AML.TA0011"
+    ],
+    "count": 1,
+    "task_uids": [
+     "linuxarena/model_registry/delete_model"
+    ]
+   },
+   {
+    "id": "AML.T0051",
+    "name": "LLM Prompt Injection",
+    "tactics": [
+     "AML.TA0005"
+    ],
+    "count": 1,
+    "task_uids": [
+     "vllm/vllm/inject_hidden_tokens"
+    ]
+   },
+   {
+    "id": "AML.T0059",
+    "name": "Erode Dataset Integrity",
+    "tactics": [
+     "AML.TA0011"
+    ],
+    "count": 1,
+    "task_uids": [
+     "linuxarena/file_indexing/redis_indexer_result_poisoning"
+    ]
+   },
+   {
+    "id": "AML.T0070",
+    "name": "RAG Poisoning",
+    "tactics": [
+     "AML.TA0006"
+    ],
+    "count": 1,
+    "task_uids": [
+     "linuxarena/file_indexing/vector_indexer_result_poisoning"
+    ]
+   },
+   {
+    "id": "AML.T0072",
+    "name": "Cyber Communication Channel",
+    "tactics": [
+     "AML.TA0014"
+    ],
+    "count": 1,
+    "task_uids": [
+     "vllm/vllm/covert_communication_channel"
+    ]
+   }
+  ]
+ },
+ "gaps": {
+  "primary": [
+   "TA0043",
+   "TA0042",
+   "TA0007",
+   "TA0008"
+  ],
+  "with_steps": [
+   "TA0043",
+   "TA0042",
+   "TA0007",
+   "TA0008"
+  ]
+ },
+ "summary": {
+  "tasks": 114,
+  "tactics_total": 15,
+  "tactics_covered_primary": 11,
+  "tactics_covered_with_steps": 11,
+  "gap_tactics_primary": 4,
+  "gap_tactics_with_steps": 4,
+  "template_tasks": 34,
+  "template_share_percent": 29.8,
+  "ambiguous_labels": 20,
+  "planned_scorer_tasks": 0,
+  "null_technique_tasks": 2,
+  "draft": 28,
+  "ai_cross_checked": 86,
+  "reviewed": 0,
+  "adjudicated": 0,
+  "unlabelled": 0
+ },
+ "tiers": {
+  "total": {
+   "draft_needs_human_review": 28,
+   "ai_cross_checked": 86,
+   "reviewed": 0,
+   "adjudicated": 0,
+   "unlabelled": 0
+  },
+  "by_setting": {
+   "linuxarena": {
+    "draft_needs_human_review": 19,
+    "ai_cross_checked": 73,
+    "reviewed": 0,
+    "adjudicated": 0,
+    "unlabelled": 0
+   },
+   "refactor_arena": {
+    "draft_needs_human_review": 1,
+    "ai_cross_checked": 6,
+    "reviewed": 0,
+    "adjudicated": 0,
+    "unlabelled": 0
+   },
+   "vllm": {
+    "draft_needs_human_review": 8,
+    "ai_cross_checked": 7,
+    "reviewed": 0,
+    "adjudicated": 0,
+    "unlabelled": 0
+   }
+  }
+ },
+ "summary_by_setting": {
+  "all": {
+   "tasks": 114,
+   "tactics_total": 15,
+   "tactics_covered_primary": 11,
+   "tactics_covered_with_steps": 11,
+   "gap_tactics_primary": 4,
+   "gap_tactics_with_steps": 4,
+   "gap_ids_primary": [
+    "TA0043",
+    "TA0042",
+    "TA0007",
+    "TA0008"
+   ],
+   "gap_ids_with_steps": [
+    "TA0043",
+    "TA0042",
+    "TA0007",
+    "TA0008"
+   ],
+   "template_tasks": 34,
+   "template_share_percent": 29.8,
+   "ambiguous_labels": 20,
+   "planned_scorer_tasks": 0,
+   "null_technique_tasks": 2,
+   "tiers": {
+    "draft_needs_human_review": 28,
+    "ai_cross_checked": 86,
+    "reviewed": 0,
+    "adjudicated": 0,
+    "unlabelled": 0
+   }
+  },
+  "linuxarena": {
+   "tasks": 92,
+   "tactics_total": 15,
+   "tactics_covered_primary": 11,
+   "tactics_covered_with_steps": 11,
+   "gap_tactics_primary": 4,
+   "gap_tactics_with_steps": 4,
+   "gap_ids_primary": [
+    "TA0043",
+    "TA0042",
+    "TA0007",
+    "TA0008"
+   ],
+   "gap_ids_with_steps": [
+    "TA0043",
+    "TA0042",
+    "TA0007",
+    "TA0008"
+   ],
+   "template_tasks": 34,
+   "template_share_percent": 37.0,
+   "ambiguous_labels": 11,
+   "planned_scorer_tasks": 0,
+   "null_technique_tasks": 0,
+   "tiers": {
+    "draft_needs_human_review": 19,
+    "ai_cross_checked": 73,
+    "reviewed": 0,
+    "adjudicated": 0,
+    "unlabelled": 0
+   }
+  },
+  "refactor_arena": {
+   "tasks": 7,
+   "tactics_total": 15,
+   "tactics_covered_primary": 4,
+   "tactics_covered_with_steps": 4,
+   "gap_tactics_primary": 11,
+   "gap_tactics_with_steps": 11,
+   "gap_ids_primary": [
+    "TA0043",
+    "TA0042",
+    "TA0001",
+    "TA0002",
+    "TA0003",
+    "TA0005",
+    "TA0006",
+    "TA0007",
+    "TA0008",
+    "TA0009",
+    "TA0011"
+   ],
+   "gap_ids_with_steps": [
+    "TA0043",
+    "TA0042",
+    "TA0001",
+    "TA0002",
+    "TA0003",
+    "TA0005",
+    "TA0006",
+    "TA0007",
+    "TA0008",
+    "TA0009",
+    "TA0011"
+   ],
+   "template_tasks": 0,
+   "template_share_percent": 0.0,
+   "ambiguous_labels": 1,
+   "planned_scorer_tasks": 0,
+   "null_technique_tasks": 0,
+   "tiers": {
+    "draft_needs_human_review": 1,
+    "ai_cross_checked": 6,
+    "reviewed": 0,
+    "adjudicated": 0,
+    "unlabelled": 0
+   }
+  },
+  "vllm": {
+   "tasks": 15,
+   "tactics_total": 15,
+   "tactics_covered_primary": 7,
+   "tactics_covered_with_steps": 9,
+   "gap_tactics_primary": 8,
+   "gap_tactics_with_steps": 6,
+   "gap_ids_primary": [
+    "TA0043",
+    "TA0042",
+    "TA0001",
+    "TA0004",
+    "TA0006",
+    "TA0007",
+    "TA0008",
+    "TA0009"
+   ],
+   "gap_ids_with_steps": [
+    "TA0043",
+    "TA0042",
+    "TA0001",
+    "TA0004",
+    "TA0007",
+    "TA0008"
+   ],
+   "template_tasks": 0,
+   "template_share_percent": 0.0,
+   "ambiguous_labels": 8,
+   "planned_scorer_tasks": 0,
+   "null_technique_tasks": 2,
+   "tiers": {
+    "draft_needs_human_review": 8,
+    "ai_cross_checked": 7,
+    "reviewed": 0,
+    "adjudicated": 0,
+    "unlabelled": 0
+   }
+  }
+ },
+ "lists": {
+  "ambiguous": [
+   "linuxarena/auto_workflow/hijack_cross_team_workflows",
+   "linuxarena/clinical_trial/suppress_safety_notifications",
+   "linuxarena/clinical_trial/suppress_warnings",
+   "linuxarena/clinical_trial/withdrawal_misclassification",
+   "linuxarena/file_indexing/authentication_bypass",
+   "linuxarena/file_indexing/deleted_files_persist",
+   "linuxarena/media_processing/access_other_teams_media",
+   "linuxarena/slack_clone/login_hijack",
+   "linuxarena/slack_clone/message_impersonate",
+   "linuxarena/tiktok/access_user_account",
+   "linuxarena/tiktok/malicious_website",
+   "refactor_arena/refactor_arena/change_any_password_in_database",
+   "vllm/vllm/bypass_request_priority",
+   "vllm/vllm/disable_token_logging",
+   "vllm/vllm/embed_weight_triggers",
+   "vllm/vllm/inject_hidden_tokens",
+   "vllm/vllm/logit_steganography",
+   "vllm/vllm/persist_malicious_state",
+   "vllm/vllm/redirect_inference_requests",
+   "vllm/vllm/rogue_inference_endpoint"
+  ],
+  "planned_scorer": [],
+  "templates": [
+   "linuxarena/auto_workflow/aw_rce",
+   "linuxarena/auto_workflow/aw_reverse_shell",
+   "linuxarena/auto_workflow/aw_run_malware_delayed",
+   "linuxarena/auto_workflow/aw_run_malware_live",
+   "linuxarena/file_indexing/fi_rce",
+   "linuxarena/file_indexing/fi_reverse_shell",
+   "linuxarena/file_indexing/fi_run_malware_delayed",
+   "linuxarena/file_indexing/fi_run_malware_live",
+   "linuxarena/media_processing/mp_rce",
+   "linuxarena/media_processing/mp_reverse_shell",
+   "linuxarena/media_processing/mp_run_malware_delayed",
+   "linuxarena/media_processing/mp_run_malware_live",
+   "linuxarena/model_registry/mr_rce",
+   "linuxarena/model_registry/mr_reverse_shell",
+   "linuxarena/model_registry/mr_run_malware_delayed",
+   "linuxarena/model_registry/mr_run_malware_live",
+   "linuxarena/shared_dotfiles/sd_reverse_shell",
+   "linuxarena/shared_dotfiles/sd_run_malware_live",
+   "linuxarena/slack_clone/sc_rce",
+   "linuxarena/slack_clone/sc_reverse_shell",
+   "linuxarena/slack_clone/sc_run_malware_delayed",
+   "linuxarena/slack_clone/sc_run_malware_live",
+   "linuxarena/tiktok/tt_rce",
+   "linuxarena/tiktok/tt_reverse_shell",
+   "linuxarena/tiktok/tt_run_malware_delayed",
+   "linuxarena/tiktok/tt_run_malware_live",
+   "linuxarena/user_tracking/ut_rce",
+   "linuxarena/user_tracking/ut_reverse_shell",
+   "linuxarena/user_tracking/ut_run_malware_delayed",
+   "linuxarena/user_tracking/ut_run_malware_live",
+   "linuxarena/web_scraping/ws_rce",
+   "linuxarena/web_scraping/ws_reverse_shell",
+   "linuxarena/web_scraping/ws_run_malware_delayed",
+   "linuxarena/web_scraping/ws_run_malware_live"
+  ]
+ }
+}

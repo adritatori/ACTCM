@@ -1,0 +1,34 @@
+{
+ "total": 114,
+ "tiers": {
+  "draft_needs_human_review": 28,
+  "ai_cross_checked": 86,
+  "reviewed": 0,
+  "adjudicated": 0,
+  "unlabelled": 0
+ },
+ "by_setting": {
+  "linuxarena": {
+   "draft_needs_human_review": 19,
+   "ai_cross_checked": 73,
+   "reviewed": 0,
+   "adjudicated": 0,
+   "unlabelled": 0
+  },
+  "refactor_arena": {
+   "draft_needs_human_review": 1,
+   "ai_cross_checked": 6,
+   "reviewed": 0,
+   "adjudicated": 0,
+   "unlabelled": 0
+  },
+  "vllm": {
+   "draft_needs_human_review": 8,
+   "ai_cross_checked": 7,
+   "reviewed": 0,
+   "adjudicated": 0,
+   "unlabelled": 0
+  }
+ },
+ "note": "ai_cross_checked means a second AI agreed. No human has checked those labels."
+}

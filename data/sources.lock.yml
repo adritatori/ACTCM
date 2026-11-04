@@ -1,0 +1,216 @@
+generated: '2026-11-04'
+note: Every task is read from the commit in `sha` below, never from a branch head.
+frameworks:
+  attack:
+    name: MITRE ATT&CK Enterprise
+    version: '20.0'
+    repo: mitre-attack/attack-stix-data
+    tag: v20.0
+    path: enterprise-attack/enterprise-attack-20.0.json
+    terms_of_use: https://attack.mitre.org/resources/legal-and-branding/terms-of-use/
+    licence_file: LICENSE.txt
+    sha: 20664a889568dce884a1dac0ec7b12ae3a199f51
+    sha256: 81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352
+    bytes: 55271014
+    licence_text_first_line: License
+  atlas:
+    name: MITRE ATLAS
+    version: '2026.10'
+    repo: mitre-atlas/atlas-data
+    tag: v6.1.0
+    path: dist/v6/ATLAS-2026.10.yaml
+    licence: Apache-2.0
+    licence_file: LICENSE
+    sha: f56c1468731d6428e5bf875263b4643b46d67437
+    sha256: ac41ee9f99a47084ba5fdfc77ae83a28687e12390240fffeb37df7914ffe142d
+    bytes: 1154660
+    licence_text_first_line: Copyright 2021-2026 MITRE
+manifests:
+- setting: linuxarena
+  repo: linuxarena/ct-linuxarena
+  tag: v0.4.0
+  sha: 4b3d6616cc8652d4c921ca4327e5544107598c16
+  note: 'The brief asks for tag v3.2.0, but this repo has no v3.2.0 tag (tags: v0.1.0-v0.4.0). v3.2.0
+    is the tag of each ENV repo, set in this repo''s envs.lock.yml. v0.4.0 is the newest tag and was the
+    default-branch head on 2026-11-04.'
+sources:
+- setting: linuxarena
+  environment: auto_workflow
+  repo: linuxarena/auto_workflow
+  tag: v3.2.0
+  sha: b3bada6ea825b5f82855fc09655e0c22c4372f74
+  tag_resolves_to_sha: true
+  tag_sha: b3bada6ea825b5f82855fc09655e0c22c4372f74
+  side_tasks_root: side_tasks
+  licence:
+    spdx: MIT
+    status: file
+    source: LICENSE
+    copyright: Copyright (c) 2025 LinuxArena
+- setting: linuxarena
+  environment: clinical_trial
+  repo: linuxarena/clinical_trial
+  tag: v3.2.0
+  sha: 9c319ef6285931646cf89f4b0ebecf1e19880279
+  tag_resolves_to_sha: true
+  tag_sha: 9c319ef6285931646cf89f4b0ebecf1e19880279
+  side_tasks_root: side_tasks
+  licence:
+    spdx: MIT
+    status: file
+    source: LICENSE
+    copyright: Copyright (c) 2025 LinuxArena
+- setting: linuxarena
+  environment: file_indexing
+  repo: linuxarena/file_indexing
+  tag: v3.2.0
+  sha: ea307733f125208b21a6ee9cd2870562af185fc2
+  tag_resolves_to_sha: true
+  tag_sha: ea307733f125208b21a6ee9cd2870562af185fc2
+  side_tasks_root: side_tasks
+  licence:
+    spdx: MIT
+    status: file
+    source: LICENSE
+    copyright: Copyright (c) 2025 LinuxArena
+- setting: linuxarena
+  environment: media_processing
+  repo: linuxarena/media_processing
+  tag: v3.2.0
+  sha: 9bb894b139d87a18bf0f0e570280622aaae2b6f6
+  tag_resolves_to_sha: true
+  tag_sha: 9bb894b139d87a18bf0f0e570280622aaae2b6f6
+  side_tasks_root: side_tasks
+  licence:
+    spdx: MIT
+    status: file
+    source: LICENSE
+    copyright: Copyright (c) 2025 LinuxArena
+- setting: linuxarena
+  environment: model_registry
+  repo: linuxarena/model_registry
+  tag: v3.2.0
+  sha: e2ebbda8849410d516f65e1b94fc508965f19d0a
+  tag_resolves_to_sha: true
+  tag_sha: e2ebbda8849410d516f65e1b94fc508965f19d0a
+  side_tasks_root: side_tasks
+  licence:
+    spdx: MIT
+    status: file
+    source: LICENSE
+    copyright: Copyright (c) 2025 LinuxArena
+- setting: linuxarena
+  environment: shared_dotfiles
+  repo: linuxarena/shared_dotfiles
+  tag: v3.2.0
+  sha: 93366d7591ce0534b8f2767835ffb5e1e661b4d2
+  tag_resolves_to_sha: true
+  tag_sha: 93366d7591ce0534b8f2767835ffb5e1e661b4d2
+  side_tasks_root: side_tasks
+  licence:
+    spdx: MIT
+    status: file
+    source: LICENSE
+    copyright: Copyright (c) 2025 LinuxArena
+- setting: linuxarena
+  environment: slack_clone
+  repo: linuxarena/slack_clone
+  tag: v3.2.0
+  sha: a1a5eb10ca5b766b905e515c045eccbf6d5d5b72
+  tag_resolves_to_sha: true
+  tag_sha: a1a5eb10ca5b766b905e515c045eccbf6d5d5b72
+  side_tasks_root: side_tasks
+  licence:
+    spdx: MIT
+    status: file
+    source: LICENSE
+    copyright: Copyright (c) 2025 LinuxArena
+- setting: linuxarena
+  environment: tiktok
+  repo: linuxarena/tiktok
+  tag: v3.2.0
+  sha: f553fd7b83e330b23863bea09560c2ffe9355552
+  tag_resolves_to_sha: true
+  tag_sha: f553fd7b83e330b23863bea09560c2ffe9355552
+  side_tasks_root: side_tasks
+  licence:
+    spdx: MIT
+    status: file
+    source: LICENSE
+    copyright: Copyright (c) 2025 LinuxArena
+- setting: linuxarena
+  environment: user_tracking
+  repo: linuxarena/user_tracking
+  tag: v3.2.0
+  sha: b2f2e208aad35eb97268a738c63b904e6787cda5
+  tag_resolves_to_sha: true
+  tag_sha: b2f2e208aad35eb97268a738c63b904e6787cda5
+  side_tasks_root: side_tasks
+  licence:
+    spdx: MIT
+    status: file
+    source: LICENSE
+    copyright: Copyright (c) 2025 LinuxArena
+- setting: linuxarena
+  environment: web_scraping
+  repo: linuxarena/web_scraping
+  tag: v3.2.0
+  sha: 7e8ae8c1af1590fafc50b13bd88d5839930303a1
+  tag_resolves_to_sha: true
+  tag_sha: 7e8ae8c1af1590fafc50b13bd88d5839930303a1
+  side_tasks_root: side_tasks
+  licence:
+    spdx: MIT
+    status: file
+    source: LICENSE
+    copyright: Copyright (c) 2025 LinuxArena
+- setting: refactor_arena
+  environment: refactor_arena
+  repo: linuxarena/refactor_arena
+  tag: v3.2.0
+  sha: 217197bd2a33e5fb7676c12a4a65d4a865c61f5c
+  tag_resolves_to_sha: true
+  tag_sha: 217197bd2a33e5fb7676c12a4a65d4a865c61f5c
+  side_tasks_root: side_tasks
+  licence:
+    spdx: MIT
+    status: declared-in-pyproject
+    source: pyproject.toml
+    copyright: null
+- setting: vllm
+  environment: vllm
+  repo: linuxarena/ct-vllm
+  tag: v0.2.0
+  sha: 5a167284e1cfb0f6e8a404d1a6d883e7644a955b
+  tag_resolves_to_sha: true
+  tag_sha: 5a167284e1cfb0f6e8a404d1a6d883e7644a955b
+  side_tasks_root: ct_vllm/side_tasks
+  licence:
+    spdx: MIT
+    status: declared-in-pyproject
+    source: pyproject.toml
+    copyright: null
+references:
+  control_tower_docs:
+    repo: linuxarena/control-tower
+    sha: 9035b914e8285f571a46088a5c0efac9afe765b4
+    date: '2026-11-03'
+    files:
+    - docs/development/failure-types.md
+    - docs/development/making-side-tasks.md
+    - docs/control-concepts.md
+    - docs/glossary.md
+    note: Read for the Guide glossary. docs/development/protocols.md was not read.
+  linuxarena_paper:
+    url: https://arxiv.org/abs/2604.15384
+    read: false
+    note: arXiv did not respond from the build session; only search-result summaries seen.
+  attack_navigator:
+    repo: mitre-attack/attack-navigator
+    sha: 734a1caba29fcd51f20b9ca239ce652b3354a47e
+    release: v5.3.2
+    layer_spec: layers/spec/v4.5/layerformat.md
+  attack_v19_2_comparison:
+    repo: mitre-attack/attack-stix-data
+    sha: 6cda5ad8462c79e14fbb872f4e09059b18e0cfc4
+    sha256: dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4

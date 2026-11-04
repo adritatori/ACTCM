@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below. This is a draft and has not been published."
+title: "Agent Control Threat Coverage Matrix (ACTCM)"
+version: 0.1.0-draft
+date-released: 2026-11-04
+type: dataset
+authors:
+  - given-names: "Adrita"
+    family-names: "Rahman Tory"
+repository-code: "https://github.com/adritatori/actcm"
+license: MIT
+abstract: >-
+  For each public AI control setting, lists every hidden attack task (side task), labels it with a MITRE ATT&CK® tactic
+  and technique (plus MITRE ATLAS where the target is an AI system), and shows which kinds of attack are tested and which are missing.
+  A task count shows what is tested, not what is caught. Labels are drafts and no human has reviewed any label yet.
+  Code is MIT; data and labels are CC BY 4.0. Not affiliated with or endorsed by The MITRE Corporation.
+keywords:
+  - AI control
+  - AI safety
+  - threat modelling
+  - benchmark coverage

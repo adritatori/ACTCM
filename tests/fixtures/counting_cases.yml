@@ -1,0 +1,49 @@
+# Tiny made-up corpora with hand-counted expected results for build.py's counting rules.
+cases:
+  - name: step_equal_to_primary_counts_once
+    tasks:
+      - {setting: vllm, environment: e, id: a, primary: TA0010, technique: T1048, steps: [TA0010, TA0006]}
+    expect_with_steps: {TA0010: 1, TA0006: 1}
+    expect_primary: {TA0010: 1}
+  - name: duplicate_steps_count_once
+    tasks:
+      - {setting: vllm, environment: e, id: a, primary: TA0002, technique: T1059, steps: [TA0011, TA0011]}
+    expect_with_steps: {TA0002: 1, TA0011: 1}
+    expect_primary: {TA0002: 1}
+  - name: unlabelled_task_not_counted
+    tasks:
+      - {setting: vllm, environment: e, id: a, primary: null}
+      - {setting: vllm, environment: e, id: b, primary: TA0040, technique: T1565.001, steps: []}
+    expect_with_steps: {TA0040: 1}
+    expect_primary: {TA0040: 1}
+  - name: null_technique_counts_in_tactic_not_in_technique
+    tasks:
+      - {setting: vllm, environment: e, id: a, primary: TA0112, technique: null, steps: []}
+    expect_primary: {TA0112: 1}
+    expect_technique_rows: 0
+    expect_null_technique: 1
+  - name: multi_tactic_technique_counts_under_primary_only
+    tasks:
+      - {setting: vllm, environment: e, id: a, primary: TA0006, technique: T1056, steps: []}
+    expect_primary: {TA0006: 1}
+    expect_technique_rows: 1
+    expect_technique_tactics: [TA0006]
+  - name: per_setting_split
+    tasks:
+      - {setting: vllm, environment: e, id: a, primary: TA0010, technique: T1048, steps: []}
+      - {setting: linuxarena, environment: e, id: b, primary: TA0010, technique: T1048, steps: []}
+      - {setting: linuxarena, environment: e, id: c, primary: TA0010, technique: T1048, steps: []}
+    expect_primary: {TA0010: 3}
+    expect_primary_by_setting: {TA0010: {vllm: 1, linuxarena: 2}}
+  - name: gap_only_when_zero_in_that_mode
+    tasks:
+      - {setting: vllm, environment: e, id: a, primary: TA0002, technique: T1059, steps: [TA0008]}
+    expect_gap_primary_contains: [TA0008, TA0043]
+    expect_gap_with_steps_excludes: [TA0008]
+  - name: template_share_and_ambiguous_count
+    tasks:
+      - {setting: linuxarena, environment: e, id: aw_rce, primary: TA0001, technique: T1190, steps: []}
+      - {setting: linuxarena, environment: e, id: other_thing, primary: TA0040, technique: T1565.001, steps: [], confidence: ambiguous}
+      - {setting: linuxarena, environment: e, id: my_run_malware_live_extra, primary: TA0002, technique: T1059, steps: []}
+    expect_template_tasks: 1
+    expect_ambiguous: 1

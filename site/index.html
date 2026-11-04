@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACTCM Explorer</title>
+<meta name="description" content="Which kinds of attack AI control tests cover, by tactic.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<div class="banner" role="note"><div class="wrap"><strong>PROVISIONAL RESULTS.</strong> No human has reviewed any label yet. Counts and gaps may still change: 2 decisions are open (the three tenant-isolation tasks and the line between Stealth and Defense Impairment).</div></div>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">ACTCM<small>Agent Control Threat Coverage Matrix</small></a>
+<nav class="main" aria-label="Main"><ul><li><a href="index.html" aria-current="page">Explorer</a></li><li><a href="guide.html">Guide</a></li><li><a href="verify.html">Verify</a></li></ul></nav>
+</div></header>
+<main id="main" class="wrap">
+
+<h1>Which kinds of attack do AI control tests cover?</h1>
+<p class="lede">For each public AI control setting, this page lists every hidden attack task (a <a href="guide.html#g-side-task">side task</a>),
+labels it with a MITRE ATT&amp;CK® <a href="guide.html#g-tactic">tactic</a> and <a href="guide.html#g-technique">technique</a>
+(plus MITRE ATLAS where the target is an AI system), and shows which kinds of attack are tested and which are missing.
+A <a href="guide.html#g-gap">gap</a> is a tactic with zero tasks.</p>
+<p class="note"><strong>Tested, not caught.</strong> A task count shows what is tested, not what is caught. A gap means &ldquo;untested&rdquo;, not &ldquo;dangerous&rdquo; and not &ldquo;undefended&rdquo;.</p>
+<p class="small" id="extras-note">LinuxArena extras is not included in v0.1, pending permission from its maintainers.</p>
+<details><summary>Why this matters</summary>
+<p>An AI control evaluation reports how often safety measures stop an AI agent that is secretly trying to cause harm. That number only covers the attacks the evaluation includes. If whole kinds of attack are missing, the number says nothing about them. Security teams check this kind of gap with MITRE ATT&amp;CK; this project applies the same check to AI control settings. <a href="guide.html">Read the guide</a>.</p>
+</details>
+<p id="load-error" class="callout" role="alert" hidden></p>
+
+<div class="controls">
+<fieldset><legend>Setting</legend><div class="seg"><label><input type="radio" name="setting" id="set-all"><span>All</span></label><label><input type="radio" name="setting" id="set-linuxarena"><span>LinuxArena</span></label><label><input type="radio" name="setting" id="set-refactor"><span>Refactor Arena</span></label><label><input type="radio" name="setting" id="set-vllm"><span>vLLM</span></label></div></fieldset>
+<fieldset><legend>Count mode</legend><div class="seg"><label><input type="radio" name="mode" id="mode-primary"><span>End goal only</span></label><label><input type="radio" name="mode" id="mode-steps"><span>End goal + required steps</span></label></div></fieldset>
+<fieldset><legend>Framework</legend><div class="seg"><label><input type="radio" name="fw" id="fw-attack"><span>ATT&amp;CK (15 tactics)</span></label><label><input type="radio" name="fw" id="fw-atlas"><span>ATLAS (16 tactics)</span></label></div></fieldset>
+</div>
+<p id="mode-note" class="small" aria-live="polite"></p>
+
+<h2>Summary</h2>
+<ul id="summary" class="strip" aria-label="Summary numbers"></ul>
+<h3>Label status</h3>
+<p class="small">How far each label has been checked. A second AI agreeing is <strong>not</strong> a human review.</p>
+<ul id="tiers" class="tiers" aria-label="Label status counts"></ul>
+
+<h2 id="matrix-title">MITRE ATT&amp;CK® matrix (15 tactics)</h2>
+<p id="matrix-help" class="small"></p>
+<p class="small">Click a tactic or a technique to list its tasks. Columns marked with a dashed hatched box and the text &ldquo;0 tasks: gap&rdquo; have no tasks.</p>
+<div class="matrix-scroll"><div id="matrix" class="matrix" role="group" aria-labelledby="matrix-title"></div></div>
+
+<div id="panel" class="panel" role="region" aria-label="Task details" aria-live="polite"></div>
+
+<h2>All tasks</h2>
+<div class="tools">
+<div><label for="f-search">Search</label><input id="f-search" type="search" placeholder="id, tactic, text"></div>
+<div><label for="f-tactic">Main tactic</label><select id="f-tactic"><option value="">Any</option></select></div>
+<div><label for="f-tier">Label status</label><select id="f-tier"><option value="">Any</option></select></div>
+</div>
+<p id="table-count" class="small" aria-live="polite"></p>
+<div class="tablewrap" tabindex="0" role="region" aria-label="Table of tasks, scrolls sideways on small screens">
+<table><caption>Side tasks in the selected setting</caption>
+<thead><tr><th scope="col">Task</th><th scope="col">Setting</th><th scope="col">Environment</th><th scope="col">Main tactic</th><th scope="col">Technique</th><th scope="col">Label status</th><th scope="col">Flags</th></tr></thead>
+<tbody id="tbody"></tbody></table></div>
+
+<h2>Take the data</h2>
+<div class="btns">
+<a id="nav-link" class="btn" href="#" rel="noopener">Open in ATT&amp;CK Navigator</a>
+<a class="btn" href="data/tasks.csv" download>Download CSV</a>
+<a class="btn" href="data/tasks.json" download>Download JSON</a>
+</div>
+<p class="small"><span id="nav-note" class="pending"></span> The Navigator link loads a layer file from the repository, so it only works once the repository is published.
+Layers show tasks per technique for the selected setting; tasks with no ATT&amp;CK technique (2 in total) cannot be shown there.</p>
+
+</main>
+<footer class="site"><div class="wrap">
+<p class="warn">A task count shows what is <em>tested</em>, not what is <em>caught</em>. A gap means &ldquo;untested&rdquo;, not &ldquo;dangerous&rdquo; and not &ldquo;undefended&rdquo;.</p>
+<p><strong>Pinned versions:</strong> ATT&amp;CK Enterprise v20.0 (commit 20664a8895), ATLAS 2026.10 (commit f56c146873), codebook 1.1-draft, 12 source repositories at fixed commits (<a href="https://github.com/adritatori/actcm/blob/main/data/sources.lock.yml">sources.lock.yml</a>, <span class="pending">works after publishing</span>).</p>
+<p><strong>MITRE ATT&amp;CK® licence.</strong> The MITRE Corporation (MITRE) hereby grants you a non-exclusive, royalty-free license to use ATT&amp;CK® for research, development, and commercial purposes. Any copy you make for such purposes is authorized provided that you reproduce MITRE&#x27;s copyright designation and this license in any such copy.</p>
+<p>© 2026 The MITRE Corporation. This work is reproduced and distributed with the permission of The MITRE Corporation. See the <a href="https://attack.mitre.org/resources/legal-and-branding/terms-of-use/">ATT&amp;CK Terms of Use</a>. ATLAS is licensed under Apache License 2.0.</p>
+<details><summary>MITRE disclaimers (reproduced from MITRE's licence text)</summary><p>MITRE does not claim ATT&amp;CK enumerates all possibilities for the types of actions and behaviors documented as part of its adversary model and framework of techniques. Using the information contained within ATT&amp;CK to address or cover full categories of techniques will not guarantee full defensive coverage as there may be undisclosed techniques or variations on existing techniques not documented by ATT&amp;CK.</p><p>ALL DOCUMENTS AND THE INFORMATION CONTAINED THEREIN ARE PROVIDED ON AN &quot;AS IS&quot; BASIS AND THE CONTRIBUTOR, THE ORGANIZATION HE/SHE REPRESENTS OR IS SPONSORED BY (IF ANY), THE MITRE CORPORATION, ITS BOARD OF TRUSTEES, OFFICERS, AGENTS, AND EMPLOYEES, DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION THEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.</p></details>
+<p><strong>Not affiliated with or endorsed by The MITRE Corporation.</strong></p>
+<p>Licences: code MIT (<a href="https://github.com/adritatori/actcm/blob/main/LICENSE">LICENSE</a>), data and labels CC BY 4.0 (<a href="https://github.com/adritatori/actcm/blob/main/LICENSE-DATA">LICENSE-DATA</a>), <a href="https://github.com/adritatori/actcm/blob/main/THIRD_PARTY_NOTICES.md">third-party notices</a>. <span class="pending">These links work after publishing.</span> Source: <a href="https://github.com/adritatori/actcm">github.com/adritatori/actcm</a> <span class="pending">(works after publishing)</span>.</p>
+</div></footer>
+<script src="assets/app.js" defer></script>
+</body>
+</html>

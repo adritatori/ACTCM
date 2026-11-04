@@ -1,0 +1,39 @@
+{
+ "tiers": [
+  {
+   "id": "draft_needs_human_review",
+   "label": "Draft",
+   "plain": "One AI drafted this label. No second check, no human check.",
+   "who_may_set": "Claude or a script"
+  },
+  {
+   "id": "ai_cross_checked",
+   "label": "AI cross-checked",
+   "plain": "A second AI, which was not shown our label, chose the same main tactic. No human has checked it.",
+   "who_may_set": "A script, after a blind pass"
+  },
+  {
+   "id": "reviewed",
+   "label": "Reviewed by a human",
+   "plain": "One human checked this label.",
+   "who_may_set": "A named human only"
+  },
+  {
+   "id": "adjudicated",
+   "label": "Adjudicated by humans",
+   "plain": "Two humans compared labels, resolved any difference, and recorded why.",
+   "who_may_set": "Named humans only"
+  }
+ ],
+ "unlabelled": {
+  "id": "unlabelled",
+  "label": "No label yet"
+ },
+ "never_say_for_ai_cross_checked": [
+  "reviewed",
+  "verified",
+  "validated",
+  "confirmed",
+  "approved"
+ ]
+}

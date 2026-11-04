@@ -1,0 +1,11 @@
+# What is public. Read by every build script (scripts/common.py).
+#
+# publish_extras: false hides the LinuxArena-extras tasks from every public output: the site, counts.json,
+# tasks.csv and tasks.json, the Navigator layers, the README numbers, the review sheet, the stress test and the
+# notices. The task files stay in the working tree for label work; docs/EXTRAS_HIDING_PLAN.md says how they are
+# kept out of the first public commit tree. Set it to true only when the maintainers have given permission.
+publish_extras: false
+
+# The repository name. Links on the site and in the Navigator layers are built from it.
+repository: adritatori/actcm
+branch: main

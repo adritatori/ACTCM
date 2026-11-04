@@ -1,0 +1,68 @@
+{
+ "provisional": true,
+ "runs": 5000,
+ "seed": 20261104,
+ "p_flip_ambiguous": 0.5,
+ "p_take_step": 0.25,
+ "robust_threshold": 0.95,
+ "threshold_note": "Our choice, not a standard.",
+ "baseline_gaps_primary": [
+  "TA0043",
+  "TA0042",
+  "TA0007",
+  "TA0008"
+ ],
+ "baseline_gaps_with_steps": [
+  "TA0043",
+  "TA0042",
+  "TA0007",
+  "TA0008"
+ ],
+ "gap_stays_zero": [
+  {
+   "tactic": "TA0043",
+   "name": "Reconnaissance",
+   "current_labels": 1.0,
+   "robust_current": true,
+   "before_v1_1_original_steps": 1.0,
+   "robust_before": true
+  },
+  {
+   "tactic": "TA0042",
+   "name": "Resource Development",
+   "current_labels": 1.0,
+   "robust_current": true,
+   "before_v1_1_original_steps": 1.0,
+   "robust_before": true
+  },
+  {
+   "tactic": "TA0007",
+   "name": "Discovery",
+   "current_labels": 1.0,
+   "robust_current": true,
+   "before_v1_1_original_steps": 1.0,
+   "robust_before": true
+  },
+  {
+   "tactic": "TA0008",
+   "name": "Lateral Movement",
+   "current_labels": 1.0,
+   "robust_current": true,
+   "before_v1_1_original_steps": 0.8762,
+   "robust_before": false
+  }
+ ],
+ "suggester": {
+  "n": 114,
+  "exact": 88,
+  "exact_pct": 77.2,
+  "with_alternative": 92,
+  "with_alternative_pct": 80.7,
+  "kappa_vs_our_primary": 0.74,
+  "unlabeled": 13,
+  "reworded_mean_pct": 48.1,
+  "reworded_min_pct": 43.9,
+  "reworded_max_pct": 51.8,
+  "note": "SUGGESTION ONLY. These keyword suggestions are never written to a label."
+ }
+}

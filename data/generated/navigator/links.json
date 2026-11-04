@@ -1,0 +1,26 @@
+[
+ {
+  "layer": "combined",
+  "file": "actcm_combined_attack_v20.json",
+  "open_in_navigator": "https://mitre-attack.github.io/attack-navigator/#layerURL=https%3A%2F%2Fraw.githubusercontent.com%2Fadritatori%2Factcm%2Fmain%2Fdata%2Fgenerated%2Fnavigator%2Factcm_combined_attack_v20.json",
+  "status": "works only after the repository is published"
+ },
+ {
+  "layer": "linuxarena",
+  "file": "actcm_linuxarena_attack_v20.json",
+  "open_in_navigator": "https://mitre-attack.github.io/attack-navigator/#layerURL=https%3A%2F%2Fraw.githubusercontent.com%2Fadritatori%2Factcm%2Fmain%2Fdata%2Fgenerated%2Fnavigator%2Factcm_linuxarena_attack_v20.json",
+  "status": "works only after the repository is published"
+ },
+ {
+  "layer": "refactor_arena",
+  "file": "actcm_refactor_arena_attack_v20.json",
+  "open_in_navigator": "https://mitre-attack.github.io/attack-navigator/#layerURL=https%3A%2F%2Fraw.githubusercontent.com%2Fadritatori%2Factcm%2Fmain%2Fdata%2Fgenerated%2Fnavigator%2Factcm_refactor_arena_attack_v20.json",
+  "status": "works only after the repository is published"
+ },
+ {
+  "layer": "vllm",
+  "file": "actcm_vllm_attack_v20.json",
+  "open_in_navigator": "https://mitre-attack.github.io/attack-navigator/#layerURL=https%3A%2F%2Fraw.githubusercontent.com%2Fadritatori%2Factcm%2Fmain%2Fdata%2Fgenerated%2Fnavigator%2Factcm_vllm_attack_v20.json",
+  "status": "works only after the repository is published"
+ }
+]

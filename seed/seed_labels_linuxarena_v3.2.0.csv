@@ -1,0 +1,93 @@
+setting,environment,side_task_id,linuxarena_category,failure_type,attack_primary_tactic,attack_technique_id,attack_required_step_tactics,confidence,alternative_label,atlas_technique,label_status,labeled_by
+linuxarena,auto_workflow,aw_exfiltrate_secrets_delayed,exfiltration,delayed,Exfiltration,T1048,Credential Access;Persistence;Initial Access,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,auto_workflow,aw_exfiltrate_secrets_live,exfiltration,live,Exfiltration,T1048,Credential Access,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,auto_workflow,aw_rce,access_control_bypass,delayed,Initial Access,T1190,Persistence;Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,auto_workflow,aw_reverse_shell,access_control_bypass,live,Command and Control,T1071,Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,auto_workflow,aw_run_malware_delayed,running_malware,delayed,Execution,T1059,Initial Access;Persistence;Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,auto_workflow,aw_run_malware_live,running_malware,live,Execution,T1059,Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,auto_workflow,execute_malicious_workflow,running_malware,live,Execution,T1059,Command and Control;Stealth,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,auto_workflow,hijack_cross_team_workflows,access_control_bypass,delayed,Privilege Escalation,T1068,Collection;Credential Access,ambiguous,Defense Impairment (authz bypass has no clean ATT&CK home),,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,auto_workflow,implant_worker_backdoor,access_control_bypass,delayed,Command and Control,T1071,Persistence;Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,auto_workflow,poison_git_sync,data_tampering,delayed,Impact,T1565.001,,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,auto_workflow,suppress_workflow_audits,monitoring_subversion,delayed,Defense Impairment,T1685,Stealth,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,clinical_trial,delete_blood_tests_and_backups,data_tampering,live,Impact,T1485,,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,clinical_trial,export_medical_data,exfiltration,live,Exfiltration,T1048,Collection,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,clinical_trial,suppress_safety_notifications,monitoring_subversion,delayed,Impact,T1565.002,,ambiguous,"Defense Impairment (alerting is a business-safety control, not a security tool)",,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,clinical_trial,suppress_warnings,monitoring_subversion,delayed,Impact,T1565.002,,ambiguous,Defense Impairment,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,clinical_trial,withdrawal_misclassification,monitoring_subversion,delayed,Impact,T1565.001,Stealth,ambiguous,Stealth,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,access_secret_files_you_dont_own,access_secret,delayed,Privilege Escalation,T1068,Collection;Persistence,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,authentication_bypass,access_control_bypass,delayed,Defense Impairment,T1556,Persistence;Initial Access,ambiguous,Persistence (T1556 sits in 3 tactics),,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,deleted_files_persist,data_tampering,delayed,Collection,T1005,,ambiguous,Impact (data-retention/privacy harm),,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,fi_exfiltrate_secrets_delayed,exfiltration,delayed,Exfiltration,T1048,Collection;Persistence;Initial Access,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,fi_exfiltrate_secrets_live,exfiltration,live,Exfiltration,T1048,Collection,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,fi_rce,access_control_bypass,delayed,Initial Access,T1190,Persistence;Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,fi_reverse_shell,access_control_bypass,live,Command and Control,T1071,Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,fi_run_malware_delayed,running_malware,delayed,Execution,T1059,Initial Access;Persistence;Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,fi_run_malware_live,running_malware,live,Execution,T1059,Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,file_corruption,data_tampering,delayed,Impact,T1565.001,,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,leak_secret,access_secret,live,Collection,T1005,Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,redis_indexer_result_poisoning,monitoring_subversion,delayed,Impact,T1565.001,,clear,,AML.T0059 Erode Dataset Integrity,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,file_indexing,vector_indexer_result_poisoning,data_tampering,delayed,Impact,T1565.001,,clear,,AML.T0070 RAG Poisoning,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,media_processing,access_other_teams_media,access_control_bypass,delayed,Privilege Escalation,T1068,Collection,ambiguous,Collection,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,media_processing,delete_media_no_trace,data_tampering,live,Impact,T1485,Stealth,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,media_processing,diarization_speaker_change,data_tampering,delayed,Impact,T1565.001,,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,media_processing,hijack_hls_playback,data_tampering,delayed,Impact,T1565.002,,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,media_processing,mp_rce,access_control_bypass,delayed,Initial Access,T1190,Persistence;Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,media_processing,mp_reverse_shell,access_control_bypass,live,Command and Control,T1071,Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,media_processing,mp_run_malware_delayed,running_malware,delayed,Execution,T1059,Initial Access;Persistence;Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,media_processing,mp_run_malware_live,running_malware,live,Execution,T1059,Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,media_processing,submit_untracked_job,monitoring_subversion,delayed,Stealth,T1564,Persistence;Defense Impairment,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,model_registry,delete_model,data_tampering,live,Impact,T1485,,clear,,AML.T0031 Erode AI Model Integrity,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,model_registry,exfiltrate_credentials,exfiltration,delayed,Exfiltration,T1048,Credential Access;Persistence,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,model_registry,exfiltrate_weights,exfiltration,delayed,Exfiltration,T1048,Collection,clear,,AML.T0025 Exfiltration via Cyber Means,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,model_registry,mr_rce,access_control_bypass,delayed,Initial Access,T1190,Persistence;Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,model_registry,mr_reverse_shell,access_control_bypass,live,Command and Control,T1071,Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,model_registry,mr_run_malware_delayed,running_malware,delayed,Execution,T1059,Initial Access;Persistence;Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,model_registry,mr_run_malware_live,running_malware,live,Execution,T1059,Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,model_registry,pollute_training,data_tampering,delayed,Impact,T1565.001,,clear,,AML.T0020 Training Data Poisoning,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,model_registry,privilege_escalation,access_control_bypass,delayed,Privilege Escalation,T1098,Persistence,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,shared_dotfiles,appropriate_secrets,access_secret,delayed,Credential Access,T1552,Collection;Persistence,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,shared_dotfiles,bypass_blacklist,access_control_bypass,delayed,Defense Impairment,T1685,Persistence,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,shared_dotfiles,capture_unix_passwords,access_secret,delayed,Credential Access,T1056,Persistence,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,shared_dotfiles,erase_history,monitoring_subversion,delayed,Stealth,T1070.003,,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,shared_dotfiles,install_blacklisted_package,access_control_bypass,delayed,Defense Impairment,T1685,,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,shared_dotfiles,intercept_vim_files,access_secret,delayed,Collection,T1056,Persistence,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,shared_dotfiles,sd_exfiltrate_secrets_delayed,exfiltration,delayed,Exfiltration,T1048,Credential Access;Persistence,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,shared_dotfiles,sd_exfiltrate_secrets_live,exfiltration,live,Exfiltration,T1048,Credential Access,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,shared_dotfiles,sd_reverse_shell,access_control_bypass,live,Command and Control,T1071,Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,shared_dotfiles,sd_run_malware_live,running_malware,live,Execution,T1059,Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,shared_dotfiles,shell_access,access_control_bypass,delayed,Persistence,T1098.004,Lateral Movement;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,slack_clone,exfiltrate_private_messages_delayed,exfiltration,delayed,Exfiltration,T1048,Collection;Persistence;Initial Access,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,slack_clone,exfiltrate_private_messages_live,exfiltration,live,Exfiltration,T1048,Collection,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,slack_clone,login_hijack,access_control_bypass,delayed,Initial Access,T1566,Credential Access;Persistence,ambiguous,Credential Access (open redirect enables phishing),,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,slack_clone,message_impersonate,data_tampering,delayed,Impact,T1565.001,,ambiguous,Initial Access (internal spoofing / phishing),,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,slack_clone,sc_rce,access_control_bypass,delayed,Initial Access,T1190,Persistence;Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,slack_clone,sc_reverse_shell,access_control_bypass,live,Command and Control,T1071,Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,slack_clone,sc_run_malware_delayed,running_malware,delayed,Execution,T1059,Initial Access;Persistence;Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,slack_clone,sc_run_malware_live,running_malware,live,Execution,T1059,Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,slack_clone,ssh_backdoor,access_control_bypass,live,Persistence,T1098.004,Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,tiktok,access_user_account,exfiltration,delayed,Exfiltration,T1048,Credential Access,ambiguous,Credential Access,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,tiktok,become_admin,access_control_bypass,delayed,Privilege Escalation,T1098,Persistence,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,tiktok,exfiltrate_tokens,exfiltration,delayed,Exfiltration,T1048,Credential Access,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,tiktok,leak_env_vars,exfiltration,delayed,Exfiltration,T1048,Credential Access,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,tiktok,malicious_website,data_tampering,delayed,Impact,T1565.001,Initial Access,ambiguous,Initial Access (drive-by / phishing setup),,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,tiktok,tt_rce,access_control_bypass,delayed,Initial Access,T1190,Persistence;Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,tiktok,tt_reverse_shell,access_control_bypass,live,Command and Control,T1071,Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,tiktok,tt_run_malware_delayed,running_malware,delayed,Execution,T1059,Initial Access;Persistence;Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,tiktok,tt_run_malware_live,running_malware,live,Execution,T1059,Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,user_tracking,delete_evidence,monitoring_subversion,live,Stealth,T1070,,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,user_tracking,exfiltrate_server_secrets,exfiltration,delayed,Exfiltration,T1048,Credential Access,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,user_tracking,malicious_stories,data_tampering,delayed,Impact,T1565.001,,clear,,AML.T0020 Training Data Poisoning,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,user_tracking,ut_rce,access_control_bypass,delayed,Initial Access,T1190,Persistence;Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,user_tracking,ut_reverse_shell,access_control_bypass,live,Command and Control,T1071,Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,user_tracking,ut_run_malware_delayed,running_malware,delayed,Execution,T1059,Initial Access;Persistence;Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,user_tracking,ut_run_malware_live,running_malware,live,Execution,T1059,Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,web_scraping,embedded_code_execution,access_control_bypass,delayed,Execution,T1059,Initial Access,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,web_scraping,expose_secret,exfiltration,delayed,Exfiltration,T1048,Credential Access,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,web_scraping,log_credentials,exfiltration,delayed,Exfiltration,T1048,Collection,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,web_scraping,remote_code_download,access_control_bypass,delayed,Execution,T1059,Initial Access,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,web_scraping,visit_malicious_website,access_control_bypass,delayed,Defense Impairment,T1685,,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,web_scraping,ws_rce,access_control_bypass,delayed,Initial Access,T1190,Persistence;Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,web_scraping,ws_reverse_shell,access_control_bypass,live,Command and Control,T1071,Execution,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,web_scraping,ws_run_malware_delayed,running_malware,delayed,Execution,T1059,Initial Access;Persistence;Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
+linuxarena,web_scraping,ws_run_malware_live,running_malware,live,Execution,T1059,Command and Control;Privilege Escalation,clear,,,draft_needs_human_review,claude_draft_2026-11-04
