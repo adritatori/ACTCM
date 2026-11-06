@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<style>
+:root{--bg:#fafaf7;--card:#fff;--ink:#1d1d1b;--mute:#605f5a;--line:#d9d7cf;--accent:#1b5fa8;--accent-ink:#fff;--ok:#1d7a46;--warn:#9a5b00;--bad:#b3261e;--sel:#e4effb;--soft:#f1efe8}
+@media (prefers-color-scheme:dark){:root{--bg:#161614;--card:#1f1f1c;--ink:#ecebe4;--mute:#a4a299;--line:#3a3935;--accent:#6aa8ee;--accent-ink:#0b1b2c;--ok:#5fcf8c;--warn:#e3a53f;--bad:#f08a82;--sel:#1d3350;--soft:#28271f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:16px}
+header{position:sticky;top:0;background:var(--bg);padding:10px 0 8px;border-bottom:1px solid var(--line);z-index:5}
+h1{font-size:18px;margin:0 0 6px}
+.bar{height:10px;background:var(--soft);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--ok);width:0}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.mute{color:var(--mute);font-size:14px}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 12px;cursor:pointer}
+button:hover:not(:disabled){border-color:var(--accent)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.mainbtn{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:14px}
+.badge{display:inline-block;font-size:12px;padding:2px 8px;border-radius:99px;background:var(--soft);border:1px solid var(--line);margin-right:6px}
+.badge.out{border-color:var(--warn);color:var(--warn)}
+.goal{font-size:19px;margin:10px 0;padding:10px 12px;border-left:4px solid var(--accent);background:var(--soft);white-space:pre-wrap}
+.reminder{font-size:14px;background:var(--sel);border-radius:8px;padding:8px 10px;margin:8px 0}
+details{margin:8px 0}
+summary{cursor:pointer;color:var(--accent)}
+pre.scorer{white-space:pre-wrap;word-break:break-word;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;max-height:260px;overflow:auto;margin:6px 0}
+h2{font-size:16px;margin:16px 0 6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.tac{text-align:left;display:block;width:100%;padding:8px 10px}
+.tac b{display:block}
+.tac small{color:var(--mute);display:block;line-height:1.3}
+.tac kbd,.kbd{float:right;font:12px ui-monospace,monospace;border:1px solid var(--line);border-radius:4px;padding:0 5px;color:var(--mute);background:var(--soft)}
+.tac.sel{background:var(--sel);border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.tac.lock{pointer-events:none}
+.seg button.sel{background:var(--sel);border-color:var(--accent);font-weight:600}
+textarea{width:100%;min-height:64px;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+input[type=text]{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+/*@OWNER*/
+.reveal{border:2px solid var(--warn);border-radius:10px;padding:12px;margin-top:12px}
+.reveal dt{font-weight:600;margin-top:8px}.reveal dd{margin:2px 0 0 0}
+.match{font-weight:600}.match.y{color:var(--ok)}.match.n{color:var(--warn)}
+/*@END*/
+.overlay{position:fixed;inset:0;background:var(--bg);z-index:20;display:flex;align-items:center;justify-content:center;padding:20px}
+.overlay .box{max-width:520px;text-align:center}
+.overlay h2{font-size:26px}
+.hidden{display:none!important}
+.warnbar{background:#fff3cd;color:#5a4300;border:1px solid #e0c15a;border-radius:8px;padding:8px 10px;margin-top:8px;font-size:14px}
+.ids{font:13px ui-monospace,Menlo,Consolas,monospace;color:var(--mute);word-break:break-word}
+.footer{margin:24px 0 8px;font-size:12px;color:var(--mute)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>__TITLE__</h1>
+  <div class="bar"><i id="barfill"></i></div>
+  <div class="row">
+    <span id="progtext" class="mute"></span>
+    <span id="sesstext" class="mute"></span>
+    <span style="flex:1"></span>
+    <button id="btnPrev" title="Left arrow">&larr; Back</button>
+    <button id="btnNext" title="Right arrow">Skip &rarr;</button>
+    <button id="btnUnrev" title="Key: N">Next unreviewed (N)</button>
+  </div>
+  <div class="row">
+    <label class="mute" for="who">Your name (press Enter when done)</label>
+    <input type="text" id="who" size="18" autocomplete="off" placeholder="__NAMEHINT__">
+    <span style="flex:1"></span>
+    <button id="btnExport">Export CSV</button>
+    <button id="btnImport">Import CSV</button>
+    <button id="btnHelp" title="Key: ?">Keys (?)</button>
+    <input type="file" id="fileIn" accept=".csv,text/csv" class="hidden">
+  </div>
+  <div id="storewarn" class="warnbar hidden">This browser is not saving your progress (private window or blocked storage). Use Export CSV often.</div>
+</header>
+
+<main id="main"></main>
+<div class="footer">ATT&amp;CK&reg; is a registered trademark of The MITRE Corporation. Tactic definitions are the first sentence of each tactic description in Enterprise ATT&amp;CK v20.0 (&copy; The MITRE Corporation, used under the ATT&amp;CK Terms of Use, https://attack.mitre.org/resources/legal-and-branding/terms-of-use/). Task text is from LinuxArena (MIT licence).</div>
+</div>
+
+<div id="help" class="overlay hidden"><div class="box">
+  <h2>Keyboard shortcuts</h2>
+  <p style="text-align:left">
+  <b>Pick tactic:</b> keys shown on each button (1&ndash;9, 0, then Q W E R T). <b>X</b> = none fits.<br>
+  <b>S</b> = sure, <b>U</b> = unsure.<br>
+  <!--@BLIND--><b>Enter</b> = save and go to the next item.<br><!--@END-->
+  <!--@OWNER--><b>Enter</b> = Reveal, then (after you choose) next item.<br>
+  <b>K</b> = keep mine, <b>A</b> = take AI's, <b>D</b> = discuss later (after Reveal).<br><!--@END-->
+  <b>N</b> = next unreviewed. <b>&larr; / &rarr;</b> = back / skip. <b>?</b> = this box. <b>Esc</b> = leave the note box.<br>
+  Keys are off while you type in the name or note box.</p>
+  <button class="mainbtn" id="helpClose">Close</button>
+</div></div>
+
+<div id="breakscr" class="overlay hidden"><div class="box" id="breakbox"></div></div>
+
+<script id="kitdata" type="application/json">__DATA__</script>
+<!--@OWNER-->
+<script id="aidata" type="application/json">__AI__</script>
+<!--@END-->
+<script>
+(function(){
+"use strict";
+var MODE = "__MODE__";
+var STORE_KEY = "__STORE_KEY__";
+var SEED = 424242;
+var PER_SESSION = 15;
+var KIT = JSON.parse(document.getElementById("kitdata").textContent);
+var TACTICS = KIT.tactics, ITEMS = KIT.items;
+/*@OWNER*/
+var AI = JSON.parse(document.getElementById("aidata").textContent);
+/*@END*/
+
+var KEYS = ["1","2","3","4","5","6","7","8","9","0","q","w","e","r","t"];
+var NONE = {id:"NONE", name:"None fits", def:"None of the 15 tactics fits the attacker's end goal. Say why in the note."};
+var TACMAP = {}; TACTICS.forEach(function(t){TACMAP[t.id]=t;}); TACMAP.NONE = NONE;
+
+/* ---------- fixed-seed shuffle (same order for everyone) ---------- */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+var ORDER = ITEMS.slice().sort(function(a,b){return a.key<b.key?-1:a.key>b.key?1:0;});
+(function(){var r=mulberry32(SEED);for(var i=ORDER.length-1;i>0;i--){var j=Math.floor(r()*(i+1));var t=ORDER[i];ORDER[i]=ORDER[j];ORDER[j]=t;}})();
+var N = ORDER.length, NSESS = Math.ceil(N/PER_SESSION);
+
+/* ---------- state + storage (always wrapped) ---------- */
+var mem = null, storeOK = true;
+function blank(){return {labeler:"", answers:{}, breaks:{}, pos:0};}
+function load(){
+  try{var s=window.localStorage.getItem(STORE_KEY); if(s){var o=JSON.parse(s); if(o&&o.answers) return o;}}catch(e){storeOK=false;}
+  return blank();
+}
+function save(){
+  try{window.localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){storeOK=false;}
+  document.getElementById("storewarn").classList.toggle("hidden", storeOK);
+}
+var state = load();
+if(!state.breaks) state.breaks = {};
+if(typeof state.pos!=="number"||state.pos<0||state.pos>=N) state.pos=0;
+var pending = {tactic:null, cert:null};   // unsaved choices for the current item
+
+function ans(key){return state.answers[key];}
+function isDone(key){var a=ans(key); if(!a) return false;
+  /*@OWNER*/ if(MODE==="owner") return !!a.decision; /*@END*/
+  return !!a.saved;}
+function doneCount(){var c=0;ORDER.forEach(function(it){if(isDone(it.key))c++;});return c;}
+
+/* ---------- tiny DOM helper ---------- */
+function h(tag,attrs,kids){var e=document.createElement(tag);attrs=attrs||{};
+  Object.keys(attrs).forEach(function(k){if(k==="class")e.className=attrs[k];else if(k==="text")e.textContent=attrs[k];else if(k.slice(0,2)==="on")e.addEventListener(k.slice(2),attrs[k]);else e.setAttribute(k,attrs[k]);});
+  (kids||[]).forEach(function(c){if(c==null)return;e.appendChild(typeof c==="string"?document.createTextNode(c):c);});return e;}
+function $(id){return document.getElementById(id);}
+
+/* ---------- rendering ---------- */
+function curItem(){return ORDER[state.pos];}
+function render(){
+  var it = curItem(), a = ans(it.key) || {};
+  pending.tactic = a.tactic || null; pending.cert = a.cert || null;
+  var locked = false;
+  /*@OWNER*/ locked = (MODE==="owner") && !!a.revealed; /*@END*/
+  var main = $("main"); main.textContent = "";
+  var blockStart = Math.floor(state.pos/PER_SESSION)*PER_SESSION;
+  var blockLen = Math.min(PER_SESSION, N-blockStart);
+  $("sesstext").textContent = "Session "+(Math.floor(state.pos/PER_SESSION)+1)+" of "+NSESS+" · item "+(state.pos-blockStart+1)+" of "+blockLen;
+  var d = doneCount();
+  $("progtext").textContent = d+" of "+N+" done";
+  $("barfill").style.width = (100*d/N)+"%";
+  $("who").value = state.labeler || "";
+
+  var card = h("div",{class:"card"});
+  var badges = h("div",{});
+  var kindLabel = it.kind==="group" ? "Template group · "+it.ids.length+" tasks, label once" : it.kind==="outlier" ? "Outlier · reviewed separately" : "Single task";
+  badges.appendChild(h("span",{class:"badge"+(it.kind==="outlier"?" out":""),text:kindLabel}));
+  if(isDone(it.key)) badges.appendChild(h("span",{class:"badge",text:"done"}));
+  card.appendChild(badges);
+  card.appendChild(h("div",{class:"mute",text:"Environment: "+it.env}));
+  card.appendChild(h("div",{class:"ids",text:(it.kind==="group"?"Tasks: ":"Task id: ")+it.ids.join(", ")}));
+  card.appendChild(h("div",{class:"goal",text:it.goal}));
+  if(it.variants && it.variants.length){
+    var dv = h("details",{}); dv.appendChild(h("summary",{text:"Other wordings in this group ("+it.variants.length+")"}));
+    it.variants.forEach(function(v){dv.appendChild(h("div",{class:"mute",text:v.ids.join(", ")+": "+v.goal}));});
+    card.appendChild(dv);
+  }
+  if(it.outlier_note) card.appendChild(h("div",{class:"reminder",text:"Why this is shown separately: "+it.outlier_note}));
+  card.appendChild(h("div",{class:"reminder",text:"Label the attacker's END goal (what the scorer checks), not the steps."}));
+  card.appendChild(h("h2",{text:"What the scorer checks"}));
+  card.appendChild(h("pre",{class:"scorer",text:it.success||"(no scorer description available)"}));
+  if(it.details){var dd=h("details",{});dd.appendChild(h("summary",{text:"Scoring details shown to the attacking agent"}));dd.appendChild(h("pre",{class:"scorer",text:it.details}));card.appendChild(dd);}
+
+  card.appendChild(h("h2",{text:"1. Pick the one tactic that is the attacker's end goal"}));
+  var grid = h("div",{class:"grid"});
+  TACTICS.concat([NONE]).forEach(function(t,i){
+    var key = t.id==="NONE" ? "x" : KEYS[i];
+    var b = h("button",{class:"tac"+(pending.tactic===t.id?" sel":"")+(locked?" lock":""),"data-tid":t.id,onclick:function(){pickTactic(t.id);}},[
+      h("kbd",{text:key.toUpperCase()}), h("b",{text:t.name}), h("small",{text:t.def})]);
+    grid.appendChild(b);
+  });
+  card.appendChild(grid);
+
+  card.appendChild(h("h2",{text:"2. How sure are you?"}));
+  var seg = h("div",{class:"row seg"});
+  [["sure","Sure (S)"],["unsure","Unsure (U)"]].forEach(function(p){
+    seg.appendChild(h("button",{class:pending.cert===p[0]?"sel":"","data-cert":p[0],disabled:locked?"disabled":null,onclick:function(){pickCert(p[0]);}},[p[1]]));
+  });
+  card.appendChild(seg);
+
+  card.appendChild(h("h2",{text:"3. Note (optional)"}));
+  var ta = h("textarea",{id:"note",placeholder:"Anything that made this hard? Which words in the goal decided it?"});
+  ta.value = a.note || "";
+  ta.addEventListener("input",function(){var x=getA(it.key);x.note=ta.value;save();});
+  ta.addEventListener("keydown",function(e){if(e.key==="Escape")ta.blur();});
+  if(locked) ta.setAttribute("readonly","readonly");
+  card.appendChild(ta);
+
+  var act = h("div",{class:"row"});
+  /*@BLIND*/
+  act.appendChild(h("button",{class:"mainbtn",id:"btnMain",onclick:saveAndNext},["Save and next (Enter)"]));
+  /*@END*/
+  /*@OWNER*/
+  if(!a.revealed) act.appendChild(h("button",{class:"mainbtn",id:"btnMain",onclick:doReveal},["Reveal AI label (Enter)"]));
+  /*@END*/
+  card.appendChild(act);
+  card.appendChild(h("div",{id:"msg",class:"mute"}));
+
+  /*@OWNER*/
+  if(a.revealed) card.appendChild(revealPanel(it,a));
+  /*@END*/
+  main.appendChild(card);
+  updateButtons();
+}
+
+function updateButtons(){
+  var ok = !!(pending.tactic && pending.cert);
+  var b = $("btnMain"); if(b) b.disabled = !ok;
+}
+function getA(key){if(!state.answers[key]) state.answers[key]={tactic:null,cert:null,note:"",saved:false,ts:""}; return state.answers[key];}
+
+function pickTactic(id){
+  var it=curItem(), a=getA(it.key);
+  /*@OWNER*/ if(a.revealed) return; /*@END*/
+  pending.tactic=id; a.tactic=id; a.saved=false; save();
+  [].forEach.call(document.querySelectorAll(".tac"),function(b){b.classList.toggle("sel",b.getAttribute("data-tid")===id);});
+  updateButtons();
+}
+function pickCert(c){
+  var it=curItem(), a=getA(it.key);
+  /*@OWNER*/ if(a.revealed) return; /*@END*/
+  pending.cert=c; a.cert=c; a.saved=false; save();
+  [].forEach.call(document.querySelectorAll("[data-cert]"),function(b){b.classList.toggle("sel",b.getAttribute("data-cert")===c);});
+  updateButtons();
+}
+function say(t){var m=$("msg"); if(m) m.textContent=t;}
+
+/*@BLIND*/
+function saveAndNext(){
+  if(!state.labeler.trim()){say("Please type your name at the top first.");$("who").focus();return;}
+  if(!(pending.tactic&&pending.cert)){say("Pick a tactic and sure/unsure first.");return;}
+  var it=curItem(), a=getA(it.key);
+  a.tactic=pending.tactic;a.cert=pending.cert;a.saved=true;a.ts=new Date().toISOString();save();
+  advance();
+}
+/*@END*/
+
+/*@OWNER*/
+function doReveal(){
+  if(!(pending.tactic&&pending.cert)){say("Pick a tactic and sure/unsure first.");return;}
+  var it=curItem(), a=getA(it.key);
+  a.tactic=pending.tactic;a.cert=pending.cert;a.revealed=true;a.ts=new Date().toISOString();save();render();
+}
+function nm(id){return TACMAP[id]?TACMAP[id].name:(id||"(none)");}
+function revealPanel(it,a){
+  var ai = AI[it.key];
+  var box = h("div",{class:"reveal"});
+  box.appendChild(h("b",{text:"AI label (your pick above is now locked)"}));
+  var same = a.tactic===ai.primary;
+  box.appendChild(h("div",{class:"match "+(same?"y":"n"),text:"You picked: "+nm(a.tactic)+" ("+a.cert+"). "+(same?"Same as the AI.":"Different from the AI.")}));
+  var dl = h("dl");
+  dl.appendChild(h("dt",{text:"AI primary tactic"})); dl.appendChild(h("dd",{text:nm(ai.primary)+" ("+ai.primary+") · AI confidence: "+ai.confidence}));
+  dl.appendChild(h("dt",{text:"AI alternative"})); dl.appendChild(h("dd",{text:ai.alt?nm(ai.alt.tactic)+" ("+ai.alt.tactic+"): "+ai.alt.reason:"none"}));
+  dl.appendChild(h("dt",{text:"AI required steps"})); dl.appendChild(h("dd",{text:ai.steps.length?ai.steps.map(nm).join(", "):"none"}));
+  dl.appendChild(h("dt",{text:"AI reasoning"})); dl.appendChild(h("dd",{text:ai.reasoning}));
+  box.appendChild(dl);
+  box.appendChild(h("h2",{text:"4. Your decision"}));
+  var r = h("div",{class:"row seg"});
+  [["keep_mine","Keep mine (K)"],["take_ai","Take AI's (A)"],["discuss_later","Discuss later (D)"]].forEach(function(p){
+    r.appendChild(h("button",{class:a.decision===p[0]?"sel":"","data-dec":p[0],onclick:function(){decide(p[0]);}},[p[1]]));
+  });
+  box.appendChild(r);
+  return box;
+}
+function decide(d){
+  var it=curItem(), a=getA(it.key); if(!a.revealed) return;
+  a.decision=d; a.final = d==="keep_mine"?a.tactic : d==="take_ai"?AI[it.key].primary : "";
+  a.ts=new Date().toISOString(); save();
+  advance();
+}
+/*@END*/
+
+/* ---------- navigation + break screen ---------- */
+function blockOf(p){return Math.floor(p/PER_SESSION);}
+function blockDone(b){for(var p=b*PER_SESSION;p<Math.min(N,(b+1)*PER_SESSION);p++){if(!isDone(ORDER[p].key))return false;}return true;}
+function go(p){
+  p=Math.max(0,Math.min(N-1,p));
+  var from=state.pos;
+  if(blockOf(p)>blockOf(from) && !state.breaks[blockOf(from)] && blockDone(blockOf(from))){showBreak(blockOf(from),p);return;}
+  state.pos=p;save();render();window.scrollTo(0,0);
+}
+function advance(){
+  if(doneCount()===N){showBreak(blockOf(state.pos),state.pos,true);return;}
+  if(state.pos+1<N) go(state.pos+1);
+  else { var u=firstUnreviewed(0); if(u>=0) go(u); else showBreak(blockOf(state.pos),state.pos,true); }
+}
+function firstUnreviewed(from){
+  for(var k=0;k<N;k++){var p=(from+k)%N;if(!isDone(ORDER[p].key))return p;}return -1;
+}
+function nextUnreviewed(){var u=firstUnreviewed(state.pos+1);if(u<0){showBreak(blockOf(state.pos),state.pos,true);return;}go(u);}
+function showBreak(b,target,finished){
+  var box=$("breakbox");box.textContent="";
+  var all = doneCount()===N;
+  if(all||finished){
+    box.appendChild(h("h2",{text:"All "+N+" items done"}));
+    box.appendChild(h("p",{text:"Export your CSV now and send it back (see HOW_TO_REVIEW.md)."}));
+  }else{
+    box.appendChild(h("h2",{text:"Take a break"}));
+    box.appendChild(h("p",{text:"Session "+(b+1)+" of "+NSESS+" finished ("+doneCount()+" of "+N+" items done in total). Stand up, drink some water, look away from the screen."}));
+    box.appendChild(h("p",{class:"mute",text:"Your answers are saved in this browser. Export a CSV too, as a backup."}));
+  }
+  var r=h("div",{class:"row",style:"justify-content:center"});
+  r.appendChild(h("button",{onclick:exportCSV},["Export CSV"]));
+  r.appendChild(h("button",{class:"mainbtn",onclick:function(){
+    state.breaks[b]=true;$("breakscr").classList.add("hidden");
+    if(all||finished){render();return;}
+    state.pos=target;save();render();window.scrollTo(0,0);}},[all||finished?"Back to items":"Start next session"]));
+  box.appendChild(r);
+  $("breakscr").classList.remove("hidden");
+}
+
+/* ---------- CSV ---------- */
+var BASE_COLS = ["labeler","item_id","kind","environment","task_ids","tactic_id","tactic_name","certainty","note","status","answered_at"];
+var COLS = BASE_COLS.slice();
+/*@OWNER*/ COLS = BASE_COLS.concat(["decision","final_tactic_id","final_tactic_name"]); /*@END*/
+function q(v){v=(v==null?"":String(v));return '"'+v.replace(/"/g,'""')+'"';}
+function rowFor(it,a){
+  var r={labeler:state.labeler||"",item_id:it.key,kind:it.kind,environment:it.env,task_ids:it.ids.join(";"),
+    tactic_id:a.tactic||"",tactic_name:a.tactic?TACMAP[a.tactic].name:"",certainty:a.cert||"",note:a.note||"",
+    status:"draft",answered_at:a.ts||""};
+  if(MODE==="blind") r.status=a.saved?"saved":"draft";
+  /*@OWNER*/
+  if(MODE==="owner"){ r.status=a.revealed?"revealed":"draft"; r.decision=a.decision||"";r.final_tactic_id=a.final||"";r.final_tactic_name=a.final?TACMAP[a.final].name:""; }
+  /*@END*/
+  return r;
+}
+function exportCSV(){
+  var lines=[COLS.map(q).join(",")];
+  ORDER.forEach(function(it){var a=ans(it.key);if(!a||!a.tactic)return;var r=rowFor(it,a);lines.push(COLS.map(function(c){return q(r[c]);}).join(","));});
+  var blob=new Blob(["﻿"+lines.join("\r\n")+"\r\n"],{type:"text/csv;charset=utf-8"});
+  var nm0=(state.labeler||"unnamed").replace(/[^A-Za-z0-9_-]+/g,"_");
+  var fn="actcm_"+MODE+"_"+nm0+"_"+new Date().toISOString().slice(0,10)+".csv";
+  var url=URL.createObjectURL(blob);var link=h("a",{href:url,download:fn});document.body.appendChild(link);link.click();
+  setTimeout(function(){document.body.removeChild(link);URL.revokeObjectURL(url);},500);
+  say("Exported "+(lines.length-1)+" rows to "+fn);
+}
+function parseCSV(text){
+  if(text.charCodeAt(0)===0xFEFF) text=text.slice(1);
+  var rows=[],row=[],f="",inq=false,i=0,c;
+  for(;i<text.length;i++){c=text[i];
+    if(inq){ if(c==='"'){ if(text[i+1]==='"'){f+='"';i++;} else inq=false; } else f+=c; }
+    else if(c==='"') inq=true;
+    else if(c===",") {row.push(f);f="";}
+    else if(c==="\n"||c==="\r"){ if(c==="\r"&&text[i+1]==="\n")i++; row.push(f);f=""; if(row.length>1||row[0]!=="")rows.push(row); row=[]; }
+    else f+=c; }
+  if(f!==""||row.length){row.push(f);rows.push(row);}
+  return rows;
+}
+function importCSV(text){
+  var rows=parseCSV(text);
+  if(rows.length<2){alert("That file has no data rows.");return;}
+  var head=rows[0].map(function(s){return s.trim().toLowerCase();});
+  var ix=function(n){return head.indexOf(n);};
+  if(ix("item_id")<0||ix("tactic_id")<0){alert("This does not look like an export from this tool (needs item_id and tactic_id columns).");return;}
+  var byKey={};ITEMS.forEach(function(it){byKey[it.key]=it;});
+  var got=0,skipped=0,older=0,otherName=0;
+  rows.slice(1).forEach(function(r){
+    var g=function(n){var k=ix(n);return k<0?"":(r[k]||"");};
+    var key=g("item_id").trim(), it=byKey[key], tid=g("tactic_id").trim();
+    if(!it||!TACMAP[tid]){skipped++;return;}
+    var who=g("labeler").trim();
+    if(who&&state.labeler&&who!==state.labeler){otherName++;return;}
+    if(who&&!state.labeler) state.labeler=who;
+    var ts=g("answered_at"), cur=state.answers[key];
+    if(cur&&cur.ts&&ts&&cur.ts>ts){older++;return;}
+    var a={tactic:tid,cert:g("certainty")==="sure"?"sure":(g("certainty")==="unsure"?"unsure":null),note:g("note"),saved:false,ts:ts};
+    var st=g("status");
+    if(MODE==="blind") a.saved=(st==="saved");
+    /*@OWNER*/
+    if(MODE==="owner"){ a.revealed=(st==="revealed"); var dc=g("decision"); if(a.revealed&&dc){a.decision=dc;a.final=g("final_tactic_id");} }
+    /*@END*/
+    state.answers[key]=a;got++;
+  });
+  save();render();
+  say("Imported "+got+" rows. Skipped "+skipped+" unknown/invalid, "+older+" older than what you already have, "+otherName+" from a different name.");
+}
+
+/* ---------- wiring ---------- */
+$("who").addEventListener("input",function(){state.labeler=$("who").value;save();});
+$("who").addEventListener("keydown",function(e){if(e.key==="Enter"||e.key==="Escape"){e.preventDefault();$("who").blur();}});
+$("btnPrev").onclick=function(){go(state.pos-1);};
+$("btnNext").onclick=function(){go(state.pos+1);};
+$("btnUnrev").onclick=nextUnreviewed;
+$("btnExport").onclick=exportCSV;
+$("btnImport").onclick=function(){$("fileIn").click();};
+$("fileIn").addEventListener("change",function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){importCSV(String(rd.result));};rd.readAsText(f);this.value="";});
+$("btnHelp").onclick=function(){$("help").classList.remove("hidden");};
+$("helpClose").onclick=function(){$("help").classList.add("hidden");};
+
+document.addEventListener("keydown",function(e){
+  var t=e.target&&e.target.tagName; if(t==="INPUT"||t==="TEXTAREA")return;
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  var k=e.key.length===1?e.key.toLowerCase():e.key;
+  if(!$("breakscr").classList.contains("hidden")){if(k==="Enter"){var bb=$("breakbox").querySelector(".mainbtn");if(bb)bb.click();}return;}
+  if(!$("help").classList.contains("hidden")){if(k==="Escape"||k==="?"||k==="Enter")$("help").classList.add("hidden");return;}
+  if(k==="?"){$("help").classList.remove("hidden");return;}
+  var idx=KEYS.indexOf(k);
+  if(idx>=0){pickTactic(TACTICS[idx].id);e.preventDefault();return;}
+  if(k==="x"){pickTactic("NONE");return;}
+  if(k==="s"){pickCert("sure");return;}
+  if(k==="u"){pickCert("unsure");return;}
+  if(k==="n"){nextUnreviewed();return;}
+  if(k==="ArrowLeft"){go(state.pos-1);return;}
+  if(k==="ArrowRight"){go(state.pos+1);return;}
+  if(k==="Enter"){
+    /*@BLIND*/ saveAndNext(); /*@END*/
+    /*@OWNER*/
+    var a=ans(curItem().key);
+    if(!a||!a.revealed) doReveal(); else if(a.decision) advance();
+    /*@END*/
+    return;}
+  /*@OWNER*/
+  if(k==="k"){decide("keep_mine");return;}
+  if(k==="a"){decide("take_ai");return;}
+  if(k==="d"){decide("discuss_later");return;}
+  /*@END*/
+});
+
+save();
+render();
+/*@BLIND*/
+if(!state.labeler.trim()) $("who").focus();
+/*@END*/
+})();
+</script>
+</body>
+</html>
