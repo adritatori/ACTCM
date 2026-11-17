@@ -1,0 +1,56 @@
+# GitHub issue form. Field ids are used for prefilled links (scripts/issue_forms.py) and field labels by scripts/check_submission.py.
+name: Propose a new incident
+description: Suggest a well-documented incident in which an AI agent acted against real systems.
+title: 'New incident: '
+labels:
+- incident
+- submission
+body:
+- type: markdown
+  attributes:
+    value: 'This form is public. A script will check it and post one comment. **A form never changes the data by itself**: a human maintainer applies accepted changes through a pull request. Your contribution is offered under the repository''s data licence (LICENSE-DATA).
+
+
+      Describe behaviour at the level of detail the source gives. Do not include commands, payloads, passwords, internal host names or the names of private individuals.'
+- type: input
+  id: incident_title
+  attributes:
+    label: Incident title
+    description: 'A plain title, for example: Agent in a test published a package to a public registry.'
+  validations:
+    required: true
+- type: input
+  id: developer
+  attributes:
+    label: Developer of the model or agent
+  validations:
+    required: false
+- type: input
+  id: disclosed
+  attributes:
+    label: Date first disclosed
+    description: YYYY-MM-DD
+    placeholder: '2026-07-30'
+  validations:
+    required: false
+- type: textarea
+  id: sources
+  attributes:
+    label: Sources
+    description: 'One https address per line. Primary sources first: the developer''s, the evaluator''s or the affected party''s own report.'
+  validations:
+    required: true
+- type: textarea
+  id: summary
+  attributes:
+    label: Summary in your own words
+    description: At most 60 words.
+  validations:
+    required: true
+- type: textarea
+  id: why
+  attributes:
+    label: Why this incident
+    description: Is there enough public detail to split it into dated steps with quotes?
+  validations:
+    required: false

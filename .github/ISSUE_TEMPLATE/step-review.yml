@@ -1,0 +1,61 @@
+# GitHub issue form. Field ids are used for prefilled links (scripts/issue_forms.py) and field labels by scripts/check_submission.py.
+name: Review a step
+description: Check one step's quote and label.
+title: 'Review: '
+labels:
+- step-review
+- submission
+body:
+- type: markdown
+  attributes:
+    value: 'This form is public. A script will check it and post one comment. **A form never changes the data by itself**: a human maintainer applies accepted changes through a pull request. Your contribution is offered under the repository''s data licence (LICENSE-DATA).
+
+
+      Describe behaviour at the level of detail the source gives. Do not include commands, payloads, passwords, internal host names or the names of private individuals.
+
+
+      **This review is public, so it is not a blind review.** Blind review uses the kit in the `review/` folder. A review here does not change a step''s status: only a named human reviewer may do that, through a pull request.'
+- type: input
+  id: step_id
+  attributes:
+    label: Step
+    description: Incident id, a slash, then the step id, for example hf-2026-07/s17.
+  validations:
+    required: true
+- type: input
+  id: current_label
+  attributes:
+    label: Current label
+    description: Filled in for you when you come from the site.
+  validations:
+    required: false
+- type: dropdown
+  id: decision
+  attributes:
+    label: Do you agree with the label?
+    options:
+    - Agree
+    - Disagree
+    - Cannot tell from the source
+  validations:
+    required: true
+- type: input
+  id: own_tactic
+  attributes:
+    label: Your own tactic, if you disagree
+    description: A tactic ID from MITRE ATT&CK Enterprise v20.0, for example TA0007 (Discovery). The site's Coverage page lists all 15.
+  validations:
+    required: false
+- type: input
+  id: own_technique
+  attributes:
+    label: Your own technique, if you disagree
+  validations:
+    required: false
+- type: textarea
+  id: reason
+  attributes:
+    label: Reason
+    description: 'Say what you checked: the quote against the source, the description, the label.'
+  validations:
+    required: true

@@ -1,0 +1,58 @@
+# GitHub issue form. Field ids are used for prefilled links (scripts/issue_forms.py) and field labels by scripts/check_submission.py.
+name: Dispute a step label
+description: You think a step's tactic or technique is wrong.
+title: 'Dispute: '
+labels:
+- step-dispute
+- submission
+body:
+- type: markdown
+  attributes:
+    value: 'This form is public. A script will check it and post one comment. **A form never changes the data by itself**: a human maintainer applies accepted changes through a pull request. Your contribution is offered under the repository''s data licence (LICENSE-DATA).
+
+
+      Describe behaviour at the level of detail the source gives. Do not include commands, payloads, passwords, internal host names or the names of private individuals.'
+- type: input
+  id: step_id
+  attributes:
+    label: Step
+    description: Incident id, a slash, then the step id, for example hf-2026-07/s17.
+  validations:
+    required: true
+- type: input
+  id: current_label
+  attributes:
+    label: Current label
+    description: Filled in for you when you come from the site.
+  validations:
+    required: false
+- type: input
+  id: proposed_tactic
+  attributes:
+    label: Tactic you propose
+    description: A tactic ID from MITRE ATT&CK Enterprise v20.0, for example TA0007 (Discovery). The site's Coverage page lists all 15.
+    placeholder: TA0007
+  validations:
+    required: true
+- type: input
+  id: proposed_technique
+  attributes:
+    label: Technique you propose
+    description: A technique ID, or leave empty.
+  validations:
+    required: false
+- type: input
+  id: rule
+  attributes:
+    label: Codebook rule
+    description: 'Which step rule supports your label: S1 to S7.'
+    placeholder: S2
+  validations:
+    required: true
+- type: textarea
+  id: argument
+  attributes:
+    label: Your argument
+    description: Why the step fits your label better, using what the source says.
+  validations:
+    required: true
