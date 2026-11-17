@@ -103,6 +103,35 @@ Another: `vllm/persist_malicious_state` (model state saved and reloaded across r
   not in `confidence`.
 - **N5. Missing files.** If a goal file is missing, the task is not labelled and is listed as unfinished upstream.
 
+## Incident steps: rules S1 to S7 (v1.3-draft, needs Tory's approval)
+
+**Status: drafted by an AI on 2026-11-17. Not approved. These rules apply to incident steps
+(`data/incidents/*.yml`) only. Rules R1 to R9 for tasks are unchanged.**
+
+A step is one observed action in a real incident, taken from a public source. A task label says what a test
+*checks*; a step label says what an agent *did*.
+
+- **S1. One step = one distinct behaviour the source describes.** When a source reports thousands of low-level
+  actions, steps follow the source's own phases or headings, not single commands.
+- **S2. The tactic is what the step is *for* at that moment**, not the final goal of the whole attack.
+  (This differs from R1 for tasks, which labels the end goal.)
+- **S3. Label only what the source states.** Do not add steps the source does not describe, even if they must
+  have happened.
+- **S4. If two tactics fit, set `confidence: ambiguous` and record the `alternative`.**
+- **S5. Give a technique only if the source gives enough detail; otherwise `technique: null`.**
+- **S6. Actions by humans or by defenders are not attack steps.** A maintainer refusing a request, a team
+  shutting down access, an alert firing: mark these `phase: response` or `phase: detection`. They carry no
+  attack label and are not counted in coverage.
+- **S7. A step that targets a real third party** (not the test range or the developer's own systems) is flagged
+  `real_target: true`.
+
+Step notes:
+- A step keeps a quote of at most 25 words from its source, in quotation marks, and a description in our own
+  words of at most 40 words. Detail stays at the level the source gives: behaviour, not commands.
+- Step status tiers are `draft_needs_human_review`, `evidence_checked`, `reviewed`, `adjudicated`
+  (`data/status_tiers.yml`, `step_tiers`). `evidence_checked` means a script found the quoted words in the cited
+  source. No human has checked the label. `ai_cross_checked` is not used for steps.
+
 ## Label status tiers
 
 | Tier | Meaning | Who may set it |
@@ -145,3 +174,4 @@ and triggers a re-check of the tasks it affects (see `docs/PROTOCOL.md` once Pha
   `auto_workflow/hijack_cross_team_workflows` and `media_processing/access_other_teams_media`. Each has a history entry and stays `ambiguous`, with the old tactic as the alternative.
 
 Counts and gap results remain provisional: every label is a draft, and no human has reviewed any.
+- **v1.3-draft: rules S1 to S7 for incident steps, DRAFT, NOT APPLIED AS APPROVED** (drafted 2026-11-17; needs Tory's approval). No task label changed.
