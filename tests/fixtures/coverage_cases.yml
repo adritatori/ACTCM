@@ -1,0 +1,25 @@
+# Made-up tasks and steps for testing the coverage join. None is real.
+tasks:
+  - {uid: syn/a, setting: vllm, primary: TA0010, technique: T1048.003, steps: [TA0006], confidence: clear, alternative: null}
+  - {uid: syn/b, setting: vllm, primary: TA0040, technique: T1565.001, steps: [], confidence: ambiguous, alternative: {tactic: TA0005, technique: T1070}}
+  - {uid: hidden/c, setting: linuxarena-extras, primary: TA0008, technique: T1021, steps: [TA0007], confidence: clear, alternative: null}
+  - {uid: syn/d, setting: vllm, primary: TA0003, technique: null, steps: [], confidence: clear, alternative: null}
+  - {uid: syn/e, setting: vllm, primary: TA0009, technique: T1213, steps: [], confidence: ambiguous, alternative: {tactic: TA0007, technique: T1083}}
+  - {uid: syn/f, setting: vllm, primary: TA0010, technique: null, steps: [TA0006, TA0006], confidence: clear, alternative: null}   # repeated step tactic
+steps:
+  - {id: s01, phase: attack, attack: {primary_tactic: TA0010, technique: T1048, confidence: clear}, expect: tested_technique, uids: [syn/a], stable: true}
+  - {id: s02, phase: attack, attack: {primary_tactic: TA0010, technique: T1041, confidence: clear}, expect: tested_tactic_only, n_goal: 2, n_step: 0, stable: true}
+  - {id: s03, phase: attack, attack: {primary_tactic: TA0006, technique: T1552, confidence: clear}, expect: tested_tactic_only, n_goal: 0, n_step: 2, stable: true}
+  - {id: s04, phase: attack, attack: {primary_tactic: TA0008, technique: T1021, confidence: clear}, expect: not_tested, n_goal: 0, n_step: 0, stable: true}   # covered only by the hidden task
+  - {id: s05, phase: attack, attack: {primary_tactic: TA0007, technique: T1082, confidence: clear}, expect: not_tested, stable: false}                         # syn/e could flip into TA0007
+  - {id: s06, phase: attack, attack: {primary_tactic: TA0043, technique: null, confidence: clear}, expect: not_tested, stable: true}
+  - {id: s07, phase: attack, attack: {primary_tactic: TA0043, technique: null, confidence: ambiguous, alternative: {tactic: TA0010, technique: T1048}}, expect: unclear}
+  - {id: s08, phase: attack, attack: {primary_tactic: TA0010, technique: T1041, confidence: ambiguous, alternative: {tactic: TA0010, technique: T1567}}, expect: tested_tactic_only}
+  - {id: s09, phase: attack, attack: {primary_tactic: TA0040, technique: T1565, confidence: clear}, expect: tested_technique, stable: false}                    # rests on one ambiguous task
+  - {id: s10, phase: attack, attack: {primary_tactic: TA0003, technique: null, confidence: clear}, expect: tested_tactic_only, stable: true}                     # null never matches null
+  - {id: s11, phase: attack, attack: {primary_tactic: TA0005, technique: T1070, confidence: clear}, expect: not_tested, stable: false}
+  - {id: s12, phase: attack, attack: {primary_tactic: TA9999, technique: T9999, confidence: clear}, expect: not_tested}                                         # garbage IDs must not crash the join
+  - {id: s13, phase: attack, attack: {primary_tactic: TA0010, technique: T1048.002, confidence: clear}, expect: tested_technique, uids: [syn/a]}                 # sibling sub-technique, same parent
+  - {id: s14, phase: detection, expect: null}
+  - {id: s15, phase: response, expect: null}
+  - {id: s16, phase: attack, attack: {primary_tactic: TA0010, technique: T1048, confidence: ambiguous, alternative: null}, expect: tested_technique}             # ambiguous with no alternative: use the primary
