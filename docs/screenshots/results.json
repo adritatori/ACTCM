@@ -1,222 +1,236 @@
 [
  {
-  "page": "index",
+  "page": "home",
   "width": 1280,
-  "scheme": "light",
-  "hScroll": false,
-  "scrollW": 1280,
-  "clientW": 1280,
+  "bytes": 21697,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "index-1280-light.png"
+  "file": "home-1280.png"
+ },
+ {
+  "page": "incidents",
+  "width": 1280,
+  "bytes": 9158,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "incidents-1280.png"
+ },
+ {
+  "page": "coverage",
+  "width": 1280,
+  "bytes": 62014,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "coverage-1280.png"
+ },
+ {
+  "page": "explorer",
+  "width": 1280,
+  "bytes": 20078,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "explorer-1280.png"
+ },
+ {
+  "page": "contribute",
+  "width": 1280,
+  "bytes": 1993,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "contribute-1280.png"
+ },
+ {
+  "page": "review",
+  "width": 1280,
+  "bytes": 63051,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "review-1280.png"
  },
  {
   "page": "guide",
   "width": 1280,
-  "scheme": "light",
-  "hScroll": false,
-  "scrollW": 1280,
-  "clientW": 1280,
+  "bytes": 157280,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "guide-1280-light.png"
+  "file": "guide-1280.png"
  },
  {
   "page": "verify",
   "width": 1280,
-  "scheme": "light",
-  "hScroll": false,
-  "scrollW": 1280,
-  "clientW": 1280,
+  "bytes": 12529,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "verify-1280-light.png"
+  "file": "verify-1280.png"
  },
  {
-  "page": "index-vllm-steps",
+  "page": "explorer-vllm-steps",
   "width": 1280,
-  "scheme": "light",
-  "hScroll": false,
-  "scrollW": 1280,
-  "clientW": 1280,
+  "bytes": 28809,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "index-vllm-steps-1280-light.png"
+  "file": "explorer-vllm-steps-1280.png"
  },
  {
-  "page": "index-atlas",
+  "page": "explorer-atlas",
   "width": 1280,
-  "scheme": "light",
-  "hScroll": false,
-  "scrollW": 1280,
-  "clientW": 1280,
+  "bytes": 28809,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "index-atlas-1280-light.png"
+  "file": "explorer-atlas-1280.png"
  },
  {
-  "page": "index",
+  "page": "replay-hf-2026-07",
+  "width": 1280,
+  "bytes": 6242,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "replay-hf-2026-07-1280.png"
+ },
+ {
+  "page": "replay-anthropic-pypi-2026",
+  "width": 1280,
+  "bytes": 6242,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "replay-anthropic-pypi-2026-1280.png"
+ },
+ {
+  "page": "replay-aisi-2026-07",
+  "width": 1280,
+  "bytes": 6242,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "replay-aisi-2026-07-1280.png"
+ },
+ {
+  "page": "home",
   "width": 400,
-  "scheme": "light",
-  "hScroll": false,
-  "scrollW": 400,
-  "clientW": 400,
+  "bytes": 33242,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "index-400-light.png"
+  "file": "home-400.png"
+ },
+ {
+  "page": "incidents",
+  "width": 400,
+  "bytes": 21697,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "incidents-400.png"
+ },
+ {
+  "page": "coverage",
+  "width": 400,
+  "bytes": 62014,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "coverage-400.png"
+ },
+ {
+  "page": "explorer",
+  "width": 400,
+  "bytes": 28809,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "explorer-400.png"
+ },
+ {
+  "page": "contribute",
+  "width": 400,
+  "bytes": 1993,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "contribute-400.png"
+ },
+ {
+  "page": "review",
+  "width": 400,
+  "bytes": 63051,
+  "problems": [],
+  "errors": [],
+  "failed": [],
+  "file": "review-400.png"
  },
  {
   "page": "guide",
   "width": 400,
-  "scheme": "light",
-  "hScroll": false,
-  "scrollW": 400,
-  "clientW": 400,
+  "bytes": 28139,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "guide-400-light.png"
+  "file": "guide-400.png"
  },
  {
   "page": "verify",
   "width": 400,
-  "scheme": "light",
-  "hScroll": false,
-  "scrollW": 400,
-  "clientW": 400,
+  "bytes": 12529,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "verify-400-light.png"
+  "file": "verify-400.png"
  },
  {
-  "page": "index-vllm-steps",
+  "page": "explorer-vllm-steps",
   "width": 400,
-  "scheme": "light",
-  "hScroll": false,
-  "scrollW": 400,
-  "clientW": 400,
+  "bytes": 20078,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "index-vllm-steps-400-light.png"
+  "file": "explorer-vllm-steps-400.png"
  },
  {
-  "page": "index-atlas",
+  "page": "explorer-atlas",
   "width": 400,
-  "scheme": "light",
-  "hScroll": false,
-  "scrollW": 400,
-  "clientW": 400,
+  "bytes": 20078,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "index-atlas-400-light.png"
+  "file": "explorer-atlas-400.png"
  },
  {
-  "page": "index",
-  "width": 1280,
-  "scheme": "dark",
-  "hScroll": false,
-  "scrollW": 1280,
-  "clientW": 1280,
-  "errors": [],
-  "failed": [],
-  "file": "index-1280-dark.png"
- },
- {
-  "page": "guide",
-  "width": 1280,
-  "scheme": "dark",
-  "hScroll": false,
-  "scrollW": 1280,
-  "clientW": 1280,
-  "errors": [],
-  "failed": [],
-  "file": "guide-1280-dark.png"
- },
- {
-  "page": "verify",
-  "width": 1280,
-  "scheme": "dark",
-  "hScroll": false,
-  "scrollW": 1280,
-  "clientW": 1280,
-  "errors": [],
-  "failed": [],
-  "file": "verify-1280-dark.png"
- },
- {
-  "page": "index-vllm-steps",
-  "width": 1280,
-  "scheme": "dark",
-  "hScroll": false,
-  "scrollW": 1280,
-  "clientW": 1280,
-  "errors": [],
-  "failed": [],
-  "file": "index-vllm-steps-1280-dark.png"
- },
- {
-  "page": "index-atlas",
-  "width": 1280,
-  "scheme": "dark",
-  "hScroll": false,
-  "scrollW": 1280,
-  "clientW": 1280,
-  "errors": [],
-  "failed": [],
-  "file": "index-atlas-1280-dark.png"
- },
- {
-  "page": "index",
+  "page": "replay-hf-2026-07",
   "width": 400,
-  "scheme": "dark",
-  "hScroll": false,
-  "scrollW": 400,
-  "clientW": 400,
+  "bytes": 6242,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "index-400-dark.png"
+  "file": "replay-hf-2026-07-400.png"
  },
  {
-  "page": "guide",
+  "page": "replay-anthropic-pypi-2026",
   "width": 400,
-  "scheme": "dark",
-  "hScroll": false,
-  "scrollW": 400,
-  "clientW": 400,
+  "bytes": 6242,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "guide-400-dark.png"
+  "file": "replay-anthropic-pypi-2026-400.png"
  },
  {
-  "page": "verify",
+  "page": "replay-aisi-2026-07",
   "width": 400,
-  "scheme": "dark",
-  "hScroll": false,
-  "scrollW": 400,
-  "clientW": 400,
+  "bytes": 169844,
+  "problems": [],
   "errors": [],
   "failed": [],
-  "file": "verify-400-dark.png"
- },
- {
-  "page": "index-vllm-steps",
-  "width": 400,
-  "scheme": "dark",
-  "hScroll": false,
-  "scrollW": 400,
-  "clientW": 400,
-  "errors": [],
-  "failed": [],
-  "file": "index-vllm-steps-400-dark.png"
- },
- {
-  "page": "index-atlas",
-  "width": 400,
-  "scheme": "dark",
-  "hScroll": false,
-  "scrollW": 400,
-  "clientW": 400,
-  "errors": [],
-  "failed": [],
-  "file": "index-atlas-400-dark.png"
+  "file": "replay-aisi-2026-07-400.png"
  }
 ]

@@ -35,5 +35,38 @@
   "validated",
   "confirmed",
   "approved"
+ ],
+ "step_tiers": [
+  {
+   "id": "draft_needs_human_review",
+   "label": "Draft",
+   "plain": "One AI drafted this step. No script check, no human check.",
+   "who_may_set": "Claude or a script"
+  },
+  {
+   "id": "evidence_checked",
+   "label": "Evidence-checked",
+   "plain": "A script found the quoted words in the cited source. No human has checked the label.",
+   "who_may_set": "A script only"
+  },
+  {
+   "id": "reviewed",
+   "label": "Reviewed by a human",
+   "plain": "One human checked this step.",
+   "who_may_set": "A named human only"
+  },
+  {
+   "id": "adjudicated",
+   "label": "Adjudicated by humans",
+   "plain": "Two humans labelled it separately, compared, and recorded why.",
+   "who_may_set": "Named humans only"
+  }
+ ],
+ "never_say_for_evidence_checked": [
+  "reviewed",
+  "verified",
+  "validated",
+  "confirmed",
+  "approved"
  ]
 }

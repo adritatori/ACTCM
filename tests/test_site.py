@@ -15,7 +15,9 @@ import common as c
 import build_site as bs
 
 SITE = c.ROOT / "site"
-PAGES = ["index.html", "guide.html", "verify.html"]
+COV = json.loads((c.DATA / "generated" / "incident_coverage.json").read_text())
+REPLAYS = [f"incidents/{i['id']}.html" for i in COV["incidents"]]
+PAGES = ["index.html", "incidents.html", "coverage.html", "explorer.html", "contribute.html", "review.html", "guide.html", "verify.html"] + REPLAYS
 COUNTS = json.loads((c.DATA / "generated" / "counts.json").read_text())
 TASKS = json.loads((c.DATA / "generated" / "tasks.json").read_text())
 
@@ -89,7 +91,7 @@ def test_footer_and_banner_on_every_page(fn):
     _, text, raw = parse(fn)
     must = ["A task count shows what is tested, not what is caught", "A gap means “untested”, not “dangerous” and not “undefended”",
             "Not affiliated with or endorsed by The MITRE Corporation.", bs.MITRE_LINE, "Terms of Use", "CC BY 4.0", "MIT",
-            "Apache License 2.0", "PROVISIONAL RESULTS", "No human has reviewed any label yet.", "ATT&CK Enterprise v20.0", "ATLAS 2026.10", "codebook 1.1-draft"]
+            "Apache License 2.0", "Draft. No human has reviewed any label yet.", "MITRE ATT&CK® Enterprise v20.0", "ATLAS 2026.10", "codebook 1.1-draft"]
     for m in must:
         assert m in text, (fn, m)
     assert "<footer" in raw and "github.com/adritatori/actcm" in raw
@@ -136,7 +138,7 @@ class Headings(HTMLParser):
 def test_every_heading_that_names_attack_says_mitre_attack_registered(fn):
     h = Headings(); h.feed((SITE / fn).read_text(encoding="utf-8"))
     named = [x for x in h.out if "ATT&CK" in x]
-    assert named or fn != "index.html", "explorer must have an ATT&CK heading"
+    assert named or fn != "explorer.html", "explorer must have an ATT&CK heading"
     for x in named:
         assert "MITRE ATT&CK®" in x, (fn, x)
     assert not [x for x in h.out if re.search(r"ATT&CK(?!®)", x.replace("MITRE ATT&CK®", ""))], (fn, h.out)
@@ -149,7 +151,7 @@ def test_explorer_js_headings_say_mitre_attack_registered():
 
 
 def test_banner_wording():
-    _, text, _ = parse("index.html")
+    _, text, _ = parse("explorer.html")
     assert "No human has reviewed any label yet." in text and "licence-wording" not in text
 
 
@@ -203,7 +205,7 @@ def test_verify_numbers_match_counts():
 
 
 def test_explorer_static_text_has_no_stale_numbers():
-    _, text, _ = parse("index.html")
+    _, text, _ = parse("explorer.html")
     assert f"({COUNTS['summary']['null_technique_tasks']} in total)" in text
     assert "ATT&CK (15 tactics)" in text and "ATLAS (16 tactics)" in text
 
@@ -250,10 +252,10 @@ def test_internal_links_resolve(fn):
     for h in p.hrefs:
         if h.startswith(("http://", "https://", "#", "mailto:")):
             continue
-        target = (SITE / h.split("#")[0]).resolve()
+        target = ((SITE / fn).parent / h.split("#")[0]).resolve()
         assert target.exists(), (fn, h)
         if "#" in h and h.split("#")[1]:
-            q, _, _ = parse(h.split("#")[0]); assert h.split("#")[1] in q.ids, (fn, h)
+            q, _, _ = parse(str(target.relative_to(SITE.resolve()))); assert h.split("#")[1] in q.ids, (fn, h)
     for h in p.hrefs:
         if h.startswith("#") and len(h) > 1:
             assert h[1:] in p.ids, (fn, h)
@@ -266,10 +268,7 @@ def test_repo_links_are_marked_as_working_after_publishing(fn):
     hits = [b for b in blocks if "github.com/adritatori/actcm" in b]
     assert hits, fn
     for b in hits:
-        if c.config().get("published"):
-            assert not re.search(r"works? after publishing", b), "the repository is live, so the pending note must be gone"
-        else:
-            assert re.search(r"works? after publishing", b), re.sub(r"\s+", " ", b)[-200:]
+        assert not re.search(r"works? after publishing", b), "the repository is live, so the pending note must be gone"
 
 
 def test_images_exist_with_alt_text_and_size():
@@ -285,10 +284,7 @@ def tokens(block: str) -> dict:
 
 def blocks():
     css = (SITE / "assets" / "style.css").read_text()
-    light = re.search(r":root \{(.*?)\n\}", css, re.S).group(1)
-    dark_media = re.search(r":root:not\(\[data-theme=\"light\"\]\) \{(.*?)\n  \}", css, re.S).group(1)
-    dark_attr = re.search(r":root\[data-theme=\"dark\"\] \{(.*?)\n\}", css, re.S).group(1)
-    return tokens(light), tokens(dark_media), tokens(dark_attr)
+    return tokens(re.search(r":root \{(.*?)\n\}", css, re.S).group(1))
 
 
 def lum(h):
@@ -306,27 +302,43 @@ def ratio(a, b):
 
 TEXT_PAIRS = [("ink", "bg"), ("ink", "surface"), ("ink", "surface-2"), ("muted", "bg"), ("muted", "surface"), ("muted", "surface-2"),
               ("link", "bg"), ("link", "surface"), ("link", "accent-soft"), ("ink", "accent-soft"), ("accent-ink", "accent"),
-              ("warn-ink", "warn-bg"), ("gap-ink", "surface"), ("gap-ink", "surface-2"), ("link", "surface-2")]
-UI_PAIRS = [("focus", "bg"), ("focus", "surface"), ("accent", "bg"), ("accent", "surface"), ("bar", "surface-2"), ("warn-line", "bg")]
+              ("warn-ink", "warn-bg"), ("gap-ink", "surface"), ("gap-ink", "surface-2"), ("link", "surface-2"), ("notice-ink", "notice-bg"),
+              ("v-tech", "v-tech-bg"), ("v-tactic", "v-tactic-bg"), ("v-none", "v-none-bg"), ("v-unclear", "v-unclear-bg"),
+              ("v-tech", "bg"), ("v-tactic", "bg"), ("v-none", "bg"), ("v-unclear", "bg"), ("v-none", "v-none-bg"), ("ink", "v-none-bg")]
+UI_PAIRS = [("focus", "bg"), ("focus", "surface"), ("accent", "bg"), ("accent", "surface"), ("bar", "surface-2"), ("warn-line", "bg"),
+            ("line-strong", "bg"), ("line-strong", "surface-2"), ("v-tech", "bg"), ("v-tactic", "bg"), ("v-none", "bg"), ("v-unclear", "bg")]
+SPEC = {"bg": "#ffffff", "surface-2": "#f8fafc", "line": "#e5e7eb", "ink": "#0b1220", "muted": "#475569", "accent": "#1d4ed8",
+        "v-tech": "#047857", "v-tech-bg": "#ecfdf5", "v-tactic": "#b45309", "v-tactic-bg": "#fffbeb", "v-none": "#b91c1c", "v-none-bg": "#fef2f2",
+        "v-unclear": "#475569", "v-unclear-bg": "#f1f5f9"}
 
 
-def test_dark_blocks_are_identical():
-    _, a, b = blocks()
-    assert a == b
+def test_light_theme_only_and_tokens_match_the_design_brief():
+    css = (SITE / "assets" / "style.css").read_text()
+    assert "prefers-color-scheme" not in css and "data-theme" not in css and "color-scheme: light" in css
+    t = blocks()
+    for k, v in SPEC.items():
+        assert t[k] == v, (k, t[k])
+    assert "prefers-reduced-motion" in css and "max-width: 1120px" in css and "70ch" in css
 
 
-@pytest.mark.parametrize("scheme", ["light", "dark"])
-def test_text_contrast_at_least_4_5(scheme):
-    t = blocks()[0 if scheme == "light" else 1]
+def test_text_contrast_at_least_4_5():
+    t = blocks()
     low = [(x, y, round(ratio(t[x], t[y]), 2)) for x, y in TEXT_PAIRS if ratio(t[x], t[y]) < 4.5]
     assert not low, low
 
 
-@pytest.mark.parametrize("scheme", ["light", "dark"])
-def test_ui_contrast_at_least_3(scheme):
-    t = blocks()[0 if scheme == "light" else 1]
+def test_ui_contrast_at_least_3():
+    t = blocks()
     low = [(x, y, round(ratio(t[x], t[y]), 2)) for x, y in UI_PAIRS if ratio(t[x], t[y]) < 3.0]
     assert not low, low
+
+
+def test_no_colour_literal_outside_the_token_block_fails_contrast_silently():
+    """Every colour used for text sits in the token block, so the contrast test above sees it."""
+    css = (SITE / "assets" / "style.css").read_text()
+    body = css[css.index("\n}\n") + 3:]
+    extra = set(re.findall(r"#[0-9a-fA-F]{6}\b", body))
+    assert extra <= {"#ffffff", "#1e40af"}, extra          # white fills, and the darker hover of the accent button
 
 
 def test_gap_is_never_colour_only():
@@ -334,6 +346,17 @@ def test_gap_is_never_colour_only():
     assert "0 tasks: gap (untested)" in js and "0 tasks: gap in this setting (untested)" in js and "gapnote" in js
     css = (SITE / "assets" / "style.css").read_text()
     assert "repeating-linear-gradient" in css and "border-style: dashed" in css
+
+
+def test_verdicts_are_never_colour_only():
+    for fn in REPLAYS + ["coverage.html"]:
+        _, text, raw = parse(fn)
+        for v in COV["verdicts"]:
+            assert v["label"] in text, (fn, v)
+        assert 'class="ico ico-not_tested"' in raw
+    css = (SITE / "assets" / "style.css").read_text()
+    for v in COV["verdicts"]:
+        assert f".ico-{v['id']}" in css and f".v-{v['id']}" in css
 
 
 # ---- browser ----------------------------------------------------------------------------------------------
@@ -368,3 +391,79 @@ def test_browser_numbers_interactions_keyboard(server):
 def test_browser_no_console_errors_no_horizontal_scroll(server):
     r = subprocess.run(["node", str(c.ROOT / "scripts" / "site_check.js"), server], capture_output=True, text=True, timeout=300)
     assert r.returncode == 0, r.stdout[-2000:] + r.stderr[-500:]
+
+
+@pytest.mark.skipif(not _node_ok(), reason="node + playwright not available")
+def test_browser_incident_pages_numbers_keyboard_and_no_javascript(server):
+    r = subprocess.run(["node", str(c.ROOT / "scripts" / "site_incidents_check.js"), server], capture_output=True, text=True, timeout=600)
+    assert r.returncode == 0, r.stdout[-3000:] + r.stderr[-500:]
+    assert " 0 failures" in r.stdout
+
+
+# ---- incident pages: numbers in the HTML equal the generated file (no browser needed) --------------------------
+def test_home_numbers_match_generated_json():
+    _, text, raw = parse("index.html")
+    t = COV["totals"]
+    for i, n in (("n-incidents", t["incidents"]), ("n-attack-steps", t["attack_steps"]), ("n-not-tested", t["verdict_counts"]["not_tested"]), ("n-unclear", t["verdict_counts"]["unclear"])):
+        assert re.search(rf'id="{i}">{n}<', raw), i
+    assert "chosen for detail, not random" in text and "What real AI agents did, against what safety tests check" in text
+    assert f"We split {t['incidents']} well-documented incidents into {t['steps']} steps" in text
+    assert f"the {t['public_tasks']} public test tasks" in text
+
+
+@pytest.mark.parametrize("fn", REPLAYS)
+def test_replay_page_matches_generated_json(fn):
+    _, text, raw = parse(fn)
+    inc = next(i for i in COV["incidents"] if fn.endswith(i["id"] + ".html"))
+    assert raw.count('<tr class="step-row"') == inc["total_steps"] == raw.count('<article class="step-detail"')
+    for v, n in inc["verdict_counts"].items():
+        assert raw.count(f'data-verdict="{v}"') == n, v
+    for s in inc["steps"]:
+        assert html_escape(s["quote"]) in raw and html_escape(s["what_happened"]) in raw, s["id"]
+        assert s["source_url"] in raw
+    for x in inc["agent_count_claims"]:
+        assert html_escape(x["claim"]) in raw                      # every claim is shown, also when they disagree
+    for lim in COV["limits"]:
+        assert html_escape(lim) in raw
+    assert "No monitor has been run" in text and "not a random sample" in text
+
+
+def test_coverage_page_matches_generated_json():
+    _, text, raw = parse("coverage.html")
+    for t in COV["tactics"]:
+        row = raw.split(f'id="row-{t["id"]}"')[1].split("</tr>")[0]
+        nums = re.findall(r'<span class="num">(\d+)</span>', row)
+        assert [int(x) for x in nums] == [t["tasks_as_goal"], t["tasks_as_step"], t["incident_steps"]], t["id"]
+        assert row.rstrip().endswith(f'<td class="num">{t["steps_never_tested"]}</td>')
+    for lim in COV["limits"]:
+        assert html_escape(lim) in raw
+    assert len(COV["limits"]) == 5
+
+
+def test_review_page_lists_every_step_once():
+    _, _, raw = parse("review.html")
+    for inc in COV["incidents"]:
+        for s in inc["steps"]:
+            assert raw.count(f'>{inc["id"]}/{s["id"]}</a>') == 1
+    assert "It does not approve anything" in raw
+
+
+def test_evidence_checked_is_never_described_as_human_checked():
+    tiers = json.loads((SITE / "data" / "status_tiers.json").read_text())
+    bad_words = tiers["never_say_for_evidence_checked"]
+    for fn in PAGES:
+        _, text, _ = parse(fn)
+        for m in re.finditer(r"Evidence-checked", text):
+            window = text[m.end():m.end() + 110].split("Reviewed")[0].lower().replace("no human has reviewed", "")   # stop at the next tier's own name
+            for bad in bad_words:
+                assert bad not in window, (fn, bad, window)
+
+
+def test_no_hidden_setting_anywhere_on_the_site():
+    for f in list(SITE.rglob("*.html")) + list((SITE / "data").rglob("*.json")):
+        assert c.publish_extras() or "linuxarena-extras" not in f.read_text(encoding="utf-8"), f
+
+
+def html_escape(x):
+    import html
+    return html.escape(x)

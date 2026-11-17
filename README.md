@@ -7,7 +7,7 @@ For each public AI control setting, ACTCM lists every hidden attack task (a "sid
 >
 > **Status: draft and provisional. No human has reviewed any label yet.** Nothing is published.
 
-![The Explorer: summary, label status and the tactic matrix, with gap tactics hatched](docs/screenshots/index-1280-light.png)
+![A Replay page: the attack ladder of one incident, one mark per step, with the step's source quote and verdict beside it](docs/screenshots/replay-hf-2026-07-1280.png)
 
 **Live site:** https://adritatori.github.io/ACTCM/ (built from this repository by GitHub Pages).
 

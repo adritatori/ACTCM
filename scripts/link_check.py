@@ -13,7 +13,7 @@ from html.parser import HTMLParser
 import common as c
 
 SITE = c.ROOT / "site"
-PAGES = ["index.html", "guide.html", "verify.html"]
+PAGES = sorted(str(p.relative_to(SITE)) for p in list(SITE.glob("*.html")) + list(SITE.glob("incidents/*.html")))
 
 
 class H(HTMLParser):

@@ -159,6 +159,7 @@ def build(tasks: list[dict] | None = None) -> dict:
             ambiguous_steps=sum(1 for s in att if s["confidence"] == "ambiguous"),
             status_counts={k: sum(1 for s in steps if s["label_status"] == k) for k in ["draft_needs_human_review", "evidence_checked", "reviewed", "adjudicated"]},
             steps=steps))
+    incidents.sort(key=lambda i: (i["dates"]["disclosed"], i["id"]))
     all_att = [(i["id"], s) for i in incidents for s in i["steps"] if s["phase"] == "attack"]
     tactic_rows = []
     for t in fw["tactics"]:

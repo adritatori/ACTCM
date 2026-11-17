@@ -47,8 +47,8 @@ def test_readme_has_the_required_lines():
     assert "A gap means \"untested\", not \"dangerous\" and not \"undefended\"." in t
     assert "Not affiliated with or endorsed by The MITRE Corporation." in t
     assert "© 2026 The MITRE Corporation. This work is reproduced and distributed with the permission of The MITRE Corporation." in t
-    assert "v0.4.0" in t and "no such tag" in t and "docs/screenshots/index-1280-light.png" in t
-    assert (R / "docs/screenshots/index-1280-light.png").exists()
+    assert "v0.4.0" in t and "no such tag" in t and "docs/screenshots/replay-hf-2026-07-1280.png" in t
+    assert (R / "docs/screenshots/replay-hf-2026-07-1280.png").exists()
     for s in ("Quick start", "How to verify", "Contribute", "Cite", "Licences"):
         assert s in t, s
 

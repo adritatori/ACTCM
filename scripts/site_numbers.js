@@ -20,7 +20,7 @@ const inSet = (uid, s) => s === 'all' || uid.startsWith(s + '/');
   for (const setting of Object.keys(HASH)) {
     for (const mode of ['primary', 'steps', 'atlas']) {
       const hash = `setting-${HASH[setting]}` + (mode === 'steps' ? '&steps' : mode === 'atlas' ? '&atlas' : '');
-      await page.goto(`${base}/index.html#${hash}`, { waitUntil: 'networkidle' });
+      await page.goto(`${base}/explorer.html#${hash}`, { waitUntil: 'networkidle' });
       await page.reload({ waitUntil: 'networkidle' });
       await page.waitForSelector('html[data-ready="1"]');
       const tag = `${setting}/${mode}`;
@@ -81,7 +81,7 @@ const inSet = (uid, s) => s === 'all' || uid.startsWith(s + '/');
     }
   }
   // interactions on the default view
-  await page.goto(`${base}/index.html#setting-all`, { waitUntil: 'networkidle' }); await page.waitForSelector('html[data-ready="1"]');
+  await page.goto(`${base}/explorer.html#setting-all`, { waitUntil: 'networkidle' }); await page.waitForSelector('html[data-ready="1"]');
   const firstTech = await page.$('.techbtn:not(.alt)'); const wantN = parseInt(await (await firstTech.$('b')).textContent(), 10);
   await firstTech.click();
   const title = await page.textContent('#panel-title'); eq('technique panel title count', /: (\d+) tasks?/.exec(title)[1], wantN);
@@ -110,13 +110,13 @@ const inSet = (uid, s) => s === 'all' || uid.startsWith(s + '/');
   }
   // a hidden setting never appears in the page at all
   if (!counts.settings.some(s => s.id === 'linuxarena-extras')) {
-    await page.goto(`${base}/index.html`, { waitUntil: 'networkidle' }); await page.waitForSelector('html[data-ready="1"]');
+    await page.goto(`${base}/explorer.html`, { waitUntil: 'networkidle' }); await page.waitForSelector('html[data-ready="1"]');
     const html = await page.content();
     eq('hidden setting is absent from the page', /LinuxArena extras<\/span>|set-extras/.test(html), false);
     eq('one-line note says extras are not included', /not included in v0\.1, pending permission/.test(await page.textContent('#extras-note')), true);
-    await page.goto(`${base}/index.html#setting-extras`, { waitUntil: 'networkidle' }); await page.waitForSelector('html[data-ready="1"]');
+    await page.goto(`${base}/explorer.html#setting-extras`, { waitUntil: 'networkidle' }); await page.waitForSelector('html[data-ready="1"]');
     eq('a hash for the hidden setting falls back to All', await page.isChecked('#set-all'), true);
-    await page.goto(`${base}/index.html#setting-all`, { waitUntil: 'networkidle' }); await page.waitForSelector('html[data-ready="1"]');
+    await page.goto(`${base}/explorer.html#setting-all`, { waitUntil: 'networkidle' }); await page.waitForSelector('html[data-ready="1"]');
   }
   await page.fill('#f-search', ''); await page.selectOption('#f-tier', 'ai_cross_checked'); await page.waitForTimeout(150);
   eq('tier filter count', (await page.textContent('#table-count')).match(/Showing (\d+)/)[1], counts.summary.ai_cross_checked);
@@ -124,7 +124,7 @@ const inSet = (uid, s) => s === 'all' || uid.startsWith(s + '/');
   eq('tactic filter count', (await page.textContent('#table-count')).match(/Showing (\d+)/)[1], counts.tactics.find(t => t.id === 'TA0040').primary.all);
   await page.click('#set-vllm', { force: true }); eq('hash after clicking vLLM', await page.evaluate(() => location.hash), '#setting-vllm');
   await page.click('#mode-steps', { force: true }); eq('hash after steps', await page.evaluate(() => location.hash), '#setting-vllm&steps');
-  await page.goto(`${base}/index.html`, { waitUntil: 'networkidle' }); await page.waitForSelector('html[data-ready="1"]');
+  await page.goto(`${base}/explorer.html`, { waitUntil: 'networkidle' }); await page.waitForSelector('html[data-ready="1"]');
   let reached = false, outlineOk = false;
   for (let i = 0; i < 80 && !reached; i++) { await page.keyboard.press('Tab'); reached = await page.evaluate(() => document.activeElement.classList.contains('tactic-btn')); }
   if (reached) outlineOk = await page.evaluate(() => { const s = getComputedStyle(document.activeElement); return s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) >= 2; });
