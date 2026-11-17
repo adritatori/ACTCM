@@ -1,1 +1,8 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Contribute page (fills in a form for you)
+    url: https://adritatori.github.io/ACTCM/contribute.html
+    about: Propose an incident, add a step or challenge a label, starting from the site.
+  - name: Review queue
+    url: https://adritatori.github.io/ACTCM/review.html
+    about: Every incident step that still needs a human check.

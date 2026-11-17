@@ -77,6 +77,16 @@ def main() -> None:
     L += ["## Control Tower documentation", "",
           f"The definitions in the Guide's glossary were checked against the Control Tower docs (`linuxarena/control-tower`, commit `{lock['references']['control_tower_docs']['sha']}`, MIT, Copyright (c) 2025 LinuxArena). "
           "We paraphrase them and quote only short phrases. See `docs/GLOSSARY_CHECK.md`.", ""]
+    import validate_incidents as vi
+    srcs = sorted(vi.load_sources().values(), key=lambda x: x["id"])
+    L += ["## Incident sources (quoted briefly, not reproduced)", "",
+          "The incident pages describe what public reports say, in our own words. From each source we keep short quotations only "
+          f"(at most {vi.MAX_QUOTE} words per step, in quotation marks, with a link). No source text is stored in this repository; "
+          "`data/incidents/_sources.yml` holds only the address, the dates and a hash of the text as read. The reports remain the work of their publishers. "
+          "ACTCM is not affiliated with or endorsed by any of them.", "", "| Source | Publisher | Published | Read |", "|---|---|---|---|"]
+    L += [f"| [{x['title']}]({x['url']}) | {x['publisher']} | {x['published']} | {x['accessed']} ({x['read_extent']}) |" for x in srcs]
+    L += ["", "Not used as sources: the Swarm Traces dataset (it states no licence; it is not ingested), swarms.wiki (linked from the site, its text is not copied), "
+              "and the redacted transcript Anthropic released with its September 2026 assessment (linked, not quoted: it asks not to be included in training data).", ""]
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT.name}: {len(la)} LinuxArena env licences identical")
 

@@ -85,3 +85,15 @@ def test_gate_extras_hidden_and_export_clean(tmp_path):
     assert c.publish_extras() is False
     ex.export(tmp_path / "e")
     assert ex.scan(tmp_path / "e") == []
+
+
+def test_private_block_pattern_removes_marked_blocks_only():
+    """Regression: the pattern once lost its first half and then deleted every line break in every exported file."""
+    import export_public as ep
+    start, end = "private:" + "start", "private:" + "end"
+    text = f"keep 1\n# {start}\nsecret = 1\n# {end}\nkeep 2\n<!-- {start} -->\nhidden\n<!-- {end} -->\nkeep 3\n"
+    assert ep.PRIVATE_BLOCK.sub("", text) == "keep 1\nkeep 2\nkeep 3\n"
+    plain = '[project]\nname = "x"\n\n[tool]\n'
+    assert ep.PRIVATE_BLOCK.sub("", plain) == plain
+    src = (ep.c.ROOT / "scripts" / "export_public.py").read_text(encoding="utf-8")
+    assert ep.PRIVATE_BLOCK.sub("", src) == src, "the export must not rewrite its own source"

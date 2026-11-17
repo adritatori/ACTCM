@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """Phase 6: build the static site in site/ from data/generated/*.
 
-Writes site/index.html, guide.html, verify.html, and copies data files to site/data/.
+Writes site/index.html (Home), incidents.html, incidents/<id>.html (one Replay page per incident), coverage.html,
+explorer.html (the task Explorer), contribute.html, review.html, guide.html, verify.html, and copies data files to site/data/.
 Every number in the HTML comes from counts.json / stress_results.json / the lock file; none is typed by hand.
 """
 from __future__ import annotations
 
 import html
 import json
-import re
 import shutil
 
 import common as c
 import frameworks as fwm  # noqa: F401  (keeps the import path consistent)
+import site_incidents as si
 
 SITE = c.ROOT / "site"
 GEN = c.DATA / "generated"
@@ -27,8 +28,10 @@ DISCLAIMERS = LICENCE_TXT.split("Disclaimers\n-----------\n")[1].strip()
 E = html.escape
 
 OPEN_DECISIONS = ["the three tenant-isolation tasks", "the line between Stealth and Defense Impairment"]
-BANNER = ("<strong>PROVISIONAL RESULTS.</strong> No human has reviewed any label yet. "
-          f"Counts and gaps may still change: {len(OPEN_DECISIONS)} decisions are open ({' and '.join(OPEN_DECISIONS)}).")
+NOTICE = "Draft. No human has reviewed any label yet."
+TAGLINE = "What real AI agents did, against what safety tests check."
+NAV = [("incidents", "incidents.html", "Incidents"), ("coverage", "coverage.html", "Coverage"), ("explorer", "explorer.html", "Tasks"),
+       ("contribute", "contribute.html", "Contribute"), ("review", "review.html", "Review"), ("guide", "guide.html", "Guide")]
 
 
 def load():
@@ -38,47 +41,45 @@ def load():
     return cn, st, lock
 
 
-def page(title: str, active: str, body: str, cn: dict, lock: dict, desc: str) -> str:
+def page(title: str, active: str, body: str, cn: dict, lock: dict, desc: str, root: str = "") -> str:
+    """One full page. `root` is "" for top-level pages and "../" for pages one folder down."""
     v = cn["versions"]
-    nav = "".join(f'<li><a href="{h}"{" aria-current=\"page\"" if k == active else ""}>{n}</a></li>'
-                  for k, h, n in [("explorer", "index.html", "Explorer"), ("guide", "guide.html", "Guide"), ("verify", "verify.html", "Verify")])
+    nav = "".join(f'<li><a href="{root}{h}"{" aria-current=\"page\"" if k == active else ""}>{n}</a></li>' for k, h, n in NAV)
     srcs = len(c.public_lock(lock)["sources"])
-    published = bool(c.config().get("published"))
-    out = f"""<!doctype html>
+    return f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="{root}assets/style.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the content</a>
-<div class="banner" role="note"><div class="wrap">{BANNER}</div></div>
 <header class="site"><div class="wrap">
-<a class="brand" href="index.html">ACTCM<small>Agent Control Threat Coverage Matrix</small></a>
+<a class="brand" href="{root}index.html">ACTCM<small> {E(TAGLINE)}</small></a>
 <nav class="main" aria-label="Main"><ul>{nav}</ul></nav>
 </div></header>
+<div class="notice" role="note"><div class="wrap">{NOTICE} <a href="{root}guide.html#results">What this means</a></div></div>
 <main id="main" class="wrap">
 {body}
 </main>
 <footer class="site"><div class="wrap">
 <p class="warn">A task count shows what is <em>tested</em>, not what is <em>caught</em>. A gap means &ldquo;untested&rdquo;, not &ldquo;dangerous&rdquo; and not &ldquo;undefended&rdquo;.</p>
-<p><strong>Pinned versions:</strong> ATT&amp;CK Enterprise v{v['attack']} (commit {v['attack_sha'][:10]}), ATLAS {v['atlas']} (commit {v['atlas_sha'][:10]}), codebook {v['codebook']}, {srcs} source repositories at fixed commits (<a href="{REPO_URL}/blob/main/data/sources.lock.yml">sources.lock.yml</a>, <span class="pending">works after publishing</span>).</p>
+<p>ACTCM, the Agent Control Threat Coverage Matrix. <a href="{root}guide.html">Guide</a> · <a href="{root}verify.html">Verify</a> · <a href="{root}contribute.html">Contribute</a></p>
+<p><strong>Pinned versions:</strong> MITRE ATT&amp;CK® Enterprise v{v['attack']} (commit {v['attack_sha'][:10]}), ATLAS {v['atlas']} (commit {v['atlas_sha'][:10]}), codebook {v['codebook']}, {srcs} source repositories at fixed commits (<a href="{REPO_URL}/blob/main/data/sources.lock.yml">sources.lock.yml</a>).</p>
 <p><strong>MITRE ATT&amp;CK® licence.</strong> {E(LICENCE_PARA)}</p>
 <p>{E(MITRE_LINE)} See the <a href="{TOU}">ATT&amp;CK Terms of Use</a>. ATLAS is licensed under Apache License 2.0.</p>
 <details><summary>MITRE disclaimers (reproduced from MITRE's licence text)</summary>{DISCLAIMER_HTML}</details>
 <p><strong>Not affiliated with or endorsed by The MITRE Corporation.</strong></p>
-<p>Licences: code MIT (<a href="{REPO_URL}/blob/main/LICENSE">LICENSE</a>), data and labels CC BY 4.0 (<a href="{REPO_URL}/blob/main/LICENSE-DATA">LICENSE-DATA</a>), <a href="{REPO_URL}/blob/main/THIRD_PARTY_NOTICES.md">third-party notices</a>. <span class="pending">These links work after publishing.</span> Source: <a href="{REPO_URL}">{REPO_URL.replace('https://', '')}</a> <span class="pending">(works after publishing)</span>.</p>
+<p>Incident steps quote their sources briefly (25 words at most) and link to them; the sources remain the work of their publishers.</p>
+<p>Licences: code MIT (<a href="{REPO_URL}/blob/main/LICENSE">LICENSE</a>), data and labels CC BY 4.0 (<a href="{REPO_URL}/blob/main/LICENSE-DATA">LICENSE-DATA</a>), <a href="{REPO_URL}/blob/main/THIRD_PARTY_NOTICES.md">third-party notices</a>. Source: <a href="{REPO_URL}">{REPO_URL.replace('https://', '')}</a>.</p>
 </div></footer>
 {{SCRIPT}}
 </body>
 </html>
 """
-    if published:     # the repository is live: drop the "works after publishing" notes (and a comma left in front of one)
-        out = re.sub(r'(?:,\s*)?\s*<span class="pending">[^<]*works? after publishing[^<]*</span>', "", out)
-    return out
 
 
 # ------------------------------------------------------------------------------------------- Explorer
@@ -137,7 +138,7 @@ A <a href="guide.html#g-gap">gap</a> is a tactic with zero tasks.</p>
 <a class="btn" href="data/tasks.csv" download>Download CSV</a>
 <a class="btn" href="data/tasks.json" download>Download JSON</a>
 </div>
-<p class="small"><span id="nav-note" class="pending"></span> The Navigator link loads a layer file from the repository, so it needs the repository to be public (it is, once published).
+<p class="small"><span id="nav-note" class="pending"></span> The Navigator link loads a layer file from the repository.
 Layers show tasks per technique for the selected setting; tasks with no ATT&amp;CK technique ({cn['summary']['null_technique_tasks']} in total) cannot be shown there.</p>
 """
 
@@ -215,7 +216,7 @@ def guide_body(cn: dict, st: dict, lock: dict) -> str:
     planned_text = f" {s['planned_scorer_tasks']} tasks have an upstream scorer that is only planned, so their labels rest on a written design." if s["planned_scorer_tasks"] else ""
     gloss = "".join(f'<dt id="{i}">{t}</dt><dd>{d}</dd>' for i, t, d in GLOSSARY)
     toc = "".join(f'<li><a href="#{a}">{t}</a></li>' for a, t in [("why", "What AI control is, and why coverage matters"), ("how", "How a control evaluation works"),
-          ("labels", "How a side task becomes a label"), ("reading", "How to read the Explorer"), ("results", "What the results show, and do not show"),
+          ("labels", "How a side task becomes a label"), ("incidents", "Incidents, steps and verdicts"), ("reading", "How to read the task Explorer"), ("results", "What the results show, and do not show"),
           ("glossary", "Glossary"), ("related", "Related work"), ("cite", "How to cite")])
     return f"""
 <h1>Guide</h1>
@@ -249,9 +250,11 @@ def guide_body(cn: dict, st: dict, lock: dict) -> str:
 <li><strong>ATLAS.</strong> None. The stored data is not an AI system (rule R7).</li>
 <li><strong>Status.</strong> {E(ex['label_status'].replace('_', ' '))}. A human has not yet checked it.</li>
 </ol>
-<p>The full rules are in the <a href="{REPO_URL}/blob/main/codebook/CODEBOOK.md">codebook</a> <span class="pending">(works after publishing)</span>.</p>
+<p>The full rules are in the <a href="{REPO_URL}/blob/main/codebook/CODEBOOK.md">codebook</a>.</p>
 
-<h2 id="reading">How to read the Explorer</h2>
+{si.guide_incidents(*si.load()[::2])}
+
+<h2 id="reading">How to read the task Explorer</h2>
 <figure><img src="assets/img/explorer-1280-light.png" alt="The Explorer at desktop width: controls, a summary strip, label status counts and the tactic matrix with gap columns hatched" width="1280" height="900" loading="lazy">
 <figcaption>Desktop. Controls at the top, then the summary strip, label status counts, and one column per tactic. Hatched columns with &ldquo;0 tasks: gap&rdquo; have no tasks.</figcaption></figure>
 <figure><img src="assets/img/explorer-400-light.png" alt="The Explorer on a phone: columns stack into a single list" width="400" height="900" loading="lazy" style="max-width:260px">
@@ -264,7 +267,7 @@ def guide_body(cn: dict, st: dict, lock: dict) -> str:
 </ul>
 
 <h2 id="results">What the results show, and do not show</h2>
-<p class="callout"><strong>Provisional.</strong> All {s['tasks']} labels are drafts. Counts and gaps will change once the open decisions are settled.</p>
+<p class="callout"><strong>Draft.</strong> No human has reviewed any label yet. All {s['tasks']} task labels and all incident step labels are drafts. Counts and gaps will change once the open decisions are settled.</p>
 <ul>
 <li>{s['tasks']} side tasks are counted: {E(settings_text)}.{unf_text}</li>{extras_li}
 <li>Counting each task once, across all settings combined, {s['tactics_covered_primary']} of {s['tactics_total']} tactics have at least one task. The gaps are: {E(gaps_p)}. (In a single setting there are more gaps; the Explorer labels them &ldquo;gaps in this setting&rdquo;.)</li>
@@ -283,7 +286,7 @@ def guide_body(cn: dict, st: dict, lock: dict) -> str:
 <dl class="glossary">{gloss}</dl>
 
 <h2 id="related">Related work</h2>
-<p>We searched for newer work that maps control settings to ATT&amp;CK or ATLAS and found none (five web searches; not exhaustive). Details: <a href="{REPO_URL}/blob/main/docs/RELATED_WORK_SEARCH.md">RELATED_WORK_SEARCH.md</a> <span class="pending">(works after publishing)</span>.</p>
+<p>We searched for newer work that maps control settings to ATT&amp;CK or ATLAS and found none (five web searches; not exhaustive). Details: <a href="{REPO_URL}/blob/main/docs/RELATED_WORK_SEARCH.md">RELATED_WORK_SEARCH.md</a>.</p>
 <div class="tablewrap"><table><caption>Related work and how it differs</caption>
 <thead><tr><th scope="col">Work</th><th scope="col">How it differs from this project</th></tr></thead><tbody>
 <tr><td><a href="https://arxiv.org/abs/2604.15384">LinuxArena paper</a></td><td>The control setting itself. Its abstract reports 20 environments and 184 side tasks; we count only the public tasks in the repositories we cover.</td></tr>
@@ -332,15 +335,30 @@ def main() -> None:
         shutil.copy(f, data / "navigator" / f.name)
     import protocol_content as pc
     (c.ROOT / "docs" / "PROTOCOL.md").write_text(pc.to_markdown(pc.sections(protocol_ctx(cn))), encoding="utf-8")
+    shutil.copy(GEN / "incident_coverage.json", data / "incident_coverage.json")
+    shutil.copy(GEN / "activity.json", data / "activity.json")
+    cov, act, tiers = si.load()
     script = '<script src="assets/app.js" defer></script>'
     pages = {
-        "index.html": ("ACTCM Explorer", "explorer", explorer_body(cn), script, "Which kinds of attack AI control tests cover, by tactic."),
+        "index.html": ("ACTCM: real agent incidents against safety tests", "home", si.home_body(cov, act, tiers, cn), "", TAGLINE),
+        "incidents.html": ("ACTCM Incidents", "incidents", si.incidents_body(cov, tiers), "", "Incidents in which an AI agent acted against real systems, split into steps with quoted sources."),
+        "coverage.html": ("ACTCM Coverage", "coverage", si.coverage_body(cov, tiers), "", "Public test tasks and real incident steps, tactic by tactic."),
+        "explorer.html": ("ACTCM Tasks", "explorer", explorer_body(cn), script, "Which kinds of attack AI control tests cover, by tactic."),
+        "contribute.html": ("ACTCM Contribute", "contribute", si.contribute_body(cov, tiers), '<script type="module" src="assets/contribute.js"></script>', "Propose an incident, add a step or challenge a label."),
+        "review.html": ("ACTCM Review queue", "review", si.review_body(cov, act, tiers), "", "Incident steps grouped by how far they have been checked."),
         "guide.html": ("ACTCM Guide", "guide", guide_body(cn, st, lock), "", "Plain-language guide to AI control, the labels and the results."),
         "verify.html": ("ACTCM Verify", "verify", verify_body(cn), "", "How to verify the data and labels."),
     }
     for fn, (title, active, body, scr, desc) in pages.items():
         (SITE / fn).write_text(page(title, active, body, cn, lock, desc).replace("{SCRIPT}", scr), encoding="utf-8")
-    print("built", ", ".join(pages), "and", len(list(data.rglob('*'))), "data files")
+    inc_dir = SITE / "incidents"
+    if inc_dir.exists():
+        shutil.rmtree(inc_dir)
+    inc_dir.mkdir()
+    for inc in cov["incidents"]:
+        html_text = page(f"ACTCM Replay: {inc['title']}", "incidents", si.replay_body(cov, tiers, inc), cn, lock, inc["summary"], root="../")
+        (inc_dir / f"{inc['id']}.html").write_text(html_text.replace("{SCRIPT}", '<script type="module" src="../assets/replay.js"></script>'), encoding="utf-8")
+    print("built", ", ".join(pages), f"+ {len(cov['incidents'])} replay pages and", len(list(data.rglob('*'))), "data files")
 
 
 if __name__ == "__main__":

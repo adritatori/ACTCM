@@ -1,0 +1,69 @@
+# Source registry for incident steps. No source text is stored here: only where it is, when we read it,
+# and a hash of its normalised text so a later edit can be noticed (scripts/evidence.py).
+# read_extent: full | partial (with read_note saying which part was read).
+# text_starts_at / text_ends_before: short markers that cut page furniture and reader comments off the article.
+sources:
+- id: hf-timeline-2026-07-27
+  url: https://huggingface.co/blog/agent-intrusion-technical-timeline
+  title: 'Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident'
+  publisher: Hugging Face
+  published: '2026-07-27'
+  accessed: '2026-11-17'
+  content_sha256: 9ee08f9b24ab8487f681212cf2d452940bc47d2ccf7e2d76ffa319f49baee829
+  read_extent: full
+  read_note: Article read in full. The interactive replay embedded in the page and the reader comments
+    were not used.
+  text_starts_at: A companion technical writeup
+  text_ends_before: Models mentioned in this article
+- id: hf-disclosure-2026-07-16
+  url: https://huggingface.co/blog/security-incident-july-2026
+  title: Security incident disclosure — July 2026
+  publisher: Hugging Face
+  published: '2026-07-16'
+  accessed: '2026-11-17'
+  content_sha256: 9ab8b7e51ee24865898ad6d71a42beaa165486752bf2dc46702acbf9573a1530
+  read_extent: full
+  superseded_by: hf-timeline-2026-07-27
+  text_starts_at: Earlier this week, we detected
+  text_ends_before: Models mentioned in this article
+- id: anthropic-incidents-2026-07-30
+  url: https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals
+  title: Investigating three incidents in our cybersecurity evaluations
+  publisher: Anthropic
+  published: '2026-07-30'
+  accessed: '2026-11-17'
+  content_sha256: 9bf0fe348d30c60a5ac0c75937fc3c1c0675511f4123c602eba94c6369fbd19c
+  read_extent: full
+  superseded_by: anthropic-assessment-2026-09-09
+- id: anthropic-assessment-2026-09-09
+  url: https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents
+  title: An alignment assessment of recent cybersecurity incidents
+  publisher: Anthropic
+  published: '2026-09-09'
+  accessed: '2026-11-17'
+  content_sha256: dac3472bcfb1ed9fa7b4c15dfc9eb8a177fe33e6868211b375345a2cba743c6e
+  read_extent: full
+  read_note: Post read in full (it says it was updated on 10 Sept). Figures are images and were not read.
+    The redacted transcript released with it was not read and is not quoted.
+  supersedes: anthropic-incidents-2026-07-30
+  fetch_note: The address given in news coverage (/news/alignment-assessment-cybersecurity-incidents)
+    redirects here.
+- id: aisi-blog-2026-08-04
+  url: https://www.aisi.gov.uk/blog/incident-report-unsanctioned-agent-behaviour-during-cyber-testing
+  title: 'Incident Report: unsanctioned agent behaviour during cyber testing'
+  publisher: UK AI Security Institute
+  published: '2026-08-04'
+  accessed: '2026-11-17'
+  content_sha256: 5f0f334c7a729e1c2037c0d47a38f24858f0c050d56337bc444debc8fb64e9c0
+  read_extent: full
+- id: aisi-report-2026-08-04
+  url: https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6a724858f7db25c81487016d_Security%20Incident%20INC-2026-07-28-01.pdf
+  title: Security Incident INC-2026-07-28-01 (technical report)
+  publisher: UK AI Security Institute
+  published: '2026-08-04'
+  accessed: '2026-11-17'
+  content_sha256: 97c17b3ee4446c7730039ead833877e19c11901b776c80de39119c6ddda79f56
+  read_extent: full
+  read_note: Text of all 34 pages read. Figures 1 to 11 were read only as far as their text extracts from
+    the PDF.
+  media_type: pdf

@@ -10,7 +10,7 @@ validate:
 test:
 	$(PYTEST) -q
 build:
-	$(PY) scripts/build.py && $(PY) scripts/navigator.py && $(PY) scripts/stress_test.py && $(PY) scripts/review_sheet.py
+	$(PY) scripts/build.py && $(PY) scripts/navigator.py && $(PY) scripts/stress_test.py && $(PY) scripts/review_sheet.py && $(PY) scripts/coverage.py
 site:
 	$(PY) scripts/build_site.py
 stress:

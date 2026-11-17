@@ -17,6 +17,7 @@ import check_labels
 import common as c
 import frameworks as fwm
 import labels as L
+import validate_incidents
 
 SCHEMA = json.loads((c.ROOT / "schema" / "task.schema.json").read_text(encoding="utf-8"))
 MAX_SUMMARY_WORDS = 20
@@ -84,7 +85,7 @@ def main() -> int:
         print("ERROR", x)
     for x in W[:30]:
         print("warn ", x)
-    return 1 if E else 0
+    return max(1 if E else 0, validate_incidents.main())
 
 
 if __name__ == "__main__":

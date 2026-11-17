@@ -46,20 +46,21 @@ def text_of(html: str) -> str:
 
 def main(base: str) -> int:
     base = base.rstrip("/") + "/"
-    pages = {"Explorer (home)": "index.html", "Guide": "guide.html", "Verify": "verify.html"}
+    pages = {"Home": "index.html", "Incidents": "incidents.html", "Coverage": "coverage.html", "Tasks (Explorer)": "explorer.html",
+             "Contribute": "contribute.html", "Review": "review.html", "Guide": "guide.html", "Verify": "verify.html"}
     texts = {}
     for name, p in pages.items():
         code, body = get(base + p)
         check(code == 200 and len(body) > 2000, f"{name} loads ({p}): HTTP {code}, {len(body)} bytes")
         texts[p] = text_of(body.decode("utf-8", "ignore"))
         raw = body.decode("utf-8", "ignore")
-        check("PROVISIONAL RESULTS" in texts[p] and "No human has reviewed any label yet." in texts[p], f"{name}: draft warning visible")
+        check("Draft. No human has reviewed any label yet." in texts[p], f"{name}: draft warning visible")
         check("Not affiliated with or endorsed by The MITRE Corporation." in texts[p] and MITRE_LINE in texts[p], f"{name}: MITRE lines in the footer")
         check("A task count shows what is tested, not what is caught." in texts[p], f"{name}: \"tested, not caught\" line")
-    idx = texts["index.html"]
+    idx = texts["explorer.html"]
     check("not included in v0.1, pending permission" in idx and "LinuxArena extras" in idx, "Explorer: one-line note that LinuxArena extras is not included in v0.1")
     check("MITRE ATT&CK® matrix" in idx, "Explorer: heading says MITRE ATT&CK®")
-    for asset in ("assets/app.js", "assets/style.css", "assets/img/explorer-1280-light.png", "assets/img/explorer-400-light.png"):
+    for asset in ("assets/app.js", "assets/replay.js", "assets/contribute.js", "assets/style.css", "assets/img/explorer-1280-light.png", "assets/img/explorer-400-light.png"):
         code, body = get(base + asset)
         check(code == 200 and len(body) > 500, f"asset loads: {asset}")
     code, body = get(base + "data/counts.json")
@@ -82,6 +83,20 @@ def main(base: str) -> int:
             layer = json.loads(body)
             ok = layer.get("domain") == "enterprise-attack" and layer.get("versions", {}).get("layer") == "4.5" and len(layer.get("techniques", [])) > 100
         check(ok, f"Navigator layer loads and is a v4.5 layer: {key}")
+    code, body = get(base + "data/incident_coverage.json")
+    cov = json.loads(body) if code == 200 else {}
+    check(code == 200 and cov.get("totals", {}).get("attack_steps"), f"data/incident_coverage.json loads: {cov.get('totals', {}).get('attack_steps')} attack steps")
+    check("linuxarena-extras" not in body.decode("utf-8", "ignore"), "no hidden setting in the incident coverage file")
+    home = texts["index.html"]
+    t = cov.get("totals", {})
+    check(all(str(x) in home for x in (t.get("incidents"), t.get("attack_steps"), t.get("verdict_counts", {}).get("not_tested"))) and "chosen for detail, not random" in home,
+          "Home: headline numbers match the coverage file and say 'chosen for detail, not random'")
+    for inc in cov.get("incidents", []):
+        code, body = get(base + f"incidents/{inc['id']}.html")
+        tx = text_of(body.decode("utf-8", "ignore"))
+        check(code == 200 and tx.count("Evidence-checked") + tx.count("Draft") >= inc["total_steps"] and "No monitor has been run" in tx
+              and "Draft. No human has reviewed any label yet." in tx, f"Replay page loads with its step table and limits: {inc['id']}")
+    check("No monitor has been run" in texts["coverage.html"] and "not a random sample" in texts["coverage.html"], "Coverage: the limits are shown")
     code, body = get(base + "data/status_tiers.json")
     check(code == 200 and "No human has checked it" in body.decode("utf-8", "ignore"), "status wording file loads and says no human has checked AI cross-checked labels")
     failed = [w for ok, w in results if not ok]

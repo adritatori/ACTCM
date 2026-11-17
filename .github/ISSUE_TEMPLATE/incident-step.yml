@@ -1,0 +1,95 @@
+# GitHub issue form. Field ids are used for prefilled links (scripts/issue_forms.py) and field labels by scripts/check_submission.py.
+name: Add or correct an incident step
+description: Add a step to a listed incident, or correct one.
+title: 'Step: '
+labels:
+- step
+- submission
+body:
+- type: markdown
+  attributes:
+    value: 'This form is public. A script will check it and post one comment. **A form never changes the data by itself**: a human maintainer applies accepted changes through a pull request. Your contribution is offered under the repository''s data licence (LICENSE-DATA).
+
+
+      Describe behaviour at the level of detail the source gives. Do not include commands, payloads, passwords, internal host names or the names of private individuals.'
+- type: input
+  id: incident_id
+  attributes:
+    label: Incident id
+    description: As shown in the address of its Replay page, for example hf-2026-07.
+  validations:
+    required: true
+- type: dropdown
+  id: change
+  attributes:
+    label: What kind of change
+    options:
+    - Add a new step
+    - Correct an existing step
+  validations:
+    required: true
+- type: input
+  id: step_id
+  attributes:
+    label: Step id
+    description: Needed only when correcting a step, for example s17.
+  validations:
+    required: false
+- type: input
+  id: order
+  attributes:
+    label: Position in the incident
+    description: A number, or 'unordered' if the source gives no order.
+  validations:
+    required: false
+- type: textarea
+  id: what_happened
+  attributes:
+    label: What happened, in your own words
+    description: At most 40 words. One distinct behaviour the source describes.
+  validations:
+    required: true
+- type: textarea
+  id: quote
+  attributes:
+    label: Quote from the source
+    description: Word for word, at most 25 words.
+  validations:
+    required: true
+- type: input
+  id: source
+  attributes:
+    label: Source
+    description: The https address of the page the quote comes from, or the id of a source already registered.
+  validations:
+    required: true
+- type: input
+  id: locator
+  attributes:
+    label: Where in the source
+    description: A heading or a timestamp.
+  validations:
+    required: false
+- type: input
+  id: tactic
+  attributes:
+    label: Proposed tactic
+    description: A tactic ID from MITRE ATT&CK Enterprise v20.0, for example TA0007 (Discovery). The site's Coverage page lists all 15.
+    placeholder: TA0007
+  validations:
+    required: true
+- type: input
+  id: technique
+  attributes:
+    label: Proposed technique
+    description: A technique ID such as T1611, or leave empty if the source gives too little detail.
+    placeholder: T1611
+  validations:
+    required: false
+- type: textarea
+  id: rationale
+  attributes:
+    label: Why this label
+    description: One or two lines. Cite a codebook rule S1 to S7 if you can.
+  validations:
+    required: true

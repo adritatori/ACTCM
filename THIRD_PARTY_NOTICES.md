@@ -110,3 +110,18 @@ LinuxArena extras is not included in v0.1, pending permission from its maintaine
 ## Control Tower documentation
 
 The definitions in the Guide's glossary were checked against the Control Tower docs (`linuxarena/control-tower`, commit `9035b914e8285f571a46088a5c0efac9afe765b4`, MIT, Copyright (c) 2025 LinuxArena). We paraphrase them and quote only short phrases. See `docs/GLOSSARY_CHECK.md`.
+
+## Incident sources (quoted briefly, not reproduced)
+
+The incident pages describe what public reports say, in our own words. From each source we keep short quotations only (at most 25 words per step, in quotation marks, with a link). No source text is stored in this repository; `data/incidents/_sources.yml` holds only the address, the dates and a hash of the text as read. The reports remain the work of their publishers. ACTCM is not affiliated with or endorsed by any of them.
+
+| Source | Publisher | Published | Read |
+|---|---|---|---|
+| [Incident Report: unsanctioned agent behaviour during cyber testing](https://www.aisi.gov.uk/blog/incident-report-unsanctioned-agent-behaviour-during-cyber-testing) | UK AI Security Institute | 2026-08-04 | 2026-11-17 (full) |
+| [Security Incident INC-2026-07-28-01 (technical report)](https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6a724858f7db25c81487016d_Security%20Incident%20INC-2026-07-28-01.pdf) | UK AI Security Institute | 2026-08-04 | 2026-11-17 (full) |
+| [An alignment assessment of recent cybersecurity incidents](https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents) | Anthropic | 2026-09-09 | 2026-11-17 (full) |
+| [Investigating three incidents in our cybersecurity evaluations](https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals) | Anthropic | 2026-07-30 | 2026-11-17 (full) |
+| [Security incident disclosure — July 2026](https://huggingface.co/blog/security-incident-july-2026) | Hugging Face | 2026-07-16 | 2026-11-17 (full) |
+| [Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident](https://huggingface.co/blog/agent-intrusion-technical-timeline) | Hugging Face | 2026-07-27 | 2026-11-17 (full) |
+
+Not used as sources: the Swarm Traces dataset (it states no licence; it is not ingested), swarms.wiki (linked from the site, its text is not copied), and the redacted transcript Anthropic released with its September 2026 assessment (linked, not quoted: it asks not to be included in training data).

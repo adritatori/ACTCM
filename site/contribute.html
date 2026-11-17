@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACTCM Contribute</title>
+<meta name="description" content="Propose an incident, add a step or challenge a label.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">ACTCM<small> What real AI agents did, against what safety tests check.</small></a>
+<nav class="main" aria-label="Main"><ul><li><a href="incidents.html">Incidents</a></li><li><a href="coverage.html">Coverage</a></li><li><a href="explorer.html">Tasks</a></li><li><a href="contribute.html" aria-current="page">Contribute</a></li><li><a href="review.html">Review</a></li><li><a href="guide.html">Guide</a></li></ul></nav>
+</div></header>
+<div class="notice" role="note"><div class="wrap">Draft. No human has reviewed any label yet. <a href="guide.html#results">What this means</a></div></div>
+<main id="main" class="wrap">
+
+<h1>Contribute</h1>
+<p class="lede">Propose an incident, add or correct a step, or challenge a label. You need a GitHub account. This page fills in a GitHub form for you; nothing is sent until you press submit there.</p>
+<h2>What happens to a submission</h2>
+<ol>
+<li>You submit the GitHub form. It is public.</li>
+<li>A script checks it: required fields, that the tactic and technique IDs exist in MITRE ATT&amp;CK® v20.0, that the quote has at most 25 words, and that the quoted words appear in the source you cite.</li>
+<li>The script posts one comment with a pass or fail table. It never changes the data.</li>
+<li>A human maintainer decides, and applies accepted changes through a pull request. A form by itself never changes data.</li>
+</ol>
+<h2>Start a submission</h2>
+<form class="wizard" id="wizard" data-repo="adritatori/actcm" hidden>
+<fieldset><legend>What do you want to do?</legend><div class="choices">
+<label><input type="radio" name="kind" value="incident-new.yml" checked><span><strong>Propose a new incident</strong><br><span class="small">You have public sources for it.</span></span></label>
+<label><input type="radio" name="kind" value="incident-step.yml"><span><strong>Add or correct a step</strong><br><span class="small">In an incident already listed.</span></span></label>
+<label><input type="radio" name="kind" value="step-dispute.yml"><span><strong>Dispute a label</strong><br><span class="small">You think a tactic or technique is wrong.</span></span></label>
+<label><input type="radio" name="kind" value="step-review.yml"><span><strong>Review a step</strong><br><span class="small">Check a step's label and quote.</span></span></label>
+</div></fieldset>
+<div data-for="incident-new.yml">
+<div class="field"><label for="w-title">Incident title</label><input type="text" id="w-title" data-field="incident_title" maxlength="140"></div>
+<div class="field"><label for="w-sources">Source address (https)</label><input type="url" id="w-sources" data-field="sources" placeholder="https://"><span class="hint">A primary source, such as the developer's or the victim's own report.</span></div>
+</div>
+<div data-for="incident-step.yml" hidden>
+<div class="field"><label for="w-inc">Incident</label><select id="w-inc" data-field="incident_id"><option value="hf-2026-07">Hugging Face intrusion by an agent in an OpenAI evaluation</option><option value="anthropic-pypi-2026">Malicious package published to PyPI by Claude Mythos 5 during an evaluation</option><option value="aisi-2026-07">UK AISI incident INC-2026-07-28-01: unsanctioned agent actions during cyber testing</option></select></div>
+<div class="field"><label for="w-quote">Quote from the source (at most 25 words)</label><input type="text" id="w-quote" data-field="quote" maxlength="400"><span class="hint" id="w-quote-n" aria-live="polite"></span></div>
+<div class="field"><label for="w-src">Source address (https)</label><input type="url" id="w-src" data-field="source" placeholder="https://"></div>
+<div class="field"><label for="w-tac">Proposed tactic</label><select id="w-tac" data-field="tactic"><option value="">Choose</option><option value="TA0043">TA0043 Reconnaissance</option><option value="TA0042">TA0042 Resource Development</option><option value="TA0001">TA0001 Initial Access</option><option value="TA0002">TA0002 Execution</option><option value="TA0003">TA0003 Persistence</option><option value="TA0004">TA0004 Privilege Escalation</option><option value="TA0005">TA0005 Stealth</option><option value="TA0112">TA0112 Defense Impairment</option><option value="TA0006">TA0006 Credential Access</option><option value="TA0007">TA0007 Discovery</option><option value="TA0008">TA0008 Lateral Movement</option><option value="TA0009">TA0009 Collection</option><option value="TA0011">TA0011 Command and Control</option><option value="TA0010">TA0010 Exfiltration</option><option value="TA0040">TA0040 Impact</option></select></div>
+</div>
+<div data-for="step-dispute.yml" hidden>
+<div class="field"><label for="w-sid">Step</label><input type="text" id="w-sid" data-field="step_id" placeholder="hf-2026-07/s17"><span class="hint">Incident id, a slash, then the step id. It is shown on every step.</span></div>
+<div class="field"><label for="w-ptac">Tactic you propose</label><select id="w-ptac" data-field="proposed_tactic"><option value="">Choose</option><option value="TA0043">TA0043 Reconnaissance</option><option value="TA0042">TA0042 Resource Development</option><option value="TA0001">TA0001 Initial Access</option><option value="TA0002">TA0002 Execution</option><option value="TA0003">TA0003 Persistence</option><option value="TA0004">TA0004 Privilege Escalation</option><option value="TA0005">TA0005 Stealth</option><option value="TA0112">TA0112 Defense Impairment</option><option value="TA0006">TA0006 Credential Access</option><option value="TA0007">TA0007 Discovery</option><option value="TA0008">TA0008 Lateral Movement</option><option value="TA0009">TA0009 Collection</option><option value="TA0011">TA0011 Command and Control</option><option value="TA0010">TA0010 Exfiltration</option><option value="TA0040">TA0040 Impact</option></select></div>
+</div>
+<div data-for="step-review.yml" hidden>
+<div class="field"><label for="w-rsid">Step</label><input type="text" id="w-rsid" data-field="step_id" placeholder="hf-2026-07/s17"><span class="hint">Or pick a step from the <a href="review.html">review queue</a>, which fills this in.</span></div>
+</div>
+<p><a class="btn primary" id="w-go" href="https://github.com/adritatori/actcm/issues/new?template=incident-new.yml">Open the GitHub form</a></p>
+<p class="small">The rest of the form is filled in on GitHub. If the form opens empty, your details were not carried over: type them in there.</p>
+</form>
+<div id="wizard-plain">
+<p>Open a form directly:</p>
+<ul>
+<li><a href="https://github.com/adritatori/actcm/issues/new?template=incident-new.yml">Propose a new incident</a></li>
+<li><a href="https://github.com/adritatori/actcm/issues/new?template=incident-step.yml">Add or correct a step</a></li>
+<li><a href="https://github.com/adritatori/actcm/issues/new?template=step-dispute.yml">Dispute a label</a></li>
+<li><a href="https://github.com/adritatori/actcm/issues/new?template=step-review.yml">Review a step</a></li>
+</ul>
+</div>
+<h2>What the status of a step means</h2>
+<div class="tablewrap"><table><caption>Step status tiers, lowest trust first</caption>
+<thead><tr><th scope="col">Status</th><th scope="col">Meaning</th><th scope="col">Who may set it</th></tr></thead><tbody><tr><th scope="row"><span class="badge t-draft_needs_human_review" title="One AI drafted this step. No script check, no human check.">Draft</span></th><td>One AI drafted this step. No script check, no human check.</td><td>Claude or a script</td></tr><tr><th scope="row"><span class="badge t-evidence_checked" title="A script found the quoted words in the cited source. No human has checked the label.">Evidence-checked</span></th><td>A script found the quoted words in the cited source. No human has checked the label.</td><td>A script only</td></tr><tr><th scope="row"><span class="badge t-reviewed" title="One human checked this step.">Reviewed by a human</span></th><td>One human checked this step.</td><td>A named human only</td></tr><tr><th scope="row"><span class="badge t-adjudicated" title="Two humans labelled it separately, compared, and recorded why.">Adjudicated by humans</span></th><td>Two humans labelled it separately, compared, and recorded why.</td><td>Named humans only</td></tr></tbody></table></div>
+<h2>Rules for sources and quotes</h2>
+<ul>
+<li>Quote at most 25 words per step, word for word, and link to the page.</li>
+<li>Describe the step in your own words, at the level of detail the source gives. Describe behaviour. Do not add commands, payloads, passwords, internal host names or other details that would help repeat an attack.</li>
+<li>Do not name private individuals.</li>
+<li>Your contribution is offered under the repository's data licence (<a href="https://github.com/adritatori/actcm/blob/main/LICENSE-DATA">LICENSE-DATA</a>).</li>
+</ul>
+<p class="small">Full guide: <a href="https://github.com/adritatori/actcm/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.</p>
+
+</main>
+<footer class="site"><div class="wrap">
+<p class="warn">A task count shows what is <em>tested</em>, not what is <em>caught</em>. A gap means &ldquo;untested&rdquo;, not &ldquo;dangerous&rdquo; and not &ldquo;undefended&rdquo;.</p>
+<p>ACTCM, the Agent Control Threat Coverage Matrix. <a href="guide.html">Guide</a> · <a href="verify.html">Verify</a> · <a href="contribute.html">Contribute</a></p>
+<p><strong>Pinned versions:</strong> MITRE ATT&amp;CK® Enterprise v20.0 (commit 20664a8895), ATLAS 2026.10 (commit f56c146873), codebook 1.1-draft, 12 source repositories at fixed commits (<a href="https://github.com/adritatori/actcm/blob/main/data/sources.lock.yml">sources.lock.yml</a>).</p>
+<p><strong>MITRE ATT&amp;CK® licence.</strong> The MITRE Corporation (MITRE) hereby grants you a non-exclusive, royalty-free license to use ATT&amp;CK® for research, development, and commercial purposes. Any copy you make for such purposes is authorized provided that you reproduce MITRE&#x27;s copyright designation and this license in any such copy.</p>
+<p>© 2026 The MITRE Corporation. This work is reproduced and distributed with the permission of The MITRE Corporation. See the <a href="https://attack.mitre.org/resources/legal-and-branding/terms-of-use/">ATT&amp;CK Terms of Use</a>. ATLAS is licensed under Apache License 2.0.</p>
+<details><summary>MITRE disclaimers (reproduced from MITRE's licence text)</summary><p>MITRE does not claim ATT&amp;CK enumerates all possibilities for the types of actions and behaviors documented as part of its adversary model and framework of techniques. Using the information contained within ATT&amp;CK to address or cover full categories of techniques will not guarantee full defensive coverage as there may be undisclosed techniques or variations on existing techniques not documented by ATT&amp;CK.</p><p>ALL DOCUMENTS AND THE INFORMATION CONTAINED THEREIN ARE PROVIDED ON AN &quot;AS IS&quot; BASIS AND THE CONTRIBUTOR, THE ORGANIZATION HE/SHE REPRESENTS OR IS SPONSORED BY (IF ANY), THE MITRE CORPORATION, ITS BOARD OF TRUSTEES, OFFICERS, AGENTS, AND EMPLOYEES, DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION THEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.</p></details>
+<p><strong>Not affiliated with or endorsed by The MITRE Corporation.</strong></p>
+<p>Incident steps quote their sources briefly (25 words at most) and link to them; the sources remain the work of their publishers.</p>
+<p>Licences: code MIT (<a href="https://github.com/adritatori/actcm/blob/main/LICENSE">LICENSE</a>), data and labels CC BY 4.0 (<a href="https://github.com/adritatori/actcm/blob/main/LICENSE-DATA">LICENSE-DATA</a>), <a href="https://github.com/adritatori/actcm/blob/main/THIRD_PARTY_NOTICES.md">third-party notices</a>. Source: <a href="https://github.com/adritatori/actcm">github.com/adritatori/actcm</a>.</p>
+</div></footer>
+<script type="module" src="assets/contribute.js"></script>
+</body>
+</html>

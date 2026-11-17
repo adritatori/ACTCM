@@ -1,4 +1,48 @@
-# Handoff (4 Nov 2026)
+# Handoff (17 Nov 2026): incident replays, v0.2.0-draft
+
+**Short version:** the branch `incident-replay` adds three incident replays, a coverage join, a redesigned site and a contribute-and-review flow.
+It is in a pull request and is **not merged**: the live site still shows v0.1 until you merge. Every label is still an unreviewed draft.
+
+## What the branch adds
+
+| Part | What | Where |
+|---|---|---|
+| Incidents | 3 incidents, 93 steps (72 attack, 21 detection and response), each with a source quote | `data/incidents/` |
+| The join | Each attack step compared with the 114 public tasks, by script | `scripts/coverage.py`, `data/generated/incident_coverage.json` |
+| Site | Home, Incidents, Replay, Coverage, Tasks, Contribute, Review, Guide, Verify. White, light only | `scripts/build_site.py`, `scripts/site_incidents.py`, `site/` |
+| Contribute | 4 issue forms, a checker, a workflow | `.github/ISSUE_TEMPLATE/`, `scripts/check_submission.py`, `.github/workflows/submission-check.yml` |
+
+## Result (draft)
+
+- 72 attack steps: 13 "same technique", 28 "same tactic only", 15 "never tested", 16 "can't tell".
+- The prediction written down first held: 26 steps have one of the four zero-task tactics as their label, in all three incidents (15 without leaning on an ambiguous label).
+- Caveat: the same AI that knew the prediction drafted the labels. No human has checked them.
+
+## Not verified
+
+- **No human has reviewed any step or task label.** 93 of 93 steps are "Evidence-checked": a script found the quote in the source. That is not a review of the label.
+- OpenAI's post on the Hugging Face incident: both addresses answered 403. Stage 1 of that incident rests on Hugging Face's account.
+- swarms.wiki entries: not matched (its entry pages load by script). The three incident files say so and link to nothing.
+- The redacted Anthropic transcript: not read, not quoted (it asks not to be included in training data, and states no licence). Step order follows the September post.
+- A press report of about 700 agents (Hugging Face incident): not read, not recorded.
+- The submission workflow has not run on a real issue. Prefilled links were built and tested offline, not opened in a signed-in browser.
+- External links: see `docs/LINK_CHECK.md` for what answered from the build session.
+
+## What you still need to do
+
+1. **Review the pull request**, then say `merge`. After the merge, GitHub Pages deploys by itself.
+2. **Check the live site:** `python3 scripts/verify_site.py https://adritatori.github.io/ACTCM/`
+3. **Approve or change codebook rules S1 to S7** (`codebook/CODEBOOK.md`, marked "needs Tory's approval").
+4. **Review the step labels.** Start with the site's Review page. Start with the 15 "never tested" steps and the 23 ambiguous ones: they carry the result.
+5. **Test the forms once:** open the Contribute page while signed in to GitHub, press "Open the GitHub form", and check the fields are filled in. Submit one test issue and check that the bot comments. If the fields are empty, tell me: the fallback is the plain form link.
+6. **Email the swarms.wiki team** (you said you would), and send the three entry links if you want them shown.
+7. **Open each external source link by hand** once.
+8. **Decide** whether to fix the `1.1-draft` codebook string in the footer and Navigator layers (it is hard-coded; the file is at v1.2).
+9. **Delete the GitHub token** mentioned below, if you have not yet.
+
+---
+
+# Earlier handoff (4 Nov 2026): v0.1.0-draft
 
 **Short version:** the code, data and site for v0.1.0-draft are published. Every label is still an unreviewed draft.
 
