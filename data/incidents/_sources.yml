@@ -1,0 +1,4 @@
+# Source registry for incident steps. No source text is stored here: only where it is, when we read it,
+# and a hash of its normalised text so a later edit can be noticed (scripts/evidence.py).
+# read_extent: full | partial (with read_note saying which part was read).
+sources: []

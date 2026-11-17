@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "incident.schema.json",
+  "title": "ACTCM incident file",
+  "type": "object",
+  "required": ["id", "title", "developer", "incident_type", "incident_type_plain", "dates", "swarms_wiki",
+               "summary", "agent_count_claims", "sources_used", "steps"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "title": {"type": "string", "minLength": 1},
+    "developer": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "incident_type": {"enum": ["eval_escape", "over_eager_in_eval", "deployed_agent", "other"]},
+    "incident_type_plain": {"type": "string", "minLength": 1},
+    "dates": {
+      "type": "object",
+      "required": ["started", "disclosed", "precision"],
+      "additionalProperties": false,
+      "properties": {
+        "started": {"type": ["string", "null"], "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "ended": {"type": ["string", "null"], "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "disclosed": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "precision": {"enum": ["day", "month", "unknown"]}
+      }
+    },
+    "swarms_wiki": {
+      "type": "object",
+      "required": ["id", "url"],
+      "additionalProperties": false,
+      "properties": {"id": {"type": ["string", "null"]}, "url": {"type": ["string", "null"], "pattern": "^https://"},
+                     "note": {"type": "string"}}
+    },
+    "summary": {"type": "string", "minLength": 1},
+    "notes": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "agent_count_claims": {
+      "type": "array",
+      "items": {"type": "object", "required": ["claim", "source"], "additionalProperties": false,
+                "properties": {"claim": {"type": "string", "minLength": 1}, "source": {"type": "string", "minLength": 1},
+                               "quote": {"type": "string"}}}
+    },
+    "sources_used": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "order", "order_basis", "time", "time_precision", "phase", "what_happened", "evidence",
+                     "label_status", "labeled_by", "reviewed_by", "history"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^s[0-9]{2,3}$"},
+          "order": {"type": "integer", "minimum": 1},
+          "order_basis": {"enum": ["stated", "reconstructed", "unordered"]},
+          "time": {"type": ["string", "null"], "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}:[0-9]{2}(:[0-9]{2})?Z)?$"},
+          "time_source_local": {"type": ["string", "null"]},
+          "time_conflict": {"type": ["string", "null"]},
+          "time_precision": {"enum": ["exact", "day", "window", "unknown"]},
+          "phase": {"enum": ["attack", "detection", "response"]},
+          "what_happened": {"type": "string", "minLength": 1},
+          "real_target": {"type": "boolean"},
+          "evidence": {
+            "type": "object",
+            "required": ["source", "quote", "locator"],
+            "additionalProperties": false,
+            "properties": {"source": {"type": "string", "minLength": 1}, "quote": {"type": "string"},
+                           "locator": {"type": "string", "minLength": 1}}
+          },
+          "attack": {
+            "type": ["object", "null"],
+            "required": ["primary_tactic", "technique", "confidence", "rationale"],
+            "additionalProperties": false,
+            "properties": {
+              "primary_tactic": {"type": "string", "pattern": "^TA[0-9]{4}$"},
+              "technique": {"type": ["string", "null"], "pattern": "^T[0-9]{4}(\\.[0-9]{3})?$"},
+              "confidence": {"enum": ["clear", "ambiguous"]},
+              "rationale": {"type": "string", "minLength": 1},
+              "alternative": {
+                "type": ["object", "null"],
+                "required": ["tactic", "reason"],
+                "additionalProperties": false,
+                "properties": {"tactic": {"type": "string", "pattern": "^TA[0-9]{4}$"},
+                               "technique": {"type": ["string", "null"], "pattern": "^T[0-9]{4}(\\.[0-9]{3})?$"},
+                               "reason": {"type": "string", "minLength": 1}}
+              }
+            }
+          },
+          "label_status": {"type": "string"},
+          "labeled_by": {"type": "string", "minLength": 1},
+          "reviewed_by": {"type": ["string", "null"]},
+          "history": {
+            "type": "array", "minItems": 1,
+            "items": {"type": "object", "required": ["date", "who", "change", "reason"], "additionalProperties": false,
+                      "properties": {"date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+                                     "who": {"type": "string", "minLength": 1},
+                                     "change": {"type": "string", "minLength": 1}, "reason": {"type": "string"}}}
+          }
+        }
+      }
+    }
+  }
+}

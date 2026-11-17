@@ -13,6 +13,8 @@ from datetime import date
 import common as c
 
 TIERS = ["draft_needs_human_review", "ai_cross_checked", "reviewed", "adjudicated"]
+STEP_TIERS = ["draft_needs_human_review", "evidence_checked", "reviewed", "adjudicated"]   # incident steps
+STEP_SCRIPT_ONLY = {"evidence_checked"}   # set by scripts/evidence.py after it finds the quote, never by hand
 UNLABELLED = "unlabelled"
 HUMAN_ONLY = {"reviewed", "adjudicated"}
 BOT_MAY_SET = {"draft_needs_human_review", "ai_cross_checked"}

@@ -1,0 +1,199 @@
+# Made-up incidents for testing the incident validator. None is real. No real organisation is named.
+# Each case patches `base` (deep merge; "__DELETE__" removes a key; a `steps` list replaces the whole list).
+# expect: valid | invalid. `error_has` is a word the error text must contain, `warn_has` likewise for warnings.
+sources:
+  - {id: syn-post, url: "https://example.org/post", title: Synthetic post, publisher: Example Org, published: "2026-01-02",
+     accessed: "2026-01-03", content_sha256: "0000000000000000000000000000000000000000000000000000000000000000", read_extent: full}
+  - {id: syn-post-v2, url: "https://example.org/post-v2", title: Synthetic post revised, publisher: Example Org, published: "2026-02-02",
+     accessed: "2026-02-03", content_sha256: "1111111111111111111111111111111111111111111111111111111111111111", read_extent: partial,
+     read_note: "Read sections 1 to 3 only.", supersedes: syn-post}
+step: &step
+  id: s01
+  order: 1
+  order_basis: stated
+  time: "2026-01-01T11:23Z"
+  time_source_local: "12:23 BST"
+  time_conflict: null
+  time_precision: exact
+  phase: attack
+  what_happened: The agent listed the services it could reach from its sandbox.
+  evidence: {source: syn-post, quote: "the agent enumerated reachable services", locator: "Timeline"}
+  attack: {primary_tactic: TA0007, technique: T1046, confidence: clear, rationale: "S2: the step is for finding services."}
+  label_status: draft_needs_human_review
+  labeled_by: claude_draft_2026-01-03
+  reviewed_by: null
+  history: [{date: "2026-01-03", who: claude_draft_2026-01-03, change: initial draft, reason: test}]
+base:
+  id: syn-incident
+  title: Synthetic incident
+  developer: [Example Org]
+  incident_type: eval_escape
+  incident_type_plain: An agent left its test sandbox.
+  dates: {started: "2026-01-01", disclosed: "2026-01-02", precision: day}
+  swarms_wiki: {id: null, url: null}
+  summary: A made-up agent left a made-up sandbox.
+  agent_count_claims:
+    - {claim: one agent, source: syn-post}
+    - {claim: about 700 agents, source: syn-post-v2}
+  sources_used: [syn-post, syn-post-v2]
+  steps:
+    - *step
+cases:
+  - {name: clean, expect: valid, patch: {}}
+  - {name: disagreeing_agent_counts_both_kept, expect: valid, patch: {}, check_claims: 2}
+  - name: null_technique
+    expect: valid
+    patch: {steps: [{<<: *step, attack: {primary_tactic: TA0007, technique: null, confidence: clear, rationale: "S5: source gives no detail."}}]}
+  - name: ambiguous_with_alternative
+    expect: valid
+    patch: {steps: [{<<: *step, attack: {primary_tactic: TA0007, technique: T1046, confidence: ambiguous, rationale: "S4.", alternative: {tactic: TA0043, technique: null, reason: "Could be scanning before entry."}}}]}
+  - name: ambiguous_without_alternative
+    expect: invalid
+    error_has: alternative
+    patch: {steps: [{<<: *step, attack: {primary_tactic: TA0007, technique: T1046, confidence: ambiguous, rationale: "S4."}}]}
+  - name: unknown_tactic
+    expect: invalid
+    error_has: TA9999
+    patch: {steps: [{<<: *step, attack: {primary_tactic: TA9999, technique: null, confidence: clear, rationale: x}}]}
+  - name: nonexistent_technique
+    expect: invalid
+    error_has: T9998
+    patch: {steps: [{<<: *step, attack: {primary_tactic: TA0007, technique: T9998, confidence: clear, rationale: x}}]}
+  - name: deprecated_technique
+    expect: invalid
+    error_has: T1002
+    patch: {steps: [{<<: *step, attack: {primary_tactic: TA0010, technique: T1002, confidence: clear, rationale: x}}]}
+  - name: technique_in_other_tactic
+    expect: invalid
+    error_has: T1611
+    patch: {steps: [{<<: *step, attack: {primary_tactic: TA0007, technique: T1611, confidence: clear, rationale: x}}]}
+  - name: alternative_technique_in_other_tactic
+    expect: invalid
+    error_has: T1611
+    patch: {steps: [{<<: *step, attack: {primary_tactic: TA0007, technique: T1046, confidence: ambiguous, rationale: x, alternative: {tactic: TA0043, technique: T1611, reason: r}}}]}
+  - name: duplicate_step_ids
+    expect: invalid
+    error_has: duplicate
+    patch: {steps: [*step, {<<: *step, order: 2}]}
+  - name: duplicate_order
+    expect: invalid
+    error_has: order
+    patch: {steps: [*step, {<<: *step, id: s02}]}
+  - name: gap_in_order_is_a_warning
+    expect: valid
+    warn_has: gap
+    patch: {steps: [*step, {<<: *step, id: s02, order: 5}]}
+  - name: unordered_missing_time
+    expect: valid
+    patch: {steps: [{<<: *step, order_basis: unordered, time: null, time_source_local: null, time_precision: unknown}]}
+  - name: times_out_of_order_is_a_warning
+    expect: valid
+    warn_has: earlier
+    patch: {steps: [*step, {<<: *step, id: s02, order: 2, time: "2025-12-31T09:00Z", time_source_local: null}]}
+  - name: time_not_utc
+    expect: invalid
+    error_has: time
+    patch: {steps: [{<<: *step, time: "2026-01-01T12:23+01:00"}]}
+  - name: bst_not_converted
+    expect: invalid
+    error_has: BST
+    patch: {steps: [{<<: *step, time: "2026-01-01T12:23Z", time_source_local: "12:23 BST"}]}
+  - name: local_time_without_utc_time
+    expect: invalid
+    error_has: time_source_local
+    patch: {steps: [{<<: *step, time: null, time_precision: exact}]}
+  - name: time_conflict_kept
+    expect: valid
+    patch: {steps: [{<<: *step, time_conflict: "Text says 12:23 BST; Figure 2 says 13:17 BST."}]}
+  - name: time_conflict_with_one_value
+    expect: invalid
+    error_has: time_conflict
+    patch: {steps: [{<<: *step, time_conflict: "Text says 12:23 BST."}]}
+  - name: quote_over_25_words
+    expect: invalid
+    error_has: "25"
+    patch: {steps: [{<<: *step, evidence: {source: syn-post, locator: x, quote: "one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twentyone twentytwo twentythree twentyfour twentyfive twentysix"}}]}
+  - name: empty_quote_on_draft_is_allowed
+    expect: valid
+    warn_has: quote
+    patch: {steps: [{<<: *step, evidence: {source: syn-post, locator: x, quote: ""}}]}
+  - name: empty_quote_on_evidence_checked
+    expect: invalid
+    error_has: quote
+    patch: {steps: [{<<: *step, label_status: evidence_checked, evidence: {source: syn-post, locator: x, quote: ""},
+            history: [{date: "2026-01-03", who: "evidence.py (script)", change: "status draft_needs_human_review -> evidence_checked", reason: quote found}]}]}
+  - name: what_happened_over_40_words
+    expect: invalid
+    error_has: "40"
+    patch: {steps: [{<<: *step, what_happened: "a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a"}]}
+  - name: unknown_source
+    expect: invalid
+    error_has: nowhere
+    patch: {steps: [{<<: *step, evidence: {source: nowhere, quote: "q", locator: x}}]}
+  - name: source_not_in_sources_used
+    expect: invalid
+    error_has: sources_used
+    patch: {sources_used: [syn-post-v2]}
+  - name: superseded_source_still_citable
+    expect: valid
+    patch: {steps: [{<<: *step, evidence: {source: syn-post, quote: "the agent enumerated reachable services", locator: "Timeline"}}, {<<: *step, id: s02, order: 2, evidence: {source: syn-post-v2, quote: "three versions were published", locator: "Revision"}}]}
+  - name: reviewed_with_null_reviewer
+    expect: invalid
+    error_has: reviewed_by
+    patch: {steps: [{<<: *step, label_status: reviewed}]}
+  - name: reviewed_by_an_ai
+    expect: invalid
+    error_has: human
+    patch: {steps: [{<<: *step, label_status: reviewed, reviewed_by: claude_review}]}
+  - name: reviewed_by_unlisted_name
+    expect: invalid
+    error_has: human
+    patch: {steps: [{<<: *step, label_status: reviewed, reviewed_by: Some Body}]}
+  - name: reviewer_set_on_draft
+    expect: invalid
+    error_has: reviewed_by
+    patch: {steps: [{<<: *step, reviewed_by: Some Body}]}
+  - name: ai_cross_checked_is_not_a_step_tier
+    expect: invalid
+    error_has: ai_cross_checked
+    patch: {steps: [{<<: *step, label_status: ai_cross_checked}]}
+  - name: evidence_checked_set_by_a_non_script
+    expect: invalid
+    error_has: script
+    patch: {steps: [{<<: *step, label_status: evidence_checked}]}
+  - name: bot_sets_reviewed_in_history
+    expect: invalid
+    error_has: human
+    patch: {steps: [{<<: *step, history: [{date: "2026-01-03", who: claude_draft, change: "status draft_needs_human_review -> reviewed", reason: x}]}]}
+  - name: attack_step_without_label
+    expect: invalid
+    error_has: attack
+    patch: {steps: [{<<: *step, attack: __DELETE__}]}
+  - name: response_step_with_attack_label
+    expect: invalid
+    error_has: response
+    patch: {steps: [{<<: *step, phase: response}]}
+  - name: detection_step_without_label
+    expect: valid
+    patch: {steps: [*step, {<<: *step, id: s02, order: 2, phase: detection, attack: __DELETE__}]}
+  - name: placeholder_left_in
+    expect: invalid
+    error_has: placeholder
+    patch: {title: "<plain title>"}
+  - name: swarms_id_without_url
+    expect: invalid
+    error_has: swarms
+    patch: {swarms_wiki: {id: I-0001, url: null}}
+  - name: summary_over_60_words
+    expect: invalid
+    error_has: "60"
+    patch: {summary: "w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w"}
+  - name: unknown_top_level_key
+    expect: invalid
+    error_has: schema
+    patch: {required_step_tactics: [TA0007]}
+bad_registries:
+  - {name: http_url, error_has: https, source: {id: a, url: "http://example.org/x", title: t, publisher: p, published: "2026-01-01", accessed: "2026-01-02", content_sha256: null, read_extent: full}}
+  - {name: partial_without_note, error_has: read_note, source: {id: a, url: "https://example.org/x", title: t, publisher: p, published: "2026-01-01", accessed: "2026-01-02", content_sha256: null, read_extent: partial}}
+  - {name: supersedes_unknown, error_has: supersedes, source: {id: a, url: "https://example.org/x", title: t, publisher: p, published: "2026-01-01", accessed: "2026-01-02", content_sha256: null, read_extent: full, supersedes: ghost}}
+  - {name: stores_text, error_has: text, source: {id: a, url: "https://example.org/x", title: t, publisher: p, published: "2026-01-01", accessed: "2026-01-02", content_sha256: null, read_extent: full, text: "full article body"}}
