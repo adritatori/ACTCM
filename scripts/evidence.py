@@ -34,7 +34,8 @@ from datetime import date
 import common as c
 
 CACHE = c.ROOT / ".cache" / "incident_sources"
-MAX_BYTES = 2_000_000
+MAX_BYTES = 2_000_000            # cap for a source cited in a public submission
+MAX_REGISTRY_BYTES = 12_000_000  # cap for a source a maintainer has registered (some reports are large PDFs)
 TIMEOUT = 10
 MAX_WORDS = 25
 MAX_REDIRECTS = 3
@@ -231,20 +232,20 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def _default_transport(url: str) -> tuple[int, dict, bytes]:
+def _default_transport(url: str, max_bytes: int = MAX_BYTES) -> tuple[int, dict, bytes]:
     opener = urllib.request.build_opener(_NoRedirect)
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "text/html,application/pdf;q=0.9,*/*;q=0.5"})
     try:
         with opener.open(req, timeout=TIMEOUT) as r:
-            return r.status, {k.lower(): v for k, v in r.headers.items()}, r.read(MAX_BYTES + 1)
+            return r.status, {k.lower(): v for k, v in r.headers.items()}, r.read(max_bytes + 1)
     except urllib.error.HTTPError as e:
         return e.code, {k.lower(): v for k, v in (e.headers or {}).items()}, b""
 
 
-def fetch(url: str, transport=None, resolve=None) -> dict:
+def fetch(url: str, transport=None, resolve=None, max_bytes: int = MAX_BYTES) -> dict:
     """Fetch one source. status: ok | refused | http_error | redirected_to_login | too_big | empty_page |
     pdf_unreadable | network_error. Text is returned, never stored in the repository."""
-    transport, resolve = transport or _default_transport, resolve or _default_resolve
+    transport, resolve = transport or (lambda u: _default_transport(u, max_bytes)), resolve or _default_resolve
     cur = url
     for _hop in range(MAX_REDIRECTS + 1):
         why = url_problem(cur, resolve)
@@ -265,7 +266,7 @@ def fetch(url: str, transport=None, resolve=None) -> dict:
             continue
         if code != 200:
             return {"status": "http_error", "http_status": code, "final_url": cur}
-        if len(body) > MAX_BYTES:
+        if len(body) > max_bytes:
             return {"status": "too_big", "final_url": cur}
         ctype = headers.get("content-type", "")
         is_pdf = "pdf" in ctype.lower() or body[:5] == b"%PDF-"
@@ -325,7 +326,7 @@ def fetch_all(sources: dict) -> dict:
     CACHE.mkdir(parents=True, exist_ok=True)
     out = {}
     for sid, s in sorted(sources.items()):
-        r = fetch(s["url"])
+        r = fetch(s["url"], max_bytes=MAX_REGISTRY_BYTES)
         out[sid] = r
         if r["status"] == "ok":
             r["text"] = clip(r["text"], s)
