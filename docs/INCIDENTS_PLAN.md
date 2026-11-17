@@ -33,7 +33,7 @@ $0. No paid service, no monitor run, no new runtime dependency. Time: seven phas
 | `make build`, `make site` | pass; `git status` clean afterwards (build is deterministic today) |
 | CI on `main` (run 5, 6 Nov 2026) | success |
 | Pages deploy on `main` (run 4, 6 Nov 2026) | success |
-| `verify_site.py` on the live address | **not verified**: the sandbox network refuses `adritatori.github.io` |
+| `verify_site.py` on the live address | 28 of 28 checks passed (after the host was allowed) |
 
 The 10 skips: missing framework and source caches (3), nothing to compare for hidden or unlicensed sources (4),
 publish-gate tests that only run under `make publish-check` (2), no unfinished upstream drafts (1).
@@ -61,7 +61,7 @@ publish-gate tests that only run under `make publish-check` (2), no unfinished u
 
 | # | Risk | Plan |
 |---|---|---|
-| 1 | **Network.** The sandbox refuses `www.aisi.gov.uk`, `cdn.prod.website-files.com` (AISI PDF), `openai.com`, `swarms.wiki`, `adritatori.github.io`. `huggingface.co`, `www.anthropic.com`, `github.com` answer. | Ask Tory to allow the hosts. Without them, incident 3 cannot be read or evidence-checked here, and its steps stay Draft. |
+| 1 | **Network.** The sandbox refuses `www.aisi.gov.uk`, `cdn.prod.website-files.com` (AISI PDF), `openai.com`, `swarms.wiki`, `adritatori.github.io`. `huggingface.co`, `www.anthropic.com`, `github.com` answer. | **Resolved 17 Nov:** Tory allowed the five hosts. AISI page, AISI PDF and swarms.wiki now answer 200. `openai.com` answers 403 (the site refuses the request, not the sandbox): if it stays so, that source is recorded as not read and we go on without it. |
 | 2 | The Anthropic 9 Sep URL answers 308 and moves to `/research/alignment-assessment-cybersecurity-incidents`. | Register the final address; note the redirect. Content not yet read. |
 | 3 | The redacted transcript is long (reported about 1,000 pages). | Read what the steps need; record `read_extent: partial` honestly. |
 | 4 | Evidence matcher false positives (quote found only in nav or footer, or inside a different sentence). | Adversarial fixtures first (section 9 of the brief). |
@@ -74,6 +74,6 @@ publish-gate tests that only run under `make publish-check` (2), no unfinished u
 
 ## Questions for Tory
 
-1. **Blocking for Phase 2:** allow the five hosts in risk 1 (an approval card is sent with this report).
+1. Resolved: the five hosts in risk 1 are allowed.
 2. Not blocking: fix the codebook version string (risk 9) when S1 to S7 land, or leave it?
 3. Not blocking: does any link you shared depend on `index.html#setting-…` Explorer addresses? Default is the forwarder in risk 7.
