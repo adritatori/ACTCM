@@ -101,7 +101,7 @@
  {
   "page": "replay-anthropic-pypi-2026",
   "width": 1280,
-  "bytes": 27939,
+  "bytes": 6242,
   "problems": [],
   "errors": [],
   "failed": [],
@@ -110,7 +110,7 @@
  {
   "page": "replay-aisi-2026-07",
   "width": 1280,
-  "bytes": 169844,
+  "bytes": 6242,
   "problems": [],
   "errors": [],
   "failed": [],
@@ -119,7 +119,7 @@
  {
   "page": "home",
   "width": 400,
-  "bytes": 33242,
+  "bytes": 21697,
   "problems": [],
   "errors": [],
   "failed": [],
@@ -182,7 +182,7 @@
  {
   "page": "verify",
   "width": 400,
-  "bytes": 12529,
+  "bytes": 21697,
   "problems": [],
   "errors": [],
   "failed": [],
@@ -191,7 +191,7 @@
  {
   "page": "explorer-vllm-steps",
   "width": 400,
-  "bytes": 20078,
+  "bytes": 28809,
   "problems": [],
   "errors": [],
   "failed": [],
@@ -200,7 +200,7 @@
  {
   "page": "explorer-atlas",
   "width": 400,
-  "bytes": 20078,
+  "bytes": 28809,
   "problems": [],
   "errors": [],
   "failed": [],
@@ -209,7 +209,7 @@
  {
   "page": "replay-hf-2026-07",
   "width": 400,
-  "bytes": 6242,
+  "bytes": 27939,
   "problems": [],
   "errors": [],
   "failed": [],
@@ -218,7 +218,7 @@
  {
   "page": "replay-anthropic-pypi-2026",
   "width": 400,
-  "bytes": 6242,
+  "bytes": 86567,
   "problems": [],
   "errors": [],
   "failed": [],
@@ -227,7 +227,7 @@
  {
   "page": "replay-aisi-2026-07",
   "width": 400,
-  "bytes": 6242,
+  "bytes": 27939,
   "problems": [],
   "errors": [],
   "failed": [],

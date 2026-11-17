@@ -48,6 +48,7 @@ const LABEL = {}; cov.verdicts.forEach(v => { LABEL[v.id] = v.label; });
   eq('coverage prediction firm', await txt('#n-pred-firm'), cov.prediction.steps_not_resting_on_an_ambiguous_label);
   eq('coverage limits shown', await page.locator('ol.limits li').count(), cov.limits.length);
   await page.click(`#row-${cov.tactics[0].id} a`);
+  await page.waitForFunction(id => document.getElementById(id).open, 't-' + cov.tactics[0].id, { timeout: 3000 }).catch(() => {});
   ok('clicking a tactic opens its list', await page.$eval(`#t-${cov.tactics[0].id}`, d => d.open));
 
   // ---- Review queue numbers
@@ -94,7 +95,7 @@ const LABEL = {}; cov.verdicts.forEach(v => { LABEL[v.id] = v.label; });
     await page.mouse.move(2, 2);
     await page.keyboard.press(' ');
     ok(`${inc.id} play pressed`, await page.getAttribute('#b-play', 'aria-pressed') === 'true');
-    await page.waitForTimeout(1900);
+    await page.waitForTimeout(2100);
     ok(`${inc.id} play advanced one step`, await page.$eval('tr.step-row.current', tr => tr.dataset.step) === inc.steps[2].id);
     // hovering the ladder holds the playback
     await page.hover('.ladder-wrap');

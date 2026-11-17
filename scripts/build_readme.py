@@ -38,6 +38,25 @@ def scope(cn: dict) -> str:
     return "\n".join(rows)
 
 
+def incidents(cov: dict) -> str:
+    t, p = cov["totals"], cov["prediction"]
+    v = {x["id"]: x["label"] for x in cov["verdicts"]}
+    names = {x["id"]: x["name"] for x in cov["tactics"]}
+    rows = ["| Incident | Attack steps | " + " | ".join(v.values()) + " |", "|---|---|" + "---|" * len(v)]
+    rows += [f"| {i['title']} | {i['attack_steps']} | " + " | ".join(str(i["verdict_counts"][k]) for k in v) + " |" for i in cov["incidents"]]
+    rows += [f"| **All {t['incidents']}** | **{t['attack_steps']}** | " + " | ".join(f"**{t['verdict_counts'][k]}**" for k in v) + " |"]
+    result = {"held": "held", "partly_held": "partly held", "failed": "failed"}[p["result"]]
+    return (f"{t['incidents']} incidents are split into {t['steps']} steps: {t['attack_steps']} attack steps and {t['detection_steps'] + t['response_steps']} detection and response steps. "
+            f"A script compares each attack step with the {t['public_tasks']} public side tasks.\n\n" + "\n".join(rows) +
+            f"\n\n{t['ambiguous_steps']} step labels are marked ambiguous, {t['steps_with_null_technique']} have no technique, and {t['unstable_verdicts']} verdicts would change if an ambiguous task label moved to its alternative. "
+            f"Step status: {t['status_counts']['draft_needs_human_review']} Draft, {t['status_counts']['evidence_checked']} Evidence-checked (a script found the quote in the source; no human has checked the label), "
+            f"{t['status_counts']['reviewed']} Reviewed by a human, {t['status_counts']['adjudicated']} Adjudicated by humans.\n\n"
+            f"**Prediction written down first** ([docs/PILOT_PREDICTION.md](docs/PILOT_PREDICTION.md)): some steps would fall in the four tactics with no public task "
+            f"({', '.join(names[x] for x in p['tactics'])}). Result: **{result}**. {p['steps_in_these_tactics']} of {t['attack_steps']} attack steps have one of those tactics as their label, "
+            f"in {p['incidents_with_such_steps']} of {t['incidents']} incidents; {p['steps_not_resting_on_an_ambiguous_label']} of them do not depend on an ambiguous label. "
+            "The labels were drafted by an AI that knew the prediction, and no human has checked them.")
+
+
 def main() -> None:
     cn = json.loads((c.DATA / "generated" / "counts.json").read_text())
     p = c.ROOT / "README.md"
@@ -48,6 +67,9 @@ def main() -> None:
     s = fill(s, "drafts", f"{unf} unfinished upstream drafts (`*_idea` folders) are excluded from all counts." if unf else "")
     s = fill(s, "extras-licence", "" if cn.get("extras_note") else
              "- The four LinuxArena extras environment repositories have no licence, so their goal text is **not** copied here. We store the task ID, a link, and a summary of 20 words or fewer written by us.")
+    cov = json.loads((c.DATA / "generated" / "incident_coverage.json").read_text())
+    s = fill(s, "incidents", incidents(cov))
+    s = fill(s, "limits", "\n".join(f"{i}. {x}" for i, x in enumerate(cov["limits"], 1)))
     p.write_text(s, encoding="utf-8")
 
 

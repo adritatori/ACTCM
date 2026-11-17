@@ -78,9 +78,16 @@ def fetch_sources() -> int:
 def verify_frameworks() -> None:
     lock = c.load_yaml(c.LOCK_FILE)["frameworks"]
     for key, spec in (("attack", fwm.ATTACK), ("atlas", fwm.ATLAS)):
-        got = fwm._fetch(spec)
+        got = fwm._fetch(spec, sha=lock[key]["sha"])          # the pin is the commit, not the tag
         if got["sha"] != lock[key]["sha"] or got["sha256"] != lock[key]["sha256"]:
             sys.exit(f"{key}: fetched file differs from the pin (sha {got['sha']} sha256 {got['sha256']})")
+        try:
+            now = c.resolve_tag(spec["repo"], spec["tag"])
+        except RuntimeError:
+            now = None
+        if now and now != lock[key]["sha"]:
+            print(f"      note: upstream tag {spec['tag']} of {spec['repo']} now points to {now[:10]}, not the pinned {lock[key]['sha'][:10]}. "
+                  "The pinned commit is used. Re-pinning is a deliberate change (scripts/frameworks.py fetch).")
 
 
 def rebuild() -> None:

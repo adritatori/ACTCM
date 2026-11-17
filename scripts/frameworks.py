@@ -30,8 +30,9 @@ ATLAS = dict(
     path="dist/v6/ATLAS-2026.10.yaml", licence="Apache-2.0", licence_file="LICENSE")
 
 
-def _fetch(spec: dict) -> dict:
-    sha = c.resolve_tag(spec["repo"], spec["tag"])
+def _fetch(spec: dict, sha: str | None = None) -> dict:
+    """Fetch the framework file. With `sha` (the pinned commit) the tag is not consulted: a tag can be moved upstream."""
+    sha = sha or c.resolve_tag(spec["repo"], spec["tag"])
     d = FW_CACHE / spec["repo"].split("/")[1]
     d.mkdir(parents=True, exist_ok=True)
     if not (d / ".git").exists():

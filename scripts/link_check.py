@@ -72,20 +72,33 @@ def main() -> dict:
     for fn in PAGES:
         p = H(); p.feed((SITE / fn).read_text(encoding="utf-8"))
         for u in p.h:
+            if "/issues/new?" in u:               # prefilled form links: check each form once, not once per step
+                u = u.split("&")[0]
             where.setdefault(u.split("#")[0], set()).add(fn)
+    import validate_incidents as vi               # every registered incident source is checked, whether or not a page links it
+    for src in vi.load_sources().values():
+        for k in ("url", "archive_url"):
+            if src.get(k):
+                where.setdefault(src[k].split("#")[0], set()).add("data/incidents/_sources.yml")
     rows = []
     for u in sorted(where):
         s = status(u)
         repo = ("github.com/" + c.config()["repository"]) in u
         verdict = "PENDING (marked 'works after publishing' on the page)" if repo and not c.config().get("published") else ("200 OK" if s == "200" else
                   "UNVERIFIED (host did not answer from this session)" if s in ("000", "") else f"HTTP {s}: CHECK")
-        rows.append((u, s, verdict, ", ".join(sorted(where[u]))))
+        blob = "/blob/" + c.config().get("branch", "main") + "/"
+        if "/issues/new?" in u and s in ("403", "302", "200"):
+            verdict = "NEEDS SIGN-IN (GitHub shows a new-issue form only to a signed-in user; not verified from here)"
+        elif repo and s == "404" and blob in u and (c.ROOT / u.split(blob)[1]).exists():
+            verdict = "PENDING MERGE (the file exists on this branch and is not on the default branch yet)"
+        pages = sorted(where[u])
+        rows.append((u, s, verdict, ", ".join(pages) if len(pages) <= 4 else f"{len(pages)} pages"))
     L = ["# Link check", "", "Run by `scripts/link_check.py` (`make links`). Repository links are tested for real. Links to other sites that did not answer from the build session are marked UNVERIFIED, not passed; run `make links` from a machine with open internet to check them.", "",
          "| URL | HTTP status | Verdict | Pages |", "|---|---|---|---|"]
     L += [f"| {u} | {s} | {v} | {w} |" for u, s, v, w in rows]
     ok = sum(1 for r in rows if r[2] == "200 OK"); pend = sum(1 for r in rows if r[2].startswith("PENDING"))
-    unv = sum(1 for r in rows if r[2].startswith("UNVERIFIED")); bad = sum(1 for r in rows if "CHECK" in r[2])
-    L += ["", f"{len(rows)} external links: {ok} return 200, {pend} pending publication, {unv} unverified (host unreachable from the session), {bad} need checking.", ""]
+    unv = sum(1 for r in rows if r[2].startswith(("UNVERIFIED", "NEEDS SIGN-IN"))); bad = sum(1 for r in rows if "CHECK" in r[2])
+    L += ["", f"{len(rows)} external links: {ok} return 200, {pend} pending (not on the default branch yet), {unv} not verified (host unreachable, or a sign-in is needed), {bad} need checking.", ""]
     (c.ROOT / "docs" / "LINK_CHECK.md").write_text("\n".join(L), encoding="utf-8")
     print(L[-2]); [print(" ", r[2][:12], r[0]) for r in rows]
     return dict(ok=ok, pending=pend, unverified=unv, bad=bad)

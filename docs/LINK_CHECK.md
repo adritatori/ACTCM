@@ -4,30 +4,31 @@ Run by `scripts/link_check.py` (`make links`). Repository links are tested for r
 
 | URL | HTTP status | Verdict | Pages |
 |---|---|---|---|
-| https://arxiv.org/abs/2604.06019 | 000 | UNVERIFIED (host did not answer from this session) | guide.html |
-| https://arxiv.org/abs/2604.15384 | 000 | UNVERIFIED (host did not answer from this session) | guide.html |
-| https://attack.mitre.org/resources/legal-and-branding/terms-of-use/ | 000 | UNVERIFIED (host did not answer from this session) | guide.html, index.html, verify.html |
-| https://github.com/adritatori/actcm | 200 | 200 OK | guide.html, index.html, verify.html |
+| https://arxiv.org/abs/2604.06019 | 200 | 200 OK | guide.html |
+| https://arxiv.org/abs/2604.15384 | 200 | 200 OK | guide.html |
+| https://attack.mitre.org/resources/legal-and-branding/terms-of-use/ | 200 | 200 OK | 11 pages |
+| https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6a724858f7db25c81487016d_Security%20Incident%20INC-2026-07-28-01.pdf | 200 | 200 OK | data/incidents/_sources.yml, incidents/aisi-2026-07.html |
+| https://github.com/adritatori/actcm | 200 | 200 OK | 11 pages |
 | https://github.com/adritatori/actcm/blob/main/CITATION.cff | 200 | 200 OK | guide.html |
-| https://github.com/adritatori/actcm/blob/main/LICENSE | 200 | 200 OK | guide.html, index.html, verify.html |
-| https://github.com/adritatori/actcm/blob/main/LICENSE-DATA | 200 | 200 OK | guide.html, index.html, verify.html |
-| https://github.com/adritatori/actcm/blob/main/THIRD_PARTY_NOTICES.md | 200 | 200 OK | guide.html, index.html, verify.html |
+| https://github.com/adritatori/actcm/blob/main/CONTRIBUTING.md | 200 | 200 OK | contribute.html |
+| https://github.com/adritatori/actcm/blob/main/LICENSE | 200 | 200 OK | 11 pages |
+| https://github.com/adritatori/actcm/blob/main/LICENSE-DATA | 200 | 200 OK | 11 pages |
+| https://github.com/adritatori/actcm/blob/main/THIRD_PARTY_NOTICES.md | 200 | 200 OK | 11 pages |
 | https://github.com/adritatori/actcm/blob/main/codebook/CODEBOOK.md | 200 | 200 OK | guide.html, verify.html |
-| https://github.com/adritatori/actcm/blob/main/data/sources.lock.yml | 200 | 200 OK | guide.html, index.html, verify.html |
+| https://github.com/adritatori/actcm/blob/main/data/sources.lock.yml | 200 | 200 OK | 11 pages |
+| https://github.com/adritatori/actcm/blob/main/docs/PILOT_PREDICTION.md | 404 | PENDING MERGE (the file exists on this branch and is not on the default branch yet) | coverage.html |
 | https://github.com/adritatori/actcm/blob/main/docs/RELATED_WORK_SEARCH.md | 200 | 200 OK | guide.html |
-| https://labs.cloudsecurityalliance.org/research/csa-research-note-atlas-agentic-gap-analysis-20260327/ | 000 | UNVERIFIED (host did not answer from this session) | guide.html |
-| https://taoq-ai.github.io/ziran/reference/benchmarks/atlas-mapping/ | 000 | UNVERIFIED (host did not answer from this session) | guide.html |
+| https://github.com/adritatori/actcm/issues/new?template=incident-new.yml | 403 | NEEDS SIGN-IN (GitHub shows a new-issue form only to a signed-in user; not verified from here) | contribute.html |
+| https://github.com/adritatori/actcm/issues/new?template=incident-step.yml | 403 | NEEDS SIGN-IN (GitHub shows a new-issue form only to a signed-in user; not verified from here) | contribute.html |
+| https://github.com/adritatori/actcm/issues/new?template=step-dispute.yml | 403 | NEEDS SIGN-IN (GitHub shows a new-issue form only to a signed-in user; not verified from here) | contribute.html, incidents/aisi-2026-07.html, incidents/anthropic-pypi-2026.html, incidents/hf-2026-07.html |
+| https://github.com/adritatori/actcm/issues/new?template=step-review.yml | 403 | NEEDS SIGN-IN (GitHub shows a new-issue form only to a signed-in user; not verified from here) | 5 pages |
+| https://huggingface.co/blog/agent-intrusion-technical-timeline | 200 | 200 OK | data/incidents/_sources.yml, incidents/hf-2026-07.html |
+| https://huggingface.co/blog/security-incident-july-2026 | 200 | 200 OK | data/incidents/_sources.yml, incidents/hf-2026-07.html |
+| https://labs.cloudsecurityalliance.org/research/csa-research-note-atlas-agentic-gap-analysis-20260327/ | 200 | 200 OK | guide.html |
+| https://swarms.wiki/ | 200 | 200 OK | incidents.html |
+| https://taoq-ai.github.io/ziran/reference/benchmarks/atlas-mapping/ | 200 | 200 OK | guide.html |
+| https://www.aisi.gov.uk/blog/incident-report-unsanctioned-agent-behaviour-during-cyber-testing | 200 | 200 OK | data/incidents/_sources.yml, incidents/aisi-2026-07.html |
+| https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals | 200 | 200 OK | data/incidents/_sources.yml, incidents/anthropic-pypi-2026.html |
+| https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents | 200 | 200 OK | data/incidents/_sources.yml, incidents/anthropic-pypi-2026.html |
 
-13 external links: 8 return 200, 0 pending publication, 5 unverified (host unreachable from the session), 0 need checking.
-
-## Live check (`make links-live`), 2026-11-04
-
-| What | URL | Result |
-|---|---|---|
-| Navigator layer `combined` | https://raw.githubusercontent.com/adritatori/actcm/main/data/generated/navigator/actcm_combined_attack_v20.json | 200 OK, valid layer |
-| Navigator layer `linuxarena` | https://raw.githubusercontent.com/adritatori/actcm/main/data/generated/navigator/actcm_linuxarena_attack_v20.json | 200 OK, valid layer |
-| Navigator layer `refactor_arena` | https://raw.githubusercontent.com/adritatori/actcm/main/data/generated/navigator/actcm_refactor_arena_attack_v20.json | 200 OK, valid layer |
-| Navigator layer `vllm` | https://raw.githubusercontent.com/adritatori/actcm/main/data/generated/navigator/actcm_vllm_attack_v20.json | 200 OK, valid layer |
-| Repository | https://github.com/adritatori/actcm | 200 |
-
-The hosted ATT&CK Navigator app itself is not tested by this script: open each "Open in Navigator" link in a browser and check that the layer loads.
+26 external links: 21 return 200, 1 pending (not on the default branch yet), 4 not verified (host unreachable, or a sign-in is needed), 0 need checking.

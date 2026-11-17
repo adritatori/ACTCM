@@ -38,8 +38,12 @@ ALWAYS_DENY_FILES = {
 # files that are only left out while the hidden setting is hidden (publish_extras: false)
 HIDDEN_ONLY_PREFIXES = ("data/tasks/linuxarena-extras/",)
 HIDDEN_ONLY_FILES = {"data/summaries/extras.yml", "data/unfinished_upstream.yml"}
-PRIVATE_BLOCK = re.compile(r"(?:|# private:end)\n?", re.S)
-MARKER_LINES = re.compile(r"^[ \t]*(?:<!-- private:(?:start|end) -->|# private:(?:start|end))[ \t]*\n", re.M)
+# Blocks between a "private:start" and a "private:end" marker line are dropped from the public copy.
+# The markers are assembled from two pieces so that this very line is not itself a private block:
+# the first public export removed the original pattern from this file, which left one that deleted every line break.
+_PS, _PE = "private:" + "start", "private:" + "end"
+PRIVATE_BLOCK = re.compile(rf"(?:<!-- {_PS} -->.*?<!-- {_PE} -->|# {_PS}\b.*?# {_PE})\n?", re.S)
+MARKER_LINES = re.compile(rf"^[ \t]*(?:<!-- (?:{_PS}|{_PE}) -->|# (?:{_PS}|{_PE}))[ \t]*\n", re.M)
 TEXT_SUFFIXES = {".md", ".py", ".yml", ".yaml", ".json", ".csv", ".txt", ".html", ".css", ".js", ".cff", ".toml", ".cfg", ""}
 
 
