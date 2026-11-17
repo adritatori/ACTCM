@@ -155,3 +155,12 @@ def test_apply_results_only_moves_between_the_two_script_tiers():
     human = {"id": "s02", "label_status": "reviewed", "history": [], "reviewed_by": "A Human"}
     assert ev.apply_result(human, {"status": "not_found"}, today="2026-01-06") is False   # never touches a human tier
     assert human["label_status"] == "reviewed"
+
+
+def test_clip_drops_reader_comments_and_page_chrome():
+    text = "Upvote 518\nThe article starts here.\nThe agent escaped.\nCommunity\nsomeone: the agent was framed"
+    src = {"text_starts_at": "The article starts here.", "text_ends_before": "Community"}
+    out = ev.clip(text, src)
+    assert out.startswith("The article starts here.") and "framed" not in out and "Upvote" not in out
+    assert ev.find_quote("the agent was framed", out)["status"] == "not_found"      # a comment is not the source
+    assert ev.clip(text, {}) == text and ev.clip(text, {"text_ends_before": "no such marker"}) == text

@@ -24,7 +24,7 @@ SOURCES_FILE = INCIDENTS_DIR / "_sources.yml"
 SCHEMA = json.loads((c.ROOT / "schema" / "incident.schema.json").read_text(encoding="utf-8"))
 MAX_QUOTE, MAX_WHAT, MAX_SUMMARY = 25, 40, 60
 SOURCE_REQUIRED = ["id", "url", "title", "publisher", "published", "accessed", "content_sha256", "read_extent"]
-SOURCE_OPTIONAL = ["archive_url", "read_note", "supersedes", "superseded_by", "fetch_note", "media_type"]
+SOURCE_OPTIONAL = ["archive_url", "read_note", "supersedes", "superseded_by", "fetch_note", "media_type", "text_starts_at", "text_ends_before"]
 ZONES = {"UTC": 0, "GMT": 0, "Z": 0, "BST": 1, "CET": 1, "CEST": 2, "EST": -5, "EDT": -4, "PST": -8, "PDT": -7}
 _LOCAL = re.compile(r"(\d{1,2}):(\d{2})\s*(UTC\s*[+-]\s*\d{1,2}|[A-Z]{1,4})\b")
 _PLACEHOLDER = re.compile(r"<[^<>\n]{1,60}>")

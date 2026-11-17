@@ -305,6 +305,17 @@ def apply_result(step: dict, result: dict, today: str | None = None) -> bool:
     return True
 
 
+def clip(text: str, src: dict) -> str:
+    """Keep only the article: drop what comes before `text_starts_at` and from `text_ends_before` on (for example
+    a reader-comment section, which is not the publisher's text and changes daily)."""
+    a, b = src.get("text_starts_at"), src.get("text_ends_before")
+    if a and a in text:
+        text = text[text.index(a):]
+    if b and b in text:
+        text = text[:text.index(b)]
+    return text
+
+
 def cached(source_id: str) -> tuple[str | None, str | None]:
     p, f = CACHE / f"{source_id}.txt", CACHE / f"{source_id}.full.txt"
     return (p.read_text(encoding="utf-8") if p.exists() else None, f.read_text(encoding="utf-8") if f.exists() else None)
@@ -317,6 +328,8 @@ def fetch_all(sources: dict) -> dict:
         r = fetch(s["url"])
         out[sid] = r
         if r["status"] == "ok":
+            r["text"] = clip(r["text"], s)
+            r["sha256"] = content_hash(r["text"])
             (CACHE / f"{sid}.txt").write_text(r["text"], encoding="utf-8")
             (CACHE / f"{sid}.full.txt").write_text(r["full_text"], encoding="utf-8")
         print(f"{r['status']:<20} {sid:<28} {r.get('sha256', '')[:12]} {r.get('reason', r.get('http_status', ''))}")
@@ -331,7 +344,7 @@ def check_all(write: bool = False, today: str | None = None) -> list[dict]:
         for s in inc["steps"]:
             src = sources.get(s["evidence"]["source"])
             text, full = cached(s["evidence"]["source"]) if src else (None, None)
-            r = {"status": "source_not_cached"} if text is None else check_quote_against_source(s["evidence"]["quote"], src, text, full)
+            r = {"status": "source_not_cached"} if text is None else check_quote_against_source(s["evidence"]["quote"], src, text, None)
             rows.append(dict(incident=inc["id"], step=s["id"], source=s["evidence"]["source"], **r))
             if write and text is not None:
                 changed |= apply_result(s, r, today)
