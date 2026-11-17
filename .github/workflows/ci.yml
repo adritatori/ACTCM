@@ -24,6 +24,7 @@ jobs:
           python scripts/build.py
           python scripts/navigator.py
           python scripts/review_sheet.py
+          python scripts/coverage.py
           python scripts/build_site.py
       - name: Generated files must be committed
         run: git diff --exit-code -- data/generated site

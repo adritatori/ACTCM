@@ -16,6 +16,7 @@ import build_notices
 import build_readme
 import build_site
 import common as c
+import coverage
 import frameworks as fwm
 import ingest
 import navigator
@@ -23,8 +24,8 @@ import review_sheet
 import stress_test
 
 CHECKSUMS = c.DATA / "generated" / "CHECKSUMS"
-GLOBS = ["README.md", "THIRD_PARTY_NOTICES.md", "docs/PROTOCOL.md", "data/tasks/**/*.yml", "data/unfinished_upstream.yml", "data/generated/*.json", "data/generated/*.csv", "data/generated/*.yml",
-         "data/generated/navigator/*.json", "site/*.html", "site/data/*", "site/data/navigator/*.json"]
+GLOBS = ["README.md", "THIRD_PARTY_NOTICES.md", "docs/PROTOCOL.md", "data/tasks/**/*.yml", "data/incidents/*.yml", "data/unfinished_upstream.yml", "data/generated/*.json", "data/generated/*.csv", "data/generated/*.yml",
+         "data/generated/navigator/*.json", "site/*.html", "site/incidents/*.html", "site/data/*", "site/data/navigator/*.json"]
 EXCLUDE = {"data/generated/CHECKSUMS"}
 
 
@@ -89,6 +90,7 @@ def rebuild() -> None:
     navigator.main()
     stress_test.main()
     review_sheet.build()
+    coverage.main()
     build_site.main()
     build_readme.main()
     build_notices.main()
