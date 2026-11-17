@@ -123,5 +123,7 @@ The incident pages describe what public reports say, in our own words. From each
 | [Investigating three incidents in our cybersecurity evaluations](https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals) | Anthropic | 2026-07-30 | 2026-11-17 (full) |
 | [Security incident disclosure — July 2026](https://huggingface.co/blog/security-incident-july-2026) | Hugging Face | 2026-07-16 | 2026-11-17 (full) |
 | [Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident](https://huggingface.co/blog/agent-intrusion-technical-timeline) | Hugging Face | 2026-07-27 | 2026-11-17 (full) |
+| [Brief independent investigation of agents' behavior, reasoning and collaboration in the OpenAI / Hugging Face hacking incident](https://metr.org/hugging-face-incident-report-aug-2026.pdf) | METR and Redwood Research | 2026-08-26 | 2026-11-17 (partial) |
+| [OpenAI – Hugging Face Incident, Technical Report](https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf) | OpenAI | 2026-08-26 | 2026-11-17 (partial) |
 
 Not used as sources: the Swarm Traces dataset (it states no licence; it is not ingested), swarms.wiki (linked from the site, its text is not copied), and the redacted transcript Anthropic released with its September 2026 assessment (linked, not quoted: it asks not to be included in training data).

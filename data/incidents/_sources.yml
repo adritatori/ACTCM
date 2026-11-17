@@ -67,3 +67,26 @@ sources:
   read_note: Text of all 34 pages read. Figures 1 to 11 were read only as far as their text extracts from
     the PDF.
   media_type: pdf
+- id: openai-report-2026-08-26
+  url: https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf
+  title: OpenAI – Hugging Face Incident, Technical Report
+  publisher: OpenAI
+  published: '2026-08-26'
+  accessed: '2026-11-17'
+  content_sha256: 96e0d9885341e5d83e1965fb8167c600d284be7d90d3371f4a9a0623cdb90ce8
+  read_extent: partial
+  read_note: Read sections I to VI (pages 4 to 16) and VIII.C to VIII.D. Sections VII, the rest of VIII,
+    IX and X were not read. The publication date is taken from press coverage, not from the report.
+  media_type: pdf
+- id: metr-redwood-report-2026-08-26
+  url: https://metr.org/hugging-face-incident-report-aug-2026.pdf
+  title: Brief independent investigation of agents' behavior, reasoning and collaboration in the OpenAI
+    / Hugging Face hacking incident
+  publisher: METR and Redwood Research
+  published: '2026-08-26'
+  accessed: '2026-11-17'
+  content_sha256: a4e02a6a1927862a85ca935abb437b1699a678c80c2e37c926e392d852e51b01
+  read_extent: partial
+  read_note: Read the summary and core takeaways (pages 1 to 5) and searched the rest for the passages
+    on transcript tampering. Most of the 91 pages were not read.
+  media_type: pdf

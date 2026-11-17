@@ -1,0 +1,418 @@
+{
+ "description": "Steps from 3 documented incidents in which AI agents acted against real systems, placed on MITRE ATT&CK® Enterprise v20.0. 65 of 84 attack steps have a technique and are shown; the rest have none. Red: no public AI control side task has that technique. Amber: some public task has it. Untested does not mean undefended, and no monitor has been run. The incidents were chosen because they are well documented; they are not a random sample. Draft: all labels were drafted by an AI. No human has reviewed any label yet. Not affiliated with or endorsed by The MITRE Corporation.",
+ "domain": "enterprise-attack",
+ "hideDisabled": false,
+ "layout": {
+  "aggregateFunction": "sum",
+  "countUnscored": false,
+  "expandedSubtechniques": "annotated",
+  "layout": "side",
+  "showAggregateScores": false,
+  "showID": true,
+  "showName": true
+ },
+ "legendItems": [
+  {
+   "color": "#b91c1c",
+   "label": "Seen in an incident, no public task has this technique"
+  },
+  {
+   "color": "#b45309",
+   "label": "Seen in an incident, a public task has this technique"
+  }
+ ],
+ "links": [
+  {
+   "label": "ACTCM repository",
+   "url": "https://github.com/adritatori/actcm"
+  }
+ ],
+ "metadata": [
+  {
+   "name": "Project",
+   "value": "Agent Control Threat Coverage Matrix (ACTCM)"
+  },
+  {
+   "name": "Status",
+   "value": "Draft: no human has reviewed any label"
+  },
+  {
+   "name": "ATT&CK version",
+   "value": "20.0"
+  }
+ ],
+ "name": "ACTCM: real AI agent incident steps",
+ "selectSubtechniquesWithParent": true,
+ "selectTechniquesAcrossTactics": true,
+ "selectVisibleTechniques": false,
+ "showTacticRowBackground": false,
+ "sorting": 3,
+ "tacticRowBackground": "#dddddd",
+ "techniques": [
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s34. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "command-and-control",
+   "techniqueID": "T1008"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s26. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "discovery",
+   "techniqueID": "T1018"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "2 incident step(s): hf-2026-07/s05, aisi-2026-07/s03. No public side task has this technique.",
+   "enabled": true,
+   "score": 2,
+   "tactic": "stealth",
+   "techniqueID": "T1027"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s29. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "exfiltration",
+   "techniqueID": "T1041"
+  },
+  {
+   "color": "#b45309",
+   "comment": "1 incident step(s): hf-2026-07/s52",
+   "enabled": true,
+   "score": 1,
+   "tactic": "privilege-escalation",
+   "techniqueID": "T1068"
+  },
+  {
+   "color": "#b45309",
+   "comment": "1 incident step(s): aisi-2026-07/s12",
+   "enabled": true,
+   "score": 1,
+   "tactic": "stealth",
+   "techniqueID": "T1070"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s31. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "lateral-movement",
+   "techniqueID": "T1072"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): anthropic-pypi-2026/s09. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "initial-access",
+   "techniqueID": "T1078"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s13. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "privilege-escalation",
+   "techniqueID": "T1078.004"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "2 incident step(s): hf-2026-07/s03, aisi-2026-07/s09. No public side task has this technique.",
+   "enabled": true,
+   "score": 2,
+   "tactic": "discovery",
+   "techniqueID": "T1082"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "2 incident step(s): hf-2026-07/s48, hf-2026-07/s27. No public side task has this technique.",
+   "enabled": true,
+   "score": 2,
+   "tactic": "command-and-control",
+   "techniqueID": "T1090"
+  },
+  {
+   "color": "#b45309",
+   "comment": "1 incident step(s): aisi-2026-07/s19",
+   "enabled": true,
+   "score": 1,
+   "tactic": "persistence",
+   "techniqueID": "T1098"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "3 incident step(s): hf-2026-07/s04, hf-2026-07/s15, aisi-2026-07/s16. No public side task has this technique.",
+   "enabled": true,
+   "score": 3,
+   "tactic": "command-and-control",
+   "techniqueID": "T1102"
+  },
+  {
+   "color": "#b45309",
+   "comment": "2 incident step(s): hf-2026-07/s07, hf-2026-07/s09",
+   "enabled": true,
+   "score": 2,
+   "tactic": "initial-access",
+   "techniqueID": "T1190"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s46. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "initial-access",
+   "techniqueID": "T1195"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): anthropic-pypi-2026/s06. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "initial-access",
+   "techniqueID": "T1195.001"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): aisi-2026-07/s04. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "initial-access",
+   "techniqueID": "T1195.002"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): anthropic-pypi-2026/s07. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "execution",
+   "techniqueID": "T1204"
+  },
+  {
+   "color": "#b45309",
+   "comment": "1 incident step(s): hf-2026-07/s36",
+   "enabled": true,
+   "score": 1,
+   "tactic": "collection",
+   "techniqueID": "T1213"
+  },
+  {
+   "color": "#b45309",
+   "comment": "1 incident step(s): hf-2026-07/s32",
+   "enabled": true,
+   "score": 1,
+   "tactic": "collection",
+   "techniqueID": "T1213.003"
+  },
+  {
+   "color": "#b45309",
+   "comment": "2 incident step(s): hf-2026-07/s19, hf-2026-07/s28",
+   "enabled": true,
+   "score": 2,
+   "tactic": "collection",
+   "techniqueID": "T1213.006"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s10. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "credential-access",
+   "techniqueID": "T1528"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s22. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "lateral-movement",
+   "techniqueID": "T1550.001"
+  },
+  {
+   "color": "#b45309",
+   "comment": "6 incident step(s): hf-2026-07/s47, hf-2026-07/s08, hf-2026-07/s35, anthropic-pypi-2026/s01, anthropic-pypi-2026/s08, aisi-2026-07/s11",
+   "enabled": true,
+   "score": 6,
+   "tactic": "credential-access",
+   "techniqueID": "T1552"
+  },
+  {
+   "color": "#b45309",
+   "comment": "1 incident step(s): hf-2026-07/s12",
+   "enabled": true,
+   "score": 1,
+   "tactic": "credential-access",
+   "techniqueID": "T1552.005"
+  },
+  {
+   "color": "#b45309",
+   "comment": "1 incident step(s): hf-2026-07/s20",
+   "enabled": true,
+   "score": 1,
+   "tactic": "credential-access",
+   "techniqueID": "T1552.007"
+  },
+  {
+   "color": "#b45309",
+   "comment": "1 incident step(s): aisi-2026-07/s08",
+   "enabled": true,
+   "score": 1,
+   "tactic": "initial-access",
+   "techniqueID": "T1566.003"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s49. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "exfiltration",
+   "techniqueID": "T1567"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "4 incident step(s): aisi-2026-07/s21, aisi-2026-07/s22, aisi-2026-07/s25, aisi-2026-07/s26. No public side task has this technique.",
+   "enabled": true,
+   "score": 4,
+   "tactic": "command-and-control",
+   "techniqueID": "T1572"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s54. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "defense-impairment",
+   "techniqueID": "T1578"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s16. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "discovery",
+   "techniqueID": "T1580"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): aisi-2026-07/s23. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "resource-development",
+   "techniqueID": "T1583"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): aisi-2026-07/s07. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "resource-development",
+   "techniqueID": "T1583.006"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s02. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "resource-development",
+   "techniqueID": "T1584"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): aisi-2026-07/s02. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "resource-development",
+   "techniqueID": "T1585"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): anthropic-pypi-2026/s05. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "resource-development",
+   "techniqueID": "T1585.002"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "3 incident step(s): hf-2026-07/s45, aisi-2026-07/s18, aisi-2026-07/s20. No public side task has this technique.",
+   "enabled": true,
+   "score": 3,
+   "tactic": "resource-development",
+   "techniqueID": "T1586"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "2 incident step(s): anthropic-pypi-2026/s03, anthropic-pypi-2026/s10. No public side task has this technique.",
+   "enabled": true,
+   "score": 2,
+   "tactic": "resource-development",
+   "techniqueID": "T1587.001"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): aisi-2026-07/s01. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "reconnaissance",
+   "techniqueID": "T1589"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s06. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "reconnaissance",
+   "techniqueID": "T1593"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "2 incident step(s): hf-2026-07/s23, hf-2026-07/s53. No public side task has this technique.",
+   "enabled": true,
+   "score": 2,
+   "tactic": "credential-access",
+   "techniqueID": "T1606"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): aisi-2026-07/s24. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "resource-development",
+   "techniqueID": "T1608"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): aisi-2026-07/s14. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "resource-development",
+   "techniqueID": "T1608.001"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "2 incident step(s): hf-2026-07/s44, hf-2026-07/s17. No public side task has this technique.",
+   "enabled": true,
+   "score": 2,
+   "tactic": "privilege-escalation",
+   "techniqueID": "T1611"
+  },
+  {
+   "color": "#b91c1c",
+   "comment": "1 incident step(s): hf-2026-07/s11. No public side task has this technique.",
+   "enabled": true,
+   "score": 1,
+   "tactic": "discovery",
+   "techniqueID": "T1613"
+  }
+ ],
+ "versions": {
+  "attack": "20",
+  "layer": "4.5",
+  "navigator": "5.1.0"
+ }
+}

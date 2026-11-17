@@ -1,3 +1,18 @@
+# Handoff (17 Nov 2026, later): the matrix tool, v0.2.1-draft
+
+v0.2.0 was merged and is live. A second pull request makes the home page a tool and corrects the Hugging Face incident.
+
+- **Home is the matrix.** Boxes are tactic and technique; red means real agents did it and no public test has it. "Check my own coverage" lets a
+  visitor tick what their tests or monitors cover and get their own gap list (saved in their browser, or as a file or link).
+- **Hugging Face incident:** OpenAI's technical report and the METR and Redwood Research report are now sources (both read in part). 59 steps.
+  The "one agent" claim now sits beside "about 1,200 agents, about 700 in the attack".
+- **Numbers now:** 84 attack steps: 15 same technique, 36 same tactic only, 16 never tested, 17 can't tell. 46 behaviours seen, 38 with no public test.
+- **Still not verified:** no human has reviewed any label; most of the METR and Redwood report and parts of the OpenAI report were not read;
+  swarms.wiki entries not matched; the submission workflow has not run on a real issue.
+- **The GitHub token:** only you can delete it (GitHub, Settings, Developer settings, Fine-grained tokens).
+
+---
+
 # Handoff (17 Nov 2026): incident replays, v0.2.0-draft
 
 **Short version:** the branch `incident-replay` adds three incident replays, a coverage join, a redesigned site and a contribute-and-review flow.

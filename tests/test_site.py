@@ -404,11 +404,31 @@ def test_browser_incident_pages_numbers_keyboard_and_no_javascript(server):
 def test_home_numbers_match_generated_json():
     _, text, raw = parse("index.html")
     t = COV["totals"]
-    for i, n in (("n-incidents", t["incidents"]), ("n-attack-steps", t["attack_steps"]), ("n-not-tested", t["verdict_counts"]["not_tested"]), ("n-unclear", t["verdict_counts"]["unclear"])):
+    m = json.loads((c.DATA / "generated" / "matrix.json").read_text())
+    for i, n in (("n-incidents", t["incidents"]), ("n-attack-steps", t["attack_steps"]), ("n-not-tested", t["verdict_counts"]["not_tested"]), ("n-unclear", t["verdict_counts"]["unclear"]),
+                 ("n-cells-real", m["totals"]["cells_seen_in_incidents"]), ("n-cells-tested", m["totals"]["cells_seen_and_tested"]), ("n-cells-gap", m["totals"]["cells_seen_not_tested"])):
         assert re.search(rf'id="{i}">{n}<', raw), i
     assert "chosen for detail, not random" in text and "What real AI agents did, against what safety tests check" in text
-    assert f"We split {t['incidents']} well-documented incidents into {t['steps']} steps" in text
-    assert f"the {t['public_tasks']} public test tasks" in text
+    assert f"{t['public_tasks']} public test tasks" in text
+    assert "No monitor has been run" in text and "Untested does not mean undefended" in text
+
+
+def test_home_matrix_matches_matrix_json():
+    _, _, raw = parse("index.html")
+    m = json.loads((c.DATA / "generated" / "matrix.json").read_text())
+    n = 0
+    for t in m["tactics"]:
+        for cell in t["cells"]:
+            n += 1
+            assert f'<li class="cell st-{cell["state"]}" data-key="{cell["key"]}" data-steps="{cell["steps"]}" data-tasks="{cell["tasks"]}">' in raw, cell["key"]
+            for r in cell["step_refs"]:
+                assert f'href="incidents/{r["incident"]}.html#step={r["step"]}"' in raw
+    assert raw.count('<li class="cell st-') == n == m["totals"]["cells"]
+    assert raw.count('<li class="gap-row"') == m["totals"]["cells_seen_in_incidents"]
+    visible = len(re.findall(r'<li class="gap-row"[^>]*data-tasks="0"[^>]*>', raw))
+    assert visible == m["totals"]["cells_seen_not_tested"] == len(re.findall(r'<li class="gap-row"(?![^>]* hidden)[^>]*>', raw))
+    for f in ("incident_steps.csv", "incident_layer.json", "matrix.json", "incident_coverage.json"):
+        assert (SITE / "data" / f).read_bytes() == (c.DATA / "generated" / f).read_bytes(), f
 
 
 @pytest.mark.parametrize("fn", REPLAYS)

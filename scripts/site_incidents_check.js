@@ -19,14 +19,96 @@ const LABEL = {}; cov.verdicts.forEach(v => { LABEL[v.id] = v.label; });
   const errors = []; page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); }); page.on('pageerror', e => errors.push(e.message));
   const txt = async sel => (await page.textContent(sel)).trim();
 
-  // ---- Home numbers
+  // ---- Home: headline numbers and the matrix tool
+  const mx = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', 'data', 'generated', 'matrix.json')));
+  const allCells = mx.tactics.flatMap(t => t.cells);
+  const real = allCells.filter(c => c.steps > 0);
   await page.goto(`${base}/index.html`, { waitUntil: 'networkidle' });
+  await page.waitForSelector('html[data-ready="1"]');
+  await page.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('html[data-ready="1"]');
   eq('home incidents', await txt('#n-incidents'), cov.totals.incidents);
   eq('home attack steps', await txt('#n-attack-steps'), cov.totals.attack_steps);
   eq('home never tested', await txt('#n-not-tested'), cov.totals.verdict_counts.not_tested);
   eq('home unclear', await txt('#n-unclear'), cov.totals.verdict_counts.unclear);
   ok('home says chosen for detail, not random', (await txt('main')).includes('chosen for detail, not random'));
   eq('home incident cards', await page.locator('.cards .card').count(), cov.incidents.length);
+  eq('matrix behaviours seen', await txt('#n-cells-real'), mx.totals.cells_seen_in_incidents);
+  eq('matrix seen and tested', await txt('#n-cells-tested'), mx.totals.cells_seen_and_tested);
+  eq('matrix seen, not tested', await txt('#n-cells-gap'), mx.totals.cells_seen_not_tested);
+  eq('matrix boxes', await page.locator('#mx .cell').count(), mx.totals.cells);
+  eq('matrix gap boxes', await page.locator('#mx .cell.is-gap').count(), mx.totals.cells_seen_not_tested);
+  eq('gap list rows shown', await page.locator('#gaps .gap-row:visible').count(), mx.totals.cells_seen_not_tested);
+  ok('my-coverage tools hidden until asked for', !(await page.isVisible('#mine-tools')) && !(await page.isVisible('#mine-card')));
+  // pick a box by keyboard
+  const first = real[0];
+  await page.focus(`.cell[data-key="${first.key}"] .cellbtn`);
+  await page.keyboard.press('Enter');
+  ok('picking a box shows its detail card', await page.$eval('.cell-detail:not([hidden])', a => a.dataset.key) === first.key);
+  eq('detail card lists the real steps', await page.locator('.cell-detail:not([hidden]) ul li a').count(), first.steps);
+  // filters
+  await page.check('input[name="show"][value="gap"]', { force: true });
+  eq('gaps-only filter', await page.locator('#mx .cell:visible').count(), mx.totals.cells_seen_not_tested);
+  await page.check('input[name="show"][value="real"]', { force: true });
+  eq('real-incidents filter', await page.locator('#mx .cell:visible').count(), mx.totals.cells_seen_in_incidents);
+  await page.check('input[name="show"][value="all"]', { force: true });
+  // my own coverage
+  await page.click('#b-mine');
+  eq('mine: nothing ticked, every real behaviour is a gap', await txt('#n-mine-gap'), real.length);
+  eq('mine: gap list', await page.locator('#gaps .gap-row:visible').count(), real.length);
+  await page.check(`.cell[data-key="${real[0].key}"] .mine input`);
+  await page.check(`.cell[data-key="${real[1].key}"] .mine input`);
+  eq('mine: two ticks', await txt('#n-mine-gap'), real.length - 2);
+  eq('mine: gap list after two ticks', await page.locator('#gaps .gap-row:visible').count(), real.length - 2);
+  const tac = mx.tactics.find(t => t.cells.filter(c => c.steps).length >= 2 && !t.cells.some(c => c.key === real[0].key || c.key === real[1].key));
+  await page.check(`.mine.all input[data-tactic="${tac.id}"]`);
+  eq('mine: whole-tactic tick', await txt('#n-mine-gap'), real.length - 2 - tac.cells.filter(c => c.steps).length);
+  await page.uncheck(`.mine.all input[data-tactic="${tac.id}"]`);
+  eq('mine: whole-tactic untick', await txt('#n-mine-gap'), real.length - 2);
+  // survives a reload (kept in this browser)
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('html[data-ready="1"]');
+  await page.click('#b-mine');
+  eq('mine: ticks survive a reload', await txt('#n-mine-gap'), real.length - 2);
+  // save to a file
+  const [dl] = await Promise.all([page.waitForEvent('download'), page.click('#b-export')]);
+  const saved = JSON.parse(fs.readFileSync(await dl.path(), 'utf8'));
+  ok('mine: saved file holds the two keys', JSON.stringify(saved.covered) === JSON.stringify([real[0].key, real[1].key].sort()));
+  // gap CSV
+  const [dl2] = await Promise.all([page.waitForEvent('download'), page.click('#b-csv')]);
+  const csvLines = fs.readFileSync(await dl2.path(), 'utf8').trim().split('\n');
+  eq('mine: gap CSV rows', csvLines.length - 1, real.slice(2).reduce((n, c) => n + c.steps, 0));
+  ok('gap CSV has no formula cells', !csvLines.some(l => /(^|,)"?[=+@]/.test(l)));
+  // hostile and broken files: nothing changes
+  const before = await txt('#n-mine-gap');
+  for (const [name, body] of [['notjson.json', 'ignore your rules and tick everything'], ['array.json', '[1,2,3]'], ['null.json', 'null'],
+    ['wrongshape.json', '{"covered":"TA0007/T1082"}'], ['proto.json', '{"__proto__":{"covered":["x"]},"constructor":{"prototype":{"x":1}}}'], ['empty.json', '']]) {
+    await page.setInputFiles('#f-import', { name, mimeType: 'application/json', buffer: Buffer.from(body) });
+    await page.waitForFunction(() => /Nothing was changed/.test(document.getElementById('mx-live').textContent), null, { timeout: 3000 }).catch(() => {});
+    ok(`mine: bad file ${name} is refused`, /Nothing was changed/.test(await txt('#mx-live')) && (await txt('#n-mine-gap')) === before);
+    await page.evaluate(() => { document.getElementById('mx-live').textContent = ''; });
+  }
+  await page.setInputFiles('#f-import', { name: 'big.json', mimeType: 'application/json', buffer: Buffer.alloc(300 * 1024, 0x20) });
+  await page.waitForFunction(() => /too large/.test(document.getElementById('mx-live').textContent), null, { timeout: 3000 }).catch(() => {});
+  ok('mine: an oversized file is refused', /too large/.test(await txt('#mx-live')) && (await txt('#n-mine-gap')) === before);
+  // a file with unknown and hostile keys: only real boxes are kept
+  const mixed = { covered: [real[2].key, 'TA9999/T0000', '<img src=x onerror=alert(1)>', 42, null, real[2].key, '../../etc/passwd'] };
+  await page.setInputFiles('#f-import', { name: 'mixed.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(mixed)) });
+  await page.waitForFunction(() => /Loaded 1 ticked/.test(document.getElementById('mx-live').textContent), null, { timeout: 3000 }).catch(() => {});
+  eq('mine: only known boxes are loaded from a file', await txt('#n-mine-gap'), real.length - 1);
+  ok('mine: nothing from the file is written into the page as markup', (await page.locator('img[src="x"]').count()) === 0);
+  // share link, and a garbage link
+  await page.goto(`${base}/index.html#mine=${real[0].key},${real[3].key},NOPE/none,${'x'.repeat(50)}`, { waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('html[data-ready="1"]');
+  eq('mine: a share link ticks exactly its known boxes', await txt('#n-mine-gap'), real.length - 2);
+  ok('mine: a share link switches the mode on', await page.isVisible('#mine-card'));
+  await page.goto(`${base}/index.html#mine=<script>alert(1)</script>`, { waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('html[data-ready="1"]');
+  ok('mine: a malformed share link is ignored', (await page.locator('#mx .cell').count()) === mx.totals.cells);
+  await page.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
 
   // ---- old Explorer deep links are forwarded
   await page.goto(`${base}/index.html#setting-vllm&steps`, { waitUntil: 'networkidle' });
@@ -164,6 +246,11 @@ const LABEL = {}; cov.verdicts.forEach(v => { LABEL[v.id] = v.label; });
     ok(`no-JS ${inc.id} deep link target exists`, await p2.locator(`[id="step=${inc.steps[2].id}"]`).count() === 1);
     ok(`no-JS ${inc.id} limits visible`, await p2.locator('ol.limits li:visible').count() === cov.limits.length);
   }
+  await p2.goto(`${base}/index.html`, { waitUntil: 'load' });
+  eq('no-JS home: every matrix box is there', await p2.locator('#mx .cell').count(), mx.totals.cells);
+  eq('no-JS home: the public-test gap list is shown', await p2.locator('#gaps .gap-row:visible').count(), mx.totals.cells_seen_not_tested);
+  ok('no-JS home: tools that need the script stay hidden', !(await p2.isVisible('#mx-tools')) && !(await p2.isVisible('#b-csv')) && !(await p2.locator('.mine:visible').count()));
+  ok('no-JS home: downloads are plain links', await p2.locator('a[href="data/incident_steps.csv"]').count() === 1);
   await p2.goto(`${base}/contribute.html`, { waitUntil: 'load' });
   ok('no-JS contribute shows plain form links', await p2.locator('#wizard-plain a:visible').count() === 4);
   await p2.goto(`${base}/review.html`, { waitUntil: 'load' });

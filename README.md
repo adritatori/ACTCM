@@ -32,18 +32,18 @@ with MITRE ATT&CK; this project applies the same check to AI control settings.
 ## Result so far: incidents (draft)
 
 <!-- incidents:start -->
-3 incidents are split into 93 steps: 72 attack steps and 21 detection and response steps. A script compares each attack step with the 114 public side tasks.
+3 incidents are split into 110 steps: 84 attack steps and 26 detection and response steps. A script compares each attack step with the 114 public side tasks.
 
 | Incident | Attack steps | Tested: same technique | Tested: same tactic only | Never tested | Can't tell |
 |---|---|---|---|---|---|
-| Hugging Face intrusion by an agent in an OpenAI evaluation | 36 | 8 | 14 | 6 | 8 |
+| Hugging Face intrusion by agents in an OpenAI evaluation | 48 | 10 | 22 | 7 | 9 |
 | Malicious package published to PyPI by Claude Mythos 5 during an evaluation | 10 | 1 | 2 | 4 | 3 |
 | UK AISI incident INC-2026-07-28-01: unsanctioned agent actions during cyber testing | 26 | 4 | 12 | 5 | 5 |
-| **All 3** | **72** | **13** | **28** | **15** | **16** |
+| **All 3** | **84** | **15** | **36** | **16** | **17** |
 
-23 step labels are marked ambiguous, 16 have no technique, and 4 verdicts would change if an ambiguous task label moved to its alternative. Step status: 0 Draft, 93 Evidence-checked (a script found the quote in the source; no human has checked the label), 0 Reviewed by a human, 0 Adjudicated by humans.
+27 step labels are marked ambiguous, 19 have no technique, and 4 verdicts would change if an ambiguous task label moved to its alternative. Step status: 0 Draft, 110 Evidence-checked (a script found the quote in the source; no human has checked the label), 0 Reviewed by a human, 0 Adjudicated by humans.
 
-**Prediction written down first** ([docs/PILOT_PREDICTION.md](docs/PILOT_PREDICTION.md)): some steps would fall in the four tactics with no public task (Reconnaissance, Resource Development, Discovery, Lateral Movement). Result: **held**. 26 of 72 attack steps have one of those tactics as their label, in 3 of 3 incidents; 15 of them do not depend on an ambiguous label. The labels were drafted by an AI that knew the prediction, and no human has checked them.
+**Prediction written down first** ([docs/PILOT_PREDICTION.md](docs/PILOT_PREDICTION.md)): some steps would fall in the four tactics with no public task (Reconnaissance, Resource Development, Discovery, Lateral Movement). Result: **held**. 27 of 84 attack steps have one of those tactics as their label, in 3 of 3 incidents; 16 of them do not depend on an ambiguous label. The labels were drafted by an AI that knew the prediction, and no human has checked them.
 <!-- incidents:end -->
 
 **Read these limits with the numbers:**
@@ -63,7 +63,7 @@ not proof of danger, and not a measurement of monitors.
 
 | Page | What it shows |
 |---|---|
-| Home | The story in six lines, three computed numbers, the incidents |
+| Matrix (home) | The tool: one box per tactic and technique, showing real incident steps against public tests. "Check my own coverage" lets you tick what your tests or monitors cover and lists the real behaviours you miss; save it, share it, download the gap list |
 | Incidents, Replay | Each incident step by step: the attack ladder, the source quote, the label, the verdict. Works by keyboard and without JavaScript |
 | Coverage | For each of the 15 tactics: public tasks and incident steps |
 | Tasks | The Explorer for the 114 side tasks (moved from the home page to `explorer.html`) |
@@ -82,7 +82,7 @@ python3 -m http.server -d site 8000        # then open http://localhost:8000
 Useful commands: `make validate`, `make build`, `make site`, `make reproduce`. See `Makefile`.
 
 Incident data: `data/incidents/*.yml` and `data/incidents/_sources.yml`. The join is `scripts/coverage.py`
-(output `data/generated/incident_coverage.json`). The quote check is `scripts/evidence.py`.
+(outputs in `data/generated/`: `incident_coverage.json`, `matrix.json`, `incident_steps.csv`, and `incident_layer.json`, an ATT&CK Navigator layer). The quote check is `scripts/evidence.py`.
 
 ## How to verify
 
