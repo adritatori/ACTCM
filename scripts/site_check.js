@@ -38,7 +38,7 @@ const TASK_DATA = /\/data\/(tasks\.json|counts\.json|status_tiers\.json|navigato
         try { bytes += (await r.body()).length; } catch (e) { /* redirects have no body */ }
       });
       await page.goto(`${base}/${url}`, { waitUntil: 'networkidle' });
-      if (name.startsWith('explorer') || name.startsWith('replay') || name === 'contribute') await page.waitForSelector('html[data-ready="1"]', { timeout: 10000 });
+      if (name.startsWith('explorer') || name.startsWith('replay') || name === 'contribute' || name === 'home') await page.waitForSelector('html[data-ready="1"]', { timeout: 10000 });
       const m = await page.evaluate(() => ({
         scrollW: document.documentElement.scrollWidth, clientW: document.documentElement.clientWidth,
         h1: document.querySelectorAll('h1').length,

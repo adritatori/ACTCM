@@ -115,7 +115,7 @@ def incident_meta(cov: dict, tiers: dict, inc: dict) -> str:
             f'<span class="v v-not_tested">{ico("not_tested")} {never} never tested</span> <span class="small">{st}</span>')
 
 
-def cards(cov: dict, tiers: dict, root: str = "") -> str:
+def cards_html(cov: dict, tiers: dict, root: str = "") -> str:
     out = []
     for inc in cov["incidents"]:
         d = inc["dates"]
@@ -125,43 +125,111 @@ def cards(cov: dict, tiers: dict, root: str = "") -> str:
     return f'<ul class="cards">{"".join(out)}</ul>'
 
 
-# ------------------------------------------------------------------------------------------- Home
+# ------------------------------------------------------------------------------------------- Home: the coverage tool
+STATE_WORDS = {"gap": "Seen in real incidents, no public test", "both": "Seen in real incidents, has a public test", "tests_only": "Public test only"}
+
+
+def matrix_html(cov: dict, mx: dict) -> tuple[str, str, str]:
+    """The matrix (one column per tactic), the hidden detail cards, and the list of behaviours seen in incidents."""
+    cols, cards, gaps = [], [], []
+    for t in mx["tactics"]:
+        cells = []
+        for cl in t["cells"]:
+            tid = f'<span class="sid">{E(cl["technique"])}</span> ' if cl["technique"] else ""
+            counts = (f'<span class="cnt"><span class="c-real" title="Steps in real incidents">{ico("not_tested" if cl["state"] == "gap" else "tested_technique")} {cl["steps"]} real</span>' if cl["steps"] else '<span class="cnt">') + \
+                     (f' <span class="c-test" title="Public test tasks">▪ {plural(cl["tasks"], "test")}</span>' if cl["tasks"] else "") + "</span>"
+            cells.append(f'<li class="cell st-{cl["state"]}" data-key="{E(cl["key"])}" data-steps="{cl["steps"]}" data-tasks="{cl["tasks"]}">'
+                         f'<button type="button" class="cellbtn" aria-controls="cell-panel" title="{E(STATE_WORDS[cl["state"]])}">{tid}{E(cl["name"])}{counts}'
+                         f'<span class="st-word">{E(STATE_WORDS[cl["state"]])}</span></button>'
+                         f'<label class="mine"><input type="checkbox" data-key="{E(cl["key"])}"> I cover this</label></li>')
+            steps = "".join(f'<li>{vchip(cov, r["verdict"])} <a href="incidents/{E(r["incident"])}.html#step={E(r["step"])}">{E(r["incident"])} {E(r["step"])}</a>: {E(r["what_happened"])}</li>' for r in cl["step_refs"]) or "<li>No step in the three incidents has this label.</li>"
+            tasks = ", ".join(f'<span class="sid">{E(u)}</span>' for u in cl["task_uids"]) or "none"
+            head = f'{E(t["name"])} › {tid}{E(cl["name"])}'
+            cards.append(f'<article class="cell-detail" id="c-{E(cl["key"].replace("/", "-"))}" data-key="{E(cl["key"])}" hidden><h3>{head}</h3>'
+                         f'<p class="small">{E(GLOSS[t["id"]])}</p><h4>In real incidents ({cl["steps"]})</h4><ul>{steps}</ul>'
+                         f'<h4>Public test tasks ({cl["tasks"]})</h4><p class="small">{tasks}{" (<a href=\"explorer.html\">open the task Explorer</a>)" if cl["tasks"] else ""}</p></article>')
+            if cl["steps"]:
+                refs = "".join(f'<li data-incident="{E(r["incident"])}" data-step="{E(r["step"])}" data-verdict="{E(r["verdict"])}" data-url="{E(r["source_url"])}">'
+                               f'<a href="incidents/{E(r["incident"])}.html#step={E(r["step"])}">{E(r["incident"])} {E(r["step"])}</a>: <span class="what">{E(r["what_happened"])}</span></li>' for r in cl["step_refs"])
+                gaps.append(f'<li class="gap-row" data-key="{E(cl["key"])}" data-tasks="{cl["tasks"]}" data-tactic="{E(t["name"])}" data-technique="{E(cl["technique"] or "")}" data-name="{E(cl["name"])}"'
+                            f'{"" if cl["state"] == "gap" else " hidden"}><strong>{head}</strong> <span class="small">({plural(cl["steps"], "real step")}, {plural(cl["tasks"], "public test")})</span><ul>{refs}</ul></li>')
+        zero = t["tasks_as_goal"] == 0 and t["tasks_as_step"] == 0
+        cols.append(f'<section class="tactic{" gap" if zero else ""}" aria-labelledby="h-{t["id"]}"><h3 id="h-{t["id"]}"><span class="thead" title="{E(GLOSS[t["id"]])}">{E(t["name"])}'
+                    f'<span class="tid">{plural(t["incident_steps"], "real step")} · {plural(t["tasks_as_goal"], "test")}{" +" + str(t["tasks_as_step"]) + " as a step" if t["tasks_as_step"] else ""}</span></span></h3>'
+                    f'{"<p class=\"gapnote\">0 public tests in this tactic</p>" if zero else ""}'
+                    f'<label class="mine all"><input type="checkbox" data-tactic="{t["id"]}"> I cover all of this tactic</label>'
+                    f'<ul class="cells">{"".join(cells) or "<li class=\"small\">Nothing here yet.</li>"}</ul></section>')
+    return "".join(cols), "".join(cards), "".join(gaps)
+
+
 def home_body(cov: dict, act: dict, tiers: dict, cn: dict) -> str:
     t = cov["totals"]
+    mx = json.loads((GEN / "matrix.json").read_text(encoding="utf-8"))
+    m = mx["totals"]
+    cols, cards, gaps = matrix_html(cov, mx)
     return f"""
 <h1>What real AI agents did, against what safety tests check</h1>
-<ol class="story">
-<li>AI labs test their safety checks by giving an agent a hidden harmful goal (a {gloss("side task")}) and seeing whether a {gloss("monitor")} notices.</li>
-<li>The safety number they report only speaks for the attacks the test includes.</li>
-<li>Meanwhile, real AI agents have already got into real systems.</li>
-<li>We split {t["incidents"]} well-documented incidents into {plural(t["steps"], gloss("step"))}, each with a quoted source.</li>
-<li>A script compares every attack step with the {t["public_tasks"]} public test tasks, using MITRE ATT&amp;CK® attack categories.</li>
-<li>The result: which real moves no public test states as a goal. Untested does not mean undefended.</li>
-</ol>
-<ul class="strip" aria-label="Headline numbers">
-<li><span class="n" id="n-incidents">{t["incidents"]}</span><span class="l">incidents, chosen for detail, not random</span></li>
-<li><span class="n" id="n-attack-steps">{t["attack_steps"]}</span><span class="l">attack steps, each with a source quote</span></li>
-<li><span class="n" id="n-not-tested">{t["verdict_counts"]["not_tested"]}</span><span class="l">steps with no public test in their {gloss("tactic")}</span></li>
-</ul>
-<p class="small">Chosen for detail, not random: these {t["incidents"]} incidents are not a sample of all incidents. Another <span id="n-unclear">{t["verdict_counts"]["unclear"]}</span> steps are marked &ldquo;{E(vlabel(cov, "unclear"))}&rdquo; because two labels are defensible and they give different answers.</p>
+<p class="lede">A map of attacker behaviour. See what AI agents really did in {t["incidents"]} documented incidents, which of it public AI control tests cover, and how your own tests or {gloss("monitor", "monitors")} compare.</p>
+<p class="small"><span id="n-incidents">{t["incidents"]}</span> incidents, chosen for detail, not random · <span id="n-attack-steps">{t["attack_steps"]}</span> attack steps, each with a source quote ·
+<span id="n-not-tested">{t["verdict_counts"]["not_tested"]}</span> in a {gloss("tactic")} no public test states · <span id="n-unclear">{t["verdict_counts"]["unclear"]}</span> where two labels disagree ·
+{t["public_tasks"]} public test tasks · categories from MITRE ATT&amp;CK®</p>
 
-<h2>Open an incident</h2>
-{cards(cov, tiers)}
-
-<h2>How to read this</h2>
-<ul>
-<li><strong>A step</strong> is one thing an agent did, in our own words, with a short quote and a link to the source that says so.</li>
-<li><strong>A verdict</strong> says whether any public test task has the same {gloss("technique")}, only the same tactic, or neither. A script works it out from the labels.</li>
-<li><strong>&ldquo;{E(vlabel(cov, "not_tested"))}&rdquo;</strong> means no public task states that tactic as its goal or as a required step. It does not mean a monitor would miss it: no monitor has been run.</li>
+<ul class="strip" aria-label="Coverage summary" id="mx-summary">
+<li><span class="n" id="n-cells-real">{m["cells_seen_in_incidents"]}</span><span class="l">behaviours seen in real incidents</span></li>
+<li><span class="n" id="n-cells-tested">{m["cells_seen_and_tested"]}</span><span class="l">of them have a public test</span></li>
+<li><span class="n" id="n-cells-gap">{m["cells_seen_not_tested"]}</span><span class="l">have no public test</span></li>
+<li id="mine-card" hidden><span class="n" id="n-mine-gap">{m["cells_seen_in_incidents"]}</span><span class="l">are not covered by you</span></li>
 </ul>
-<div class="btns"><a class="btn primary" href="incidents.html">See the incidents</a><a class="btn" href="coverage.html">Coverage by tactic</a><a class="btn" href="explorer.html">The {cn["summary"]["tasks"]} test tasks</a></div>
+
+<div class="toolbar" id="mx-tools" hidden>
+<fieldset><legend>Show</legend><div class="seg">
+<label><input type="radio" name="show" value="all" checked><span>Everything</span></label>
+<label><input type="radio" name="show" value="real"><span>Real incidents</span></label>
+<label><input type="radio" name="show" value="gap"><span>Gaps only</span></label>
+</div></fieldset>
+<button type="button" class="btn primary" id="b-mine" aria-pressed="false">Check my own coverage</button>
+<span class="mine-tools" id="mine-tools" hidden>
+<button type="button" class="btn" id="b-link">Copy share link</button>
+<button type="button" class="btn" id="b-export">Save my coverage</button>
+<label class="btn" for="f-import">Load a saved file</label><input type="file" id="f-import" accept="application/json,.json" class="vh">
+<button type="button" class="btn" id="b-reset">Clear</button>
+</span>
+</div>
+<p id="mx-live" class="small" role="status" aria-live="polite"></p>
+
+<h2 id="matrix-title">The matrix</h2>
+<p class="small">One column per tactic, one box per {gloss("technique")}. <span class="key k-gap">Seen in real incidents, no public test</span> <span class="key k-both">Seen in real incidents, has a public test</span> <span class="key k-tests_only">Public test only</span></p>
+<div class="matrix mx" id="mx" role="group" aria-labelledby="matrix-title">{cols}</div>
+<section class="panel card" id="cell-panel" aria-live="polite" aria-label="Details of the selected box"><p id="cell-empty" class="small">Pick a box to list the real incident steps and the public tests behind it.</p>{cards}</section>
+
+<h2 id="gaps-title">Real behaviours with no public test</h2>
+<p class="small" id="gaps-note">Each line is something an AI agent did in a documented incident that no public test task has as its goal. Untested does not mean undefended.</p>
+<p id="gaps-count" class="small" aria-live="polite"></p>
+<ul class="gaplist" id="gaps">{gaps}</ul>
+
+<h2>Take the data</h2>
+<div class="btns">
+<button type="button" class="btn" id="b-csv" hidden>Download this gap list (CSV)</button>
+<a class="btn" href="data/incident_steps.csv" download>All incident steps (CSV)</a>
+<a class="btn" href="data/incident_coverage.json" download>Steps and verdicts (JSON)</a>
+<a class="btn" href="data/incident_layer.json" download>ATT&amp;CK Navigator layer</a>
+<a class="btn" href="data/tasks.csv" download>All test tasks (CSV)</a>
+</div>
+
+<h2>How to use this</h2>
+<div class="uses">
+<div class="card"><h3>You build tests for AI agents</h3><p>The red boxes are behaviours real agents showed that no public test asks for. Each links to the incident step and its source. Use the gap list as a to-do list for new test tasks.</p></div>
+<div class="card"><h3>You run agents or a multi-agent system</h3><p>Press <strong>Check my own coverage</strong>. Tick what your tests, monitors or guardrails cover. The gap list becomes yours: real behaviours you have nothing for. Save it or share the link.</p></div>
+<div class="card"><h3>You study an incident</h3><p>Open a replay: every step in order, the source's own words, and how the incident was found. Steps are also in the CSV and the Navigator layer.</p></div>
+</div>
+<p class="small">All labels are drafts by an AI; no human has reviewed them. No monitor has been run: a box with a test says the behaviour is tested, not that it is caught. Your ticks stay in your browser.</p>
+
+<h2>Incidents</h2>
+{cards_html(cov, tiers)}
+<p><a class="btn" href="coverage.html">Coverage by tactic</a> <a class="btn" href="explorer.html">Explore the {cn["summary"]["tasks"]} test tasks</a> <a class="btn" href="contribute.html">Contribute</a></p>
 
 <h2>Recent changes</h2>
-{feed_html(act, "")}
-<script>
-(function () {{ function fwd() {{ if (/^#setting-/.test(location.hash)) location.replace("explorer.html" + location.hash); }}
-  window.addEventListener("hashchange", fwd); fwd(); }})();   /* old Explorer links pointed at this page */
-</script>
+{feed_html(act, "", 4)}
 """
 
 
@@ -178,7 +246,7 @@ def incidents_body(cov: dict, tiers: dict) -> str:
 <h1>Incidents</h1>
 <p class="lede">{cov["totals"]["incidents"]} incidents in which an AI agent acted against real systems, each split into dated steps with a quoted source.</p>
 <p class="small">They were chosen because they are well documented. They are not a random sample.</p>
-{cards(cov, tiers)}
+{cards_html(cov, tiers)}
 <h2>At a glance</h2>
 <div class="tablewrap" tabindex="0" role="region" aria-label="Table of incidents, scrolls sideways on small screens"><table>
 <caption>Steps and verdicts per incident</caption>
@@ -536,7 +604,8 @@ def guide_incidents(cov: dict, tiers: dict) -> str:
     ttab = "".join(f'<tr><th scope="row">{badge(tiers, k)}</th><td>{E(x["plain"])}</td><td>{E(x["who_may_set"])}</td><td class="num">{t["status_counts"][k]}</td></tr>' for k, x in tiers.items())
     return f"""
 <h2 id="incidents">Incidents, steps and verdicts</h2>
-<p>The <a href="incidents.html">incident pages</a> ask a second question: when real AI agents acted against real systems, did they do things that no public test states as a goal?</p>
+<p>AI labs test their safety checks by giving an agent a hidden harmful goal and seeing whether a monitor notices. The safety number they report only speaks for the attacks the test includes. Meanwhile, real AI agents have already got into real systems.</p>
+<p>The <a href="index.html">matrix</a> and the <a href="incidents.html">incident pages</a> ask: when real AI agents acted against real systems, did they do things that no public test states as a goal? And if you run agents yourself, which of those behaviours do your own tests and monitors cover?</p>
 <ol>
 <li><strong>Pick incidents with a detailed public account.</strong> There are {t["incidents"]}. They were chosen because they are well documented, not at random.</li>
 <li><strong>Split each account into steps.</strong> A step is one distinct behaviour the source describes. Where a source reports thousands of low-level actions, steps follow the source's own phases. There are {t["steps"]} steps: {t["attack_steps"]} attack steps, and {t["detection_steps"] + t["response_steps"]} detection and response steps that show how the incident was found.</li>

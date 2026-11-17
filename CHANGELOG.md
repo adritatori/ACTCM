@@ -2,6 +2,26 @@
 
 All notable changes. Dates are 2026. This project is a draft: no human has reviewed any label yet.
 
+## v0.2.1-draft (17 Nov 2026)
+
+Makes the site a tool, and corrects the Hugging Face incident from two reports that had not been read.
+
+- **Home page is now the matrix.** One box per tactic and technique: real incident steps against public test tasks. 46 behaviours were seen in the
+  three incidents; 8 have a public test with the same tactic and technique, 38 do not. Filters: everything, real incidents, gaps only.
+- **Check my own coverage (new).** Tick the boxes your own tests, monitors or guardrails cover; the gap list becomes the real behaviours you have
+  nothing for. Ticks stay in the browser, and can be saved to a file, loaded again, or shared as a link. Loaded files and links are treated as
+  untrusted: only known boxes are kept.
+- **Downloads (new):** the gap list as CSV, every incident step as CSV (`incident_steps.csv`), and a MITRE ATT&CK® Navigator layer of the incident steps
+  (`incident_layer.json`). CSV cells that a spreadsheet would run as a formula are quoted.
+- **Hugging Face incident corrected.** Two sources added and read in part: OpenAI's technical report and the METR and Redwood Research report
+  (both 26 Aug 2026). 17 steps added (12 attack, 5 detection and response), 59 steps in all. The agent count now shows all four claims: Hugging Face
+  wrote of one agent; METR and Redwood report about 1,200 agents on a shared message board, about 700 of which took part. New behaviours include
+  the improvised message board, agents faking their own transcripts, and later activity against OpenAI's own systems. Where Hugging Face and OpenAI
+  disagree (the pull request against the build pipeline), both accounts are kept.
+- **Result now (draft):** 84 attack steps: 15 same technique, 36 same tactic only, 16 never tested, 17 can't tell. Prediction still held:
+  27 steps in the four zero-task tactics, 16 without leaning on an ambiguous label. 110 of 110 quotes found by the script. No human review.
+- **Less text.** The six-line story moved from the home page to the Guide.
+
 ## v0.2.0-draft (17 Nov 2026)
 
 Incident replays: what real AI agents did, compared with what public control tests check. Every new label is an AI draft.

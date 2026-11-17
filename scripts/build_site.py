@@ -30,7 +30,7 @@ E = html.escape
 OPEN_DECISIONS = ["the three tenant-isolation tasks", "the line between Stealth and Defense Impairment"]
 NOTICE = "Draft. No human has reviewed any label yet."
 TAGLINE = "What real AI agents did, against what safety tests check."
-NAV = [("incidents", "incidents.html", "Incidents"), ("coverage", "coverage.html", "Coverage"), ("explorer", "explorer.html", "Tasks"),
+NAV = [("home", "index.html", "Matrix"), ("incidents", "incidents.html", "Incidents"), ("coverage", "coverage.html", "Coverage"), ("explorer", "explorer.html", "Tasks"),
        ("contribute", "contribute.html", "Contribute"), ("review", "review.html", "Review"), ("guide", "guide.html", "Guide")]
 
 
@@ -337,10 +337,12 @@ def main() -> None:
     (c.ROOT / "docs" / "PROTOCOL.md").write_text(pc.to_markdown(pc.sections(protocol_ctx(cn))), encoding="utf-8")
     shutil.copy(GEN / "incident_coverage.json", data / "incident_coverage.json")
     shutil.copy(GEN / "activity.json", data / "activity.json")
+    for f in ("matrix.json", "incident_steps.csv", "incident_layer.json"):
+        shutil.copy(GEN / f, data / f)
     cov, act, tiers = si.load()
     script = '<script src="assets/app.js" defer></script>'
     pages = {
-        "index.html": ("ACTCM: real agent incidents against safety tests", "home", si.home_body(cov, act, tiers, cn), "", TAGLINE),
+        "index.html": ("ACTCM: real agent incidents against safety tests", "home", si.home_body(cov, act, tiers, cn), '<script type="module" src="assets/matrix.js"></script>', TAGLINE),
         "incidents.html": ("ACTCM Incidents", "incidents", si.incidents_body(cov, tiers), "", "Incidents in which an AI agent acted against real systems, split into steps with quoted sources."),
         "coverage.html": ("ACTCM Coverage", "coverage", si.coverage_body(cov, tiers), "", "Public test tasks and real incident steps, tactic by tactic."),
         "explorer.html": ("ACTCM Tasks", "explorer", explorer_body(cn), script, "Which kinds of attack AI control tests cover, by tactic."),

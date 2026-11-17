@@ -60,7 +60,7 @@ def main(base: str) -> int:
     idx = texts["explorer.html"]
     check("not included in v0.1, pending permission" in idx and "LinuxArena extras" in idx, "Explorer: one-line note that LinuxArena extras is not included in v0.1")
     check("MITRE ATT&CK® matrix" in idx, "Explorer: heading says MITRE ATT&CK®")
-    for asset in ("assets/app.js", "assets/replay.js", "assets/contribute.js", "assets/style.css", "assets/img/explorer-1280-light.png", "assets/img/explorer-400-light.png"):
+    for asset in ("assets/app.js", "assets/replay.js", "assets/contribute.js", "assets/matrix.js", "assets/style.css", "assets/img/explorer-1280-light.png", "assets/img/explorer-400-light.png"):
         code, body = get(base + asset)
         check(code == 200 and len(body) > 500, f"asset loads: {asset}")
     code, body = get(base + "data/counts.json")
@@ -87,6 +87,13 @@ def main(base: str) -> int:
     cov = json.loads(body) if code == 200 else {}
     check(code == 200 and cov.get("totals", {}).get("attack_steps"), f"data/incident_coverage.json loads: {cov.get('totals', {}).get('attack_steps')} attack steps")
     check("linuxarena-extras" not in body.decode("utf-8", "ignore"), "no hidden setting in the incident coverage file")
+    code, body = get(base + "data/matrix.json")
+    mxj = json.loads(body) if code == 200 else {}
+    check(code == 200 and mxj.get("totals", {}).get("cells"), f"data/matrix.json loads: {mxj.get('totals', {}).get('cells')} boxes")
+    code, body = get(base + "data/incident_steps.csv")
+    check(code == 200 and len(body.decode("utf-8", "ignore").strip().splitlines()) - 1 == cov.get("totals", {}).get("steps"), "incident step CSV download has one row per step")
+    code, body = get(base + "data/incident_layer.json")
+    check(code == 200 and json.loads(body).get("versions", {}).get("layer") == "4.5", "incident Navigator layer loads and is a v4.5 layer")
     home = texts["index.html"]
     t = cov.get("totals", {})
     check(all(str(x) in home for x in (t.get("incidents"), t.get("attack_steps"), t.get("verdict_counts", {}).get("not_tested"))) and "chosen for detail, not random" in home,

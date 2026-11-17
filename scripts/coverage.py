@@ -201,6 +201,97 @@ def build_activity() -> dict:
     return dict(note="Built from the history fields in data/incidents/*.yml. Updates on each deploy.", entries=rows)
 
 
+def build_matrix(cov: dict, tasks: list[dict] | None = None) -> dict:
+    """Tactic by technique cells for the home page tool: how many public tasks and how many incident steps sit in each.
+    Techniques are grouped at parent level. A cell is a `gap` when incidents show it and no public task has it."""
+    fw = fwm.load()["attack"]
+    tasks = load_public_tasks() if tasks is None else tasks
+    out = []
+    for t in cov["tactics"]:
+        cells = {}
+        def cell(tech):
+            p = parent(tech)
+            return cells.setdefault(p or "none", dict(key=f'{t["id"]}/{p or "none"}', technique=p, name=fw["techniques"].get(p or "", {}).get("name") or ("No technique given" if not p else p),
+                                                         task_uids=[], step_refs=[]))
+        for x in tasks:
+            if x["primary"] == t["id"]:
+                cell(x["technique"])["task_uids"].append(x["uid"])
+        for inc in cov["incidents"]:
+            for s in inc["steps"]:
+                if s["phase"] == "attack" and s["primary_tactic"] == t["id"]:
+                    cell(s["technique"])["step_refs"].append(dict(incident=inc["id"], incident_title=inc["title"], step=s["id"], verdict=s["verdict"],
+                                                                 what_happened=s["what_happened"], source_url=s["source_url"]))
+        rows = []
+        for cl in cells.values():
+            cl.update(tasks=len(cl["task_uids"]), steps=len(cl["step_refs"]), task_uids=sorted(cl["task_uids"]))
+            cl["state"] = "gap" if cl["steps"] and not cl["tasks"] else "both" if cl["steps"] else "tests_only"
+            rows.append(cl)
+        rows.sort(key=lambda r: (-r["steps"], -r["tasks"], r["key"]))
+        out.append(dict(id=t["id"], name=t["name"], tasks_as_goal=t["tasks_as_goal"], tasks_as_step=t["tasks_as_step"],
+                        incident_steps=sum(r["steps"] for r in rows), cells=rows))
+    allc = [r for t in out for r in t["cells"]]
+    real = [r for r in allc if r["steps"]]
+    return dict(note="A cell is one technique under one tactic (sub-techniques grouped under their parent). Draft: no human has reviewed any label yet.",
+                totals=dict(cells=len(allc), cells_seen_in_incidents=len(real), cells_seen_and_tested=sum(1 for r in real if r["tasks"]),
+                            cells_seen_not_tested=sum(1 for r in real if not r["tasks"]), cells_tests_only=sum(1 for r in allc if not r["steps"])),
+                tactics=out)
+
+
+def csv_safe(v) -> str:
+    """A value for a CSV cell. A leading =, +, - or @ would be run as a formula by a spreadsheet, so it gets a quote in front."""
+    v = "" if v is None else str(v)
+    return "'" + v if v[:1] in ("=", "+", "@") or (v[:1] == "-" and len(v) > 1 and not v[1].isdigit()) else v
+
+
+def steps_csv(cov: dict) -> str:
+    import csv
+    import io
+    cols = ["incident", "step", "order", "phase", "time_utc", "tactic_id", "tactic", "technique_id", "technique", "confidence", "verdict",
+            "tasks_same_technique", "tasks_tactic_as_goal", "tasks_tactic_as_step", "label_status", "what_happened", "quote", "source", "source_url"]
+    buf = io.StringIO()
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(cols)
+    for inc in cov["incidents"]:
+        for s in inc["steps"]:
+            a = s["phase"] == "attack"
+            w.writerow([csv_safe(x) for x in (
+                inc["id"], s["id"], s["order"], s["phase"], s["time"] or "", s.get("primary_tactic", ""), s.get("primary_tactic_name", ""), s.get("technique") or "",
+                s.get("technique_name") or "", s.get("confidence", ""), s.get("verdict", ""), len(s["technique_task_uids"]) if a else "", s["tasks_tactic_as_goal"] if a else "",
+                s["tasks_tactic_as_step"] if a else "", s["label_status"], s["what_happened"], s["quote"], s["source_publisher"], s["source_url"])])
+    return buf.getvalue()
+
+
+def incident_layer(cov: dict, tasks: list[dict] | None = None) -> dict:
+    """An ATT&CK Navigator layer (format 4.5): incident steps per technique. Red = no public task has that technique."""
+    fw = fwm.load()["attack"]
+    tasks = load_public_tasks() if tasks is None else tasks
+    short = {t["id"]: t["shortname"] for t in fw["tactics"]}
+    tested = {parent(x["technique"]) for x in tasks if x["technique"]}
+    by = {}
+    for inc in cov["incidents"]:
+        for s in inc["steps"]:
+            if s["phase"] == "attack" and s["technique"]:
+                by.setdefault((s["technique"], s["primary_tactic"]), []).append(f'{inc["id"]}/{s["id"]}')
+    techs = [dict(techniqueID=k, tactic=short[tac], score=len(v), color="#b91c1c" if parent(k) not in tested else "#b45309",
+                  comment=f"{len(v)} incident step(s): " + ", ".join(v) + (". No public side task has this technique." if parent(k) not in tested else ""), enabled=True)
+             for (k, tac), v in sorted(by.items())]
+    t = cov["totals"]
+    return dict(
+        name="ACTCM: real AI agent incident steps", versions=dict(attack=fw["version"].split(".")[0], navigator="5.1.0", layer="4.5"), domain="enterprise-attack",
+        description=(f"Steps from {t['incidents']} documented incidents in which AI agents acted against real systems, placed on MITRE ATT&CK® Enterprise v{fw['version']}. "
+                     f"{sum(len(v) for v in by.values())} of {t['attack_steps']} attack steps have a technique and are shown; the rest have none. "
+                     "Red: no public AI control side task has that technique. Amber: some public task has it. Untested does not mean undefended, and no monitor has been run. "
+                     "The incidents were chosen because they are well documented; they are not a random sample. Draft: all labels were drafted by an AI. No human has reviewed any label yet. "
+                     "Not affiliated with or endorsed by The MITRE Corporation."),
+        sorting=3, layout=dict(layout="side", showID=True, showName=True, showAggregateScores=False, countUnscored=False, aggregateFunction="sum", expandedSubtechniques="annotated"),
+        hideDisabled=False, techniques=techs,
+        legendItems=[dict(label="Seen in an incident, no public task has this technique", color="#b91c1c"), dict(label="Seen in an incident, a public task has this technique", color="#b45309")],
+        showTacticRowBackground=False, tacticRowBackground="#dddddd", selectTechniquesAcrossTactics=True, selectSubtechniquesWithParent=True, selectVisibleTechniques=False,
+        metadata=[dict(name="Project", value="Agent Control Threat Coverage Matrix (ACTCM)"), dict(name="Status", value="Draft: no human has reviewed any label"),
+                  dict(name="ATT&CK version", value=fw["version"])],
+        links=[dict(label="ACTCM repository", url=f"https://github.com/{c.config()['repository']}")])
+
+
 def render(obj: dict) -> str:
     return json.dumps(obj, indent=1, sort_keys=True, ensure_ascii=False) + "\n"
 
@@ -209,6 +300,9 @@ def main() -> int:
     cov = build()
     OUT.write_text(render(cov), encoding="utf-8")
     ACTIVITY.write_text(render(build_activity()), encoding="utf-8")
+    (GEN / "matrix.json").write_text(render(build_matrix(cov)), encoding="utf-8")
+    (GEN / "incident_steps.csv").write_text(steps_csv(cov), encoding="utf-8")
+    (GEN / "incident_layer.json").write_text(render(incident_layer(cov)), encoding="utf-8")
     t = cov["totals"]
     print(f"{t['incidents']} incidents, {t['attack_steps']} attack steps vs {t['public_tasks']} public tasks: {t['verdict_counts']}; "
           f"{t['unstable_verdicts']} verdicts not stable; prediction {cov['prediction']['result']}")
